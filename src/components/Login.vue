@@ -1,0 +1,106 @@
+<template>
+  <div id="base-div">
+      <b-navbar toggleable="lg" type="dark" variant="info">
+          <b-navbar-brand href="/homePage">Rent A Car</b-navbar-brand>
+          <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
+          <b-collapse id="nav-collapse" is-nav>
+            <b-navbar-nav class="ml-auto">
+              <b-nav-item href="/homePage" link-classes="text-light"><b>Homepage</b></b-nav-item>
+            </b-navbar-nav>
+          </b-collapse>  
+        </b-navbar>  
+    <div id="div-login"> 
+        <h2>Login to you account</h2>
+        <b-form @submit.prevent="login">
+          <b-form-group id="input-group-1" label="Email address:" label-for="emailID" description="We'll never share your email with anyone else.">
+           <b-form-input id="emailID" v-model="email" type="email" required placeholder="Enter email"></b-form-input>
+         </b-form-group>
+         <b-form-group id="input-group-2" label="Password:" label-for="passwordID">
+           <b-form-input id="passwordID" v-model="password" type="password" required placeholder="Enter password"></b-form-input>
+         </b-form-group>
+         <b-button type="submit" variant="primary">Login</b-button>
+         <p>Don't have an account? <a href="/registration">Create a new account.</a></p>
+         <p v-if="showError" class="p-error">Invalid email or password.</p>
+    </b-form>
+      </div>
+  </div>
+</template>
+
+<script>
+//import axios from "axios";
+//const baseUrl = "http://localhost:9000/api";
+
+export default {
+    data() {
+        return {
+            email: "",
+            password: "",
+            showError: false
+        }
+    },
+    methods: {
+        login: function(){
+
+            let loginDTO = {email: this.email, password: this.password};
+            console.log(loginDTO);
+            this.showError = true;
+            setTimeout(() => {this.showError = false;}, 4000);
+
+            /*const headers = {
+                  'Content-Type': 'application/json',
+                  'Accept': 'application/json'
+            }
+            axios.post(baseUrl + "/auth/login", loginDTO, headers).then(
+                response => {
+                  console.log("Login success");   
+                  this.localstorage.setItem("access_token", response.data.accessToken);  
+                  axios.get(baseUrl + "/auth/currentUser").then(
+                     response => {
+                         this.localstorage.setItem("user", response.data);
+                         this.$router.push({ path: 'homePage'});
+                     }
+            )            
+              }).catch(
+                  error => {
+                      if(error.response && error.response.status === 400){
+                             this.showError = true;
+                             setTimeout(() => {this.showError = false;}, 4000);
+                      }
+                  }
+              );*/   
+        },
+       
+    }
+
+}
+</script>
+
+<style>
+  h2{
+      text-align: center;
+      margin-top: 10px;
+  }
+
+  #base-div{
+        background-image: url('../assets/login.jpg');
+        background-repeat: no-repeat;
+        background-attachment: fixed;
+        background-size: cover;
+        height:100vh;
+  }
+
+  #div-login {
+    margin-left:auto;
+    margin-right:auto;
+    margin-top:5em;  
+    width:40%;
+    padding:2em;
+    border-width: 0.5px;
+    border-style: solid;
+  }
+
+  .p-error{
+      color:red;
+  }
+
+</style>
