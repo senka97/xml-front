@@ -3,6 +3,8 @@ import Router from 'vue-router'
 import HomePage from '../components/HomePage.vue'
 import Login from '../components/Login.vue'
 import Registration from '../components/Registration.vue'
+import Welcome from '../components/Welcome.vue'
+import PostAd from '../components/PostAd.vue'
 
 Vue.use(Router)
 
@@ -11,8 +13,18 @@ export default new Router({
     routes: [
         {
             path: '/',
+            name: 'Welcome',
+            component: Welcome
+        },
+        {
+            path: '/homePage',
             name: 'HomePage',
             component: HomePage
+        },
+        {
+            path: '/postAd',
+            name: 'PostAd',
+            component: PostAd
         },
         {
             path: '/login',
