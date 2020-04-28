@@ -5,6 +5,7 @@ import Login from '../components/Login.vue'
 import Registration from '../components/Registration.vue'
 import Welcome from '../components/Welcome.vue'
 import PostAd from '../components/PostAd.vue'
+import AdminProfile from '../components/AdminProfile.vue'
 
 Vue.use(Router)
 
@@ -35,6 +36,11 @@ export default new Router({
             path: '/registration',
             name: 'Registration',
             component: Registration
+        },
+        {
+            path: '/adminProfile',
+            name: 'AdminProfile',
+            component: AdminProfile
         },
         {
             path: '*',

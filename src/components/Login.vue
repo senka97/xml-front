@@ -1,7 +1,7 @@
 <template>
-  <div id="base-div">
-      <b-navbar toggleable="lg" type="dark" variant="info">
-          <b-navbar-brand href="/homePage">Rent A Car</b-navbar-brand>
+  <div id="base-div-login">
+      <b-navbar toggleable="lg" type="dark" variant="dark">
+          <b-navbar-brand href="/">Rent A Car</b-navbar-brand>
           <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
           <b-collapse id="nav-collapse" is-nav>
             <b-navbar-nav class="ml-auto">
@@ -81,7 +81,7 @@ export default {
       margin-top: 10px;
   }
 
-  #base-div{
+  #base-div-login{
         background-image: url('../assets/login.jpg');
         background-repeat: no-repeat;
         background-attachment: fixed;
