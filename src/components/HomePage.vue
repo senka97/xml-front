@@ -1,253 +1,280 @@
 <template>
-   <div > 
-       <b-navbar toggleable="lg" type="dark" variant="info">
-          <b-navbar-brand href="/"> <b> Rent a Car </b> </b-navbar-brand>
-         <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
-
-          <b-navbar-toggle target="nav-collapse1"></b-navbar-toggle>
-
-          <b-collapse id="nav-collapse1" is-nav>
-            <b-navbar-nav class="ml-auto">
-              <b-nav-item href="/homePage" link-classes="text-light"><b>Search Cars</b></b-nav-item>
-              <b-nav-item href="/postAd" link-classes="text-light"><b>Post Ad</b></b-nav-item>
-            </b-navbar-nav>
-
-          <b-collapse id="nav-collapse" is-nav>
-            <b-navbar-nav class="ml-auto">
-              <!--<b-nav-item href="#"><b-icon style="width: 1.7em; height: 1.7em;" icon="bell-fill" class="rounded-circle bg-info p-2" variant="light"></b-icon><span class="badge badge-notify">3</span></b-nav-item> -->
-              <b-nav-item href="/login" link-classes="text-light"><b>Login</b></b-nav-item>
-              <b-nav-item href="/registration" link-classes="text-light"><b>Register</b></b-nav-item>
-            </b-navbar-nav>
-          </b-collapse>  
-          </b-collapse>
-        </b-navbar>  
-
-  <div class="div-search">
-    <b-nav vertical >
-      <b-card id="card" no-body  bg-variant="info" text-variant="light" header-text-variant="dark" align="center" header-bg-variant="light" header="Find a car for you" >
-       <b-card-text class="div-filter-card">
-          <b-form @submit.prevent="search1">
-          <b-form-group  align="left" id="input-group-1" label="Location:" label-for="location">
-           <b-form-input id="location" v-model="location" type="text" required placeholder="Enter location"></b-form-input>
-         </b-form-group>
-         <b-form-group  align="left" id="input-group-2" label="Start date: (it has to be 48h from now)" label-for="startDate">
-              <b-form-datepicker :min="minDate" v-model="startDate" locale="en" placeholder="Start date"></b-form-datepicker>
-         </b-form-group>   
-         <b-form-group  align="left" id="input-group-3" label="End date:" label-for="endDate" > 
-            <b-form-datepicker :min="minDate" :max="maxDate" v-model="endDate" locale="en" placeholder="End date"></b-form-datepicker>
-         </b-form-group>
-         <b-button type="submit" variant="light">Search</b-button>
-         
-         <p v-if="showError" class="p-error">Error</p>
+  <div>
+    <NavBar />
+    <div class="image"></div>
+    <div class="container col-11 card-container">
+      <b-card class="shadow">
+        <b-form>
+          <b-form-group>
+            <b-row>
+              <b-col>
+                <b-label>Pick-Up Location</b-label>
+                <b-input-group>
+                  <b-input-group-prepend is-text>
+                    <b-icon icon="geo-alt"></b-icon>
+                  </b-input-group-prepend>
+                  <b-form-input class="col-12" type="text" required></b-form-input>
+                </b-input-group>
+              </b-col>
+              <b-col>
+                <b-label>Pick-Up Date</b-label>
+                <b-input-group>
+                  <b-input-group-prepend is-text>
+                    <b-icon icon="calendar"></b-icon>
+                  </b-input-group-prepend>
+                  <b-form-input class="col-12" type="datetime-local" required></b-form-input>
+                </b-input-group>
+              </b-col>
+              <b-col>
+                <b-label>Return Date</b-label>
+                <b-input-group>
+                  <b-input-group-prepend is-text>
+                    <b-icon icon="calendar"></b-icon>
+                  </b-input-group-prepend>
+                  <b-form-input class="col-12" type="datetime-local" required></b-form-input>
+                </b-input-group>
+              </b-col>
+              <b-col>
+                <b-input-group>
+                  <b-button v-b-toggle.collapse-2 type="button" class="col-12 mt-4 m-1">Expanded Search</b-button>
+                </b-input-group>
+              </b-col>
+              <b-col>
+                <b-input-group>
+                  <b-button  type="button" class="col-12 mt-4" @click="search">Search</b-button>
+                </b-input-group>
+              </b-col>
+            </b-row>
+            <b-row>
+                <b-collapse id="collapse-2" class="mb-5 container-fluid margin-custom">
+                   <div class="extended-search mt-3 pt-2">
+                     <b-row class="mt-2">
+                       <b-col>
+                         <b-form-select v-model="selectedBrand" :options="brands"></b-form-select>
+                       </b-col>
+                        <b-col>
+                          <b-form-select v-model="selectedModel" :options="models"></b-form-select>
+                        </b-col>
+                        <b-col>
+                          <b-form-input type="number" min="0" placeholder="Price from"></b-form-input>
+                        </b-col>
+                        <b-col>
+                          <b-form-input type="number" min="0" placeholder="Price to"></b-form-input>
+                        </b-col>
+                     </b-row>
+                     <b-row class="mt-2">
+                       <b-col>
+                         <b-form-group label="Fuel type:">
+                        <b-form-checkbox-group
+                          id="checkbox-group-1"
+                          v-model="fueltypeSelected"
+                          :options="fuelType"
+                          name="flavour-1"
+                        ></b-form-checkbox-group>
+                        </b-form-group>
+                       </b-col>
+                       <b-col>
+                         <b-form-group label="Vehicle type:">
+                        <b-form-checkbox-group
+                          id="checkbox-group-1"
+                          v-model="vehicletypeSelected"
+                          :options="vehicletype"
+                          name="flavour-1"
+                        ></b-form-checkbox-group>
+                        </b-form-group>
+                       </b-col>
+                       <b-col>
+                         <b-form-group label="Transmission:">
+                        <b-form-checkbox-group
+                          id="checkbox-group-1"
+                          v-model="transmissionSelected"
+                          :options="transmission"
+                          name="flavour-1"
+                        ></b-form-checkbox-group>
+                        </b-form-group>
+                       </b-col>
+                     </b-row>
+                     <b-row class="mt-2">
+                       <b-col>
+                         <b-form-group label="Mileage:">
+                          <b-form-input type="number" min="0"></b-form-input>
+                        </b-form-group>
+                       </b-col>
+                       <b-col>
+                        <b-form-group label="Kilometers limit:">
+                          <b-form-input type="number" min="0" placeholder="Unlimited"></b-form-input>
+                        </b-form-group>
+                       </b-col>
+                       <b-col>
+                          <b-form-group label="Number of children seats:">
+                          <b-form-input type="number" min="0"></b-form-input>
+                        </b-form-group>
+                       </b-col>
+                       <b-col>
+                         <b-form-group class="mt-custom">
+                          <b-form-checkbox
+                            id="checkbox-1"
+                            v-model="cdw"
+                            name="checkbox-1"
+                            :value="true"
+                          >
+                            Collision Damage Waiver
+                          </b-form-checkbox>
+                        </b-form-group>
+                       </b-col>
+                     </b-row>
+                   </div>
+                </b-collapse>
+            </b-row>
+          </b-form-group>
         </b-form>
-        </b-card-text>
       </b-card>
-    </b-nav>
-  </div>
-
-  <div class="div-filter">
-    <div >
-     <b-card id="card" no-body  bg-variant="info" header-bg-variant="light" header-text-variant="dark" text-variant="light" header="Filter cars">
-    <b-card-text class="div-filter-card">
-      <div class="containter mx-2 row">
-        <div class="col">
-          <b-form-group label-cols="1" label-cols-lg="4" label-size="sm" label="Car brand:" label-for="carBrand">
-            <b-form-select id="carBrand" v-model="brand" :options="brands">
-                <template v-slot:first>
-                  <b-form-select-option :value="null">Select brand</b-form-select-option>
-                </template>
-              </b-form-select>  
-          </b-form-group>
-        </div>
-        <div class="col">
-            <b-form-group label-cols="1" label-cols-lg="4" label-size="sm" label="Car class:" label-for="carClass">
-            <b-form-select id="carClass" v-model="cclass" :options="classes">
-                <template v-slot:first>
-                  <b-form-select-option :value="null">Select class</b-form-select-option>
-                </template>
-              </b-form-select>  
-          </b-form-group>
-        </div>
-        <div class="col">
-            <b-form-group label-cols="1" label-cols-lg="6" label-size="sm" label="Mileage:" label-for="mileage">
-            <b-form-input id="mileage" :min="0" type="number" placeholder="Choose number" size="sm" v-model="mileage"></b-form-input>
-           </b-form-group>
-        </div>
     </div>
-    <div class="containter mx-2 row">
-        <div class="col">
-            <b-form-group label-cols="1" label-cols-lg="4" label-size="sm" label="Type of fuel:" label-for="carFuelType">
-            <b-form-select id="carFuelType" v-model="fuelType" :options="fuelTypes">
-                <template v-slot:first>
-                  <b-form-select-option :value="null">Select fuel type</b-form-select-option>
-                </template>
-              </b-form-select>  
-          </b-form-group>
-        </div>
-        <div class="col">
-            <b-form-group label-cols="1" label-cols-lg="4" label-size="sm" label="Child Seats:" label-for="childSeats">
-              <b-form-input :min="0" :max="4" id="childSeats" size="sm" type="number" placeholder="Choose number" v-model="childSeats" ></b-form-input>
-           </b-form-group>
-        </div>
-        <div class="col">
-            <b-form-group label-cols="1" label-cols-lg="6" label-size="sm" label="Planned mileage:" label-for="plannedMileage">
-            <b-form-input id="plannedMileage" :min="0" type="number" placeholder="Choose number" size="sm" v-model="plannedMileage"></b-form-input>
-           </b-form-group>
-        </div>
-    </div> 
-    <div class="containter mx-2 row">
-        <div class="col">
-            <b-form-group label-cols="1" label-cols-lg="4" label-size="sm" label="Gearshift type:" label-for="gearshiftType">
-            <b-form-select id="gearshiftType" v-model="gearshift" :options="gearshifts">
-                <template v-slot:first>
-                  <b-form-select-option :value="null">Select gearshift type</b-form-select-option>
-                </template>
-              </b-form-select>  
-          </b-form-group>
-        </div>
-        <div class="col">
-          <div class="containter mx-2 row">
-            <div class="col"> 
-                <b-form-group label-cols="4" label-cols-lg="4" label-size="sm" label="Price:" label-for="minPrice">
-                  <b-form-input :min="0"  type="number" id="minPrice" size="sm" placeholder="Min" v-model="minPrice"></b-form-input>
-                </b-form-group>
-            </div>
-            <div class="col"> 
-              <b-form-group label-cols="4" label-cols-lg="4" label-size="sm" label="Price:" label-for="maxPrice">
-                  <b-form-input :min="0" type="number" id="maxPrice" size="sm" placeholder="Max" v-model="maxPrice"></b-form-input>
-                </b-form-group>
-            </div>
-          </div>
-        </div>
-        <div class="col">
-            <b-form-group label-cols="6" label-cols-lg="8" label-size="sm" label="Collision Damage Waiver Protection:" label-for="checkbox-1">
-              <b-form-checkbox plain size="lg" id="checkbox-1" v-model="CDWProtection" name="checkbox-1" value="true" unchecked-value="false"></b-form-checkbox>
-           </b-form-group>
-        </div>
-    </div> 
-    </b-card-text>
-  </b-card>
+    <div class="container d-flex mt-5">
+      <b-form-select v-model="sortSelected" :options="sortingOptions" class="col-2 ml-auto mr-custom" v-if="show"></b-form-select>  
+    </div>
+    <div class="container mt-4 d-flex justify-content-center" v-for="v in vehicles" :key="v.id">
+      <VehicleCard v-if="show" :showDiffButtons="true" :vehicle="v"/>
+    </div>
   </div>
-
-  <div class="div-resault" v-if="showCars"> 
-     <div v-for="item in items" :key="item"> 
-       <b-card img-src="https://www.strongcar.rs/pub/catalog/crop/skoda-superb-rent-a-car.jpg" 
-       alt="Card image" img-height="150px" img-width="150px" img-left class="mb-3" style="background-color:azure">
-      <b-card-text>
-        Information about the car.
-      </b-card-text>
-    </b-card>
-     </div>
-  </div>
-
-  </div>
-  
-</div>
-
 </template>
 
-
 <script>
-export default {
-    name: "HomePage",
-    components: {
-       
-    },
-    data() {
-      const now = new Date();
-      const today = new Date(now.getFullYear(), now.getMonth(), now.getDate()+2);
-      const minD = new Date(today);
-      
+import NavBar from "../components/NavBar.vue";
+import VehicleCard from "../components/VehicleCard.vue";
 
+export default {
+  name: "HomePage",
+  components: {
+    NavBar,
+    VehicleCard,
+  },
+  data() {
       return {
-            minDate: minD,
-            maxDate: null,
-            location: "",
-            startDate: null,
-            endDate: null,
-            showError: false,
-            items: [{},{},{}],
-            showCars: false,
-            brand: null,
-            brands:[
-                { value: 1, text: "BMW"},
-                { value: 1, text: "Audi"},
-                { value: 3, text: "Mercedes"},
-                { value: 4, text: "Tesla"},
-                { value: 5, text: "Opel"}
-            ],
-            fuelType: null,
-            fuelTypes:[
-                { value: 1, text: "Petrol"},
-                { value: 1, text: "Gas"},
-                { value: 3, text: "Diesel"},
-            ],
-            gearshift: null,
-           gearshifts:[
-                { value: 1, text: "Manuel"},
-                { value: 1, text: "Automatic"},
-                { value: 3, text: "Semi-Automatic"},
-            ],
-            cclass: null,
-            classes: [
-              { value: 1, text: "SUV"},
-              { value: 2, text: "Old Timer"},
-              { value: 3, text: "City Car"},
-              { value: 4, text: "Sports Car"},     
-              { value: 5, text: "Station Vagon"},
-              { value: 5, text: "Van"}         
-            ],
-            minPrice: null,
-            maxPrice: null,
-            childSeats: null,
-            mileage: null,
-            plannedMileage: null,
-            CDWProtection: "false"
-        }
-    },
-    methods: {
-      search1: function(){
-        this.showCars = true;
+        selectedBrand: null,
+        vehicletypeSelected: [],
+        fueltypeSelected: [],
+        transmissionSelected: [],
+        cdw: false,
+        brands: [
+          { value: null, text: 'Brand', disabled: true},
+          { value: 'a', text: 'Alfa Romeo' },
+          { value: 'b', text: 'Audi' },
+          { value: 'c', text: 'BMW' },
+          { value: 'd', text: 'Chevrolet'},
+          { value: 'e', text: 'Ferrari'},
+          { value: 'f', text: 'Fiat'},
+          { value: 'g', text: 'Ford'},
+          { value: 'h', text: 'Hyundai'},
+          { value: 'i', text: 'Mercedes Benz'},
+          { value: 'j', text: 'Peugeot'},
+          { value: 'k', text: 'Toyota'},
+        ],
+        selectedModel: null,
+        models: [
+          { value: null, text: 'Model', disabled: true},
+          { value: 'a', text: 'Alfa Romeo' },
+          { value: 'b', text: 'A8' },
+          { value: 'c', text: 'BMW' },
+          { value: 'd', text: 'Chevrolet'},
+          { value: 'e', text: 'Ferrari'},
+          { value: 'f', text: 'Fiat'},
+          { value: 'g', text: 'Ford'},
+          { value: 'h', text: 'Hyundai'},
+          { value: 'i', text: 'Mercedes Benz'},
+          { value: 'j', text: 'Peugeot'},
+          { value: 'k', text: 'Toyota'},
+        ],
+        fuelType: [
+          {text: 'Petrol', value: 'petrol'},
+          {text: 'Disel', value: 'disel'},
+          {text: 'Hybrid', value: 'hybrid'},
+          {text: 'Gas', value: 'gas'},
+          {text: 'Electric', value: 'electric'},
+        ],
+        vehicletype: [
+          {text: 'SUV', value: 'suv'},
+          {text: 'Saloon', value: 'saloon'},
+          {text: 'Coupe', value: 'coupe'},
+          {text: 'Cabriolet', value: 'cabriolet'},
+        ],
+        transmission: [
+          {text: 'Manual gearbox', value: 'manual'},
+          {text: 'Semi-automatic', value: 'semi-automatic'},
+          {text: 'Automatic', value: 'automatic'},
+        ],
+        vehicles: [
+          {
+            id: 1,
+            image: 'https://audimediacenter-a.akamaihd.net/system/production/media/49930/images/28318372b7f78fa640c07e629929a92fffb90804/A178321_x500.jpg?1582358914',
+            brand: 'Audi',
+            model: 'A8',
+            price: 75,
+            fuelType: 'Disel',
+            vehicletype: 'Saloon',
+            transmission: 'Manual',
+            mileage: 15000,
+            kilometerLimit: 'Unlimited',
+            childrenSeats: 0,
+            cdw: true,
+            rate: 4.5,
+          }
+        ],
+        show: false,
+        sortSelected: null,
+        sortingOptions: [
+          { value: null, text: 'Sort by', disabled: true},
+          { value: 'priceAsc', text: 'Price ascending' },
+          { value: 'priceDesc', text: 'Price descendig' },
+          { value: 'mileageAsc', text: 'Mileage ascending' },
+          { value: 'mileageDesc', text: 'Mileage descending'},
+          { value: 'rateAsc', text: 'Rate ascending'},
+          { value: 'rateDesc', text: 'Rate descending'},
+        ],
       }
+  },
+  methods: {
+    search: function() {
+      this.show = true;
     }
-  
+  }
 };
 </script>
 
 <style scoped>
-.badge-notify{
-   background:red;
-   position:relative;
-   top: -15px;
-   left: -15px;
-}
-/*#base-div{
-  background-image: url('../assets/img3.jpg');
-  background-attachment: scroll;
+
+.image {
+  overflow: hidden;
+  background-image: url("../assets/car_lake1.jpg");
+  height: 500px;
+  width: 100%;
+  background-position: bottom;
+  background-repeat: no-repeat;
   background-size: cover;
-  height:100vh;
-}*/
+  position: absolute;
+}
 
-  .div-search{
-    width:20%;
-    float:left;
-    
-  }
-  .div-filter{
-    float: left;
-    width: 80%;
-  }
+.card-container {
+    margin-top: 28%;
+    position: relative;
+}
 
-  .div-resault{
-    padding: 1em;
-  }
-  
-  .div-filter-card{
-    padding-top: 1em;
-  }
+.extended-search {
+    width: 100%;
+    border-top: 1px solid rgb(168, 168, 168);
+}
 
-  #card{
-    padding: 1em;
-  }
-    
+.shadow {
+  -webkit-box-shadow: 5px 5px 5px 5px;
+    box-shadow: 5px 5px 5px 5px;
+}
+
+.mt-custom {
+  margin-top: 12%;
+}
+
+.mr-custom {
+  margin-right: 12.5%;
+}
+
 </style>
