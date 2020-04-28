@@ -1,7 +1,7 @@
 <template>
-  <div id="base-div">
-      <b-navbar toggleable="lg" type="dark" variant="info">
-          <b-navbar-brand href="/homePage">Rent A Car</b-navbar-brand>
+  <div id="base-div-reg">
+      <b-navbar toggleable="lg" type="dark" variant="dark">
+          <b-navbar-brand href="/">Rent A Car</b-navbar-brand>
           <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
           <b-collapse id="nav-collapse" is-nav>
             <b-navbar-nav class="ml-auto">
@@ -33,10 +33,22 @@
          <b-button class="btn-reset" type="reset" v-on:click="reset()" variant="danger">Reset</b-button>
     </b-form>
       </div>
+      <b-modal id="modal-center" ref="modal-success" ok-only :header-bg-variant="headerBgVariantSuccess" :header-text-variant="headerTextVariant" centered title="Registration request successfully sent.">
+        <p class="my-4">Request for registration successfully sent. When administrator accept your request, you will get 
+            an email with activation link to activate your account.
+        </p>
+        <p>Thank you for believing in us.</p>
+      </b-modal>
+      <b-modal id="modal-center" ref="modal-error" ok-only :header-bg-variant="headerBgVariantError" :header-text-variant="headerTextVariant" centered title="Sending registration request failed.">
+        <p class="my-4">An error occured while sending the request. Plase try again.</p>
+      </b-modal>
   </div>
 </template>
 
 <script>
+//import axios from "axios";
+//const baseUrl = "http://localhost:9000/api";
+
 export default {
 
     data() {
@@ -46,16 +58,50 @@ export default {
             email: "",
             password: "",
             passwordConfirm: "",
-            showError: false
+            showError: false,
+            headerBgVariantSuccess: 'success',
+            headerBgVariantError: 'danger',
+            headerTextVariant: 'light',
         }
     },
     methods: {
         createAccount: function(){
             console.log(this.firstName);
+            //this.$router.push({ path: '/login'});
+            /*this.$notify({
+                group: 'mainHolder',
+                title: 'Important message',
+                text: 'Hello user! This is a notification!',
+                type: 'success'
+            });*/
+
+            this.$refs["modal-success"].show();
+
+            let regUserDTO = {firstName: this.firstName, lastName: this.lastName, email: this.email, password: this.password};
+            console.log(regUserDTO);
+            
+            /*const headers = {
+                  'Content-Type': 'application/json',
+                  'Accept': 'application/json'
+            }*/
+            /*axios.post(baseUrl + "/auth/register", regUserDTO, headers).then(
+                () => {
+                     this.$refs["modal-success"].show();
+                     this.reset();
+                }
+            ).catch(
+                error => {
+                     this.$refs["modal-success"].show();
+                     this.reset();
+                }
+            )*/
         },
         reset: function(){
             this.password = "";
             this.passwordConfirm = "";
+            this.email = "";
+            this.firstName = "";
+            this.lastName = "";
         }
     },
     computed: {
@@ -115,12 +161,12 @@ export default {
       margin-top: 10px;
     }
 
-    #base-div{
+    #base-div-reg{
         background-image: url('../assets/login.jpg');
         background-repeat: no-repeat;
         background-attachment: fixed;
         background-size: cover;
-        height:100vh;
+        height:110vh;
     }
 
     #div-reg {
