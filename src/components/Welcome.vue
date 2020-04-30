@@ -7,8 +7,8 @@
 
           <b-collapse id="nav-collapse1" is-nav>
             <b-navbar-nav class="ml-auto">
-              <b-nav-item href="/homePage" link-classes="text-light"><b>Search Cars</b></b-nav-item>
-              <b-nav-item href="/postAd" link-classes="text-light"><b>Post Ad</b></b-nav-item>
+              <b-nav-item href="/home" link-classes="text-light"><b>Search Cars</b></b-nav-item>
+              <b-nav-item href="/post/ad" link-classes="text-light"><b>Post Ad</b></b-nav-item>
             </b-navbar-nav>
 
           <b-navbar-toggle target="nav-collapse2"></b-navbar-toggle>
