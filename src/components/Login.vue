@@ -10,7 +10,7 @@
           </b-collapse>  
         </b-navbar>  
     <div id="div-login"> 
-        <h2>Login to you account</h2>
+        <h2>Login to your account</h2>
         <b-form @submit.prevent="login">
           <b-form-group id="input-group-1" label="Email address:" label-for="emailID" description="We'll never share your email with anyone else.">
            <b-form-input id="emailID" v-model="email" type="email" required placeholder="Enter email"></b-form-input>
