@@ -20,7 +20,7 @@ export default new Router({
             component: Welcome
         },
         {
-            path: '/homePage',
+            path: '/home',
             name: 'HomePage',
             component: HomePage
         },
@@ -35,7 +35,7 @@ export default new Router({
             component: VehicleDetails
         },
         {
-            path: '/postAd',
+            path: '/post/ad',
             name: 'PostAd',
             component: PostAd
         },
