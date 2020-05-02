@@ -46,22 +46,30 @@
             <b-row>
               <b-collapse id="collapse-2" class="mb-5 container-fluid margin-custom">
                 <div class="extended-search mt-3 pt-2">
-                  <b-row class="mt-2">
+                  <b-row class="mt-3">
                     <b-col>
-                      <b-form-select v-model="selectedBrand" :options="brands"></b-form-select>
+                      <b-form-group label="Brand:">
+                        <b-form-select v-model="selectedBrand" :options="brands"></b-form-select>
+                      </b-form-group>
                     </b-col>
                     <b-col>
-                      <b-form-select v-model="selectedModel" :options="models"></b-form-select>
+                      <b-form-group label="Model:">
+                        <b-form-select v-model="selectedModel" :options="models"></b-form-select>
+                      </b-form-group>
                     </b-col>
                     <b-col>
-                      <b-input-group append="€">
-                        <b-form-input type="number" min="0" placeholder="Price from"></b-form-input>
-                      </b-input-group>
+                      <b-form-group label="Price from:">
+                        <b-input-group append="€">
+                          <b-form-input type="number" min="0"></b-form-input>
+                        </b-input-group>
+                      </b-form-group>
                     </b-col>
                     <b-col>
-                      <b-input-group append="€">
-                        <b-form-input type="number" min="0" placeholder="Price to"></b-form-input>
-                      </b-input-group>
+                      <b-form-group label="Price to:">
+                        <b-input-group append="€">
+                          <b-form-input type="number" min="0"></b-form-input>
+                        </b-input-group>
+                      </b-form-group>
                     </b-col>
                   </b-row>
                   <b-row class="mt-2">
@@ -73,10 +81,10 @@
                           :options="fuelType"
                           name="checkboxFuelType"
                         ></b-form-checkbox-group>
-                      </b-form-group>
+                      </b-form-group>                     
                     </b-col>
                     <b-col>
-                      <b-form-group label="Vehicle type:">
+                       <b-form-group label="Vehicle type:">
                         <b-form-checkbox-group
                           id="checkboxVehicleType"
                           v-model="vehicletypeSelected"
@@ -166,7 +174,7 @@ export default {
       transmissionSelected: [],
       cdw: false,
       brands: [
-        { value: null, text: "Brand", disabled: true },
+        { value: null, text: "Select brand", disabled: true },
         { value: "a", text: "Alfa Romeo" },
         { value: "b", text: "Audi" },
         { value: "c", text: "BMW" },
@@ -181,7 +189,7 @@ export default {
       ],
       selectedModel: null,
       models: [
-        { value: null, text: "Model", disabled: true },
+        { value: null, text: "Select model", disabled: true },
         { value: "a", text: "Alfa Romeo" },
         { value: "b", text: "A8" },
         { value: "c", text: "BMW" },
@@ -217,6 +225,22 @@ export default {
           id: 1,
           image:
             "https://audimediacenter-a.akamaihd.net/system/production/media/49930/images/28318372b7f78fa640c07e629929a92fffb90804/A178321_x500.jpg?1582358914",
+          brand: "Audi",
+          model: "A8",
+          price: 75,
+          fuelType: "Disel",
+          vehicletype: "Saloon",
+          transmission: "Manual",
+          mileage: 15000,
+          kilometerLimit: "Unlimited",
+          childrenSeats: 0,
+          cdw: true,
+          rate: 4.5
+        },
+        {
+          id: 2,
+          image:
+            "https://stimg.cardekho.com/images/carexteriorimages/630x420/Audi/Audi-A8-2019/6722/1544785682176/front-left-side-47.jpg?tr=h-140",
           brand: "Audi",
           model: "A8",
           price: 75,

@@ -12,7 +12,7 @@
               <input @change="getImage" type="file" ref="file" style="display: none">
               <b-row>
                 <b-col class="d-flex justify-content-center" v-if="images.length === 0">
-                  <b-img v-if="images" thumbnail fluid src="https://via.placeholder.com/300x250" alt="Image 1"></b-img>
+                  <b-img v-if="images" thumbnail fluid src="https://via.placeholder.com/350x250" alt="Image 1"></b-img>
                 </b-col>
                 <b-col v-for="img in images" :key="img">
                   <b-img v-if="images" width="300" height="250" thumbnail :src="img"></b-img>
@@ -22,7 +22,7 @@
             <b-container class="mt-2">
               <b-row>
                 <b-button class="buttons" @click="$refs.file.click()" >Add an image</b-button>
-                <b-button class="buttons ml-2" @click="removeImage()" >Remove an image</b-button>
+                <b-button variant="outline-secondary" class="buttons ml-2" @click="removeImage()" >Remove an image</b-button>
               </b-row>
             </b-container>
             <hr>
@@ -122,6 +122,13 @@
                   </b-input-group>
                 </b-form-group>
               </b-col>
+              <b-col>
+                <b-form-group label="Location:">
+                  <b-input-group>
+                    <b-form-input type="text"></b-form-input>
+                  </b-input-group>
+                </b-form-group>
+              </b-col>
             </b-row>
             <hr />
             <b-row>
@@ -213,7 +220,6 @@ export default {
         { text: "Semi-automatic", value: "semi-automatic" },
         { text: "Automatic", value: "automatic" }
       ],
-      image: "https://via.placeholder.com/870x300",
       images: [],
       currentImage: 0
     };

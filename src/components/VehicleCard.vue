@@ -1,13 +1,16 @@
 <template>
   <b-card no-body class="overflow-hidden custom-width mb-3">
+    <template v-slot:header>
+      <h3 class="mb-0 text-center">{{vehicle.brand + ' ' + vehicle.model}}</h3>
+    </template>
     <b-row no-gutters>
       <b-col md="6">
-        <b-card-img :src="vehicle.image" alt="Image" class="rounded-0 mt-2 ml-2 mb-2"></b-card-img>
+        <b-card-img :src="vehicle.image" width="415" height="277" alt="Image" class="rounded-0 mt-2 ml-2 mb-2"></b-card-img>
       </b-col>
       <b-col md="6">
-        <b-card-body :title="vehicle.brand + ' ' + vehicle.model">
+        <b-card-body>
           <b-card-text>
-              <b-row>
+              <b-row class="mt-2">
                   <b-col col-3>
                        <b-icon icon="star-fill"></b-icon>
                         {{vehicle.rate}}
@@ -18,10 +21,10 @@
               </b-row>   
               <b-row class="mt-2">
                 <b-col>
-                  <b>Fuel type:</b> {{vehicle.fuelType}}
+                  <b>Vehicle type:</b> {{vehicle.vehicletype}}                 
                 </b-col>
                 <b-col>
-                  <b>Vehicle type:</b> {{vehicle.vehicletype}}
+                  <b>Fuel type:</b> {{vehicle.fuelType}}
                 </b-col>
               </b-row>       
               <b-row class="mt-2">
@@ -49,8 +52,8 @@
         </b-card-body>
         <b-row>
           <!--Dugme "Add to {korpica}" ce se prikazivati samo ako je korisnik ulogovan-->
-          <b-button v-show="showDiffButtons" type="button" class="ml-auto mr-2 mt-3"> <a class="removeDecoration" href="/cart">Add to <b-icon icon="bucket-fill"></b-icon></a></b-button>
-          <b-button v-show="showDiffButtons" type="button" class="mr-4 mt-3"><a class="removeDecoration" href="/vehicle/details">Details</a></b-button>
+          <b-button v-show="showDiffButtons" type="button" class="ml-auto mr-2 mt-5 buttons"> <a class="removeDecoration" href="/cart">Add to <b-icon icon="bucket-fill"></b-icon></a></b-button>
+          <b-button v-show="showDiffButtons" type="button" class="mr-4 mt-5 buttons"><a class="removeDecoration" href="/vehicle/details">Details</a></b-button>
         </b-row> 
       </b-col>
     </b-row>
@@ -85,6 +88,10 @@ export default {
 .removeDecoration {
     text-decoration: none;
     color: #fff;
+}
+
+.buttons {
+  width: 110px;
 }
 
 </style>
