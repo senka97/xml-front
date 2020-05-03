@@ -38,28 +38,53 @@
           <!--Agent/Companies registration-->
           <div class="sub-work-div" v-if="showRegForm">
             <b-form class="reg-form" @submit.prevent="registerAgent()">
-           <b-form-group id="input-group-1" label="First name:" label-for="firstNameAID">
-              <b-form-input id="firstNameAID" v-model="firstNameAgent" type="text" required placeholder="Enter first name"></b-form-input>
-           </b-form-group>
-           <b-form-group id="input-group-2" label="Last name:" label-for="lastNameAID">
-              <b-form-input id="lastNameAID" v-model="lastNameAgent" type="text" required placeholder="Enter last name"></b-form-input>
-           </b-form-group>
-           <b-form-group id="input-group-3" label="Name of the company:" label-for="companyID">
-             <b-form-input id="companyID" v-model="companyName" type="text" required placeholder="Enter a company's name"></b-form-input>
-           </b-form-group>
-           <b-form-group id="input-group-3" label="Address:" label-for="addressID">
-             <b-form-input id="addressID" v-model="addressAgent" type="text" required placeholder="Enter a company's name"></b-form-input>
-           </b-form-group>
-           <b-form-group id="input-group-3" label="Company number:" label-for="companyNumID">
-             <b-form-input id="companyNumID" v-model="companyNumber" type="number" required placeholder="Enter a company's number"></b-form-input>
-           </b-form-group>
-           <b-form-group id="input-group-3" label="Email address:" label-for="emailAID">
-             <b-form-input id="emailIDA" v-model="emailAgent" type="email" required placeholder="Enter email"></b-form-input>
-           </b-form-group>
-           <b-form-group id="input-group-4" label="Password:" label-for="passwordID"
-           :invalid-feedback="invalidFeedbackPassword" :valid-feedback="validFeedbackPassword" :state="statePassword">
-             <b-form-input id="passwordID" v-model="passwordAgent" type="password" required placeholder="Enter password"></b-form-input>
-           </b-form-group>
+              <b-container>
+                <b-row>
+                  <b-col>
+                    <b-form-group id="input-group-1" label="First name:" label-for="firstNameAID">
+                      <b-form-input id="firstNameAID" v-model="firstNameAgent" type="text" required placeholder="Enter first name"></b-form-input>
+                    </b-form-group>
+                  </b-col>
+                  <b-col>
+                    <b-form-group id="input-group-2" label="Last name:" label-for="lastNameAID">
+                       <b-form-input id="lastNameAID" v-model="lastNameAgent" type="text" required placeholder="Enter last name"></b-form-input>
+                    </b-form-group>
+                  </b-col> 
+                </b-row>
+                <b-row>
+                  <b-col>
+                      <b-form-group id="input-group-3" label="Name of the company:" label-for="companyID">
+                        <b-form-input id="companyID" v-model="companyName" type="text" required placeholder="Enter a company's name"></b-form-input>
+                      </b-form-group>
+                  </b-col>
+                  <b-col>
+                    <b-form-group id="input-group-3" label="Company number:" label-for="companyNumID">
+                         <b-form-input id="companyNumID" v-model="companyNumber" type="number" required placeholder="Enter a company's number"></b-form-input>
+                      </b-form-group>
+                  </b-col>
+                </b-row>
+                <b-row>
+                  <b-col>
+                      <b-form-group id="input-group-3" label="Address:" label-for="addressID">
+                        <b-form-input id="addressID" v-model="addressAgent" type="text" required placeholder="Enter a company's address"></b-form-input>
+                      </b-form-group>
+                  </b-col>
+                  <b-col>
+                      <b-form-group id="input-group-3" label="Email address:" label-for="emailAID">
+                         <b-form-input id="emailIDA" v-model="emailAgent" type="email" required placeholder="Enter email"></b-form-input>
+                      </b-form-group>
+                  </b-col>
+                </b-row>
+                <b-row>
+                  <b-col>
+                    <b-form-group id="input-group-4" label="Password:" label-for="passwordID"
+                      :invalid-feedback="invalidFeedbackPassword" :valid-feedback="validFeedbackPassword" :state="statePassword">
+                       <b-form-input id="passwordID" v-model="passwordAgent" type="password" required placeholder="Enter password"></b-form-input>
+                    </b-form-group>
+                  </b-col>
+                  <b-col></b-col>
+                </b-row>
+              </b-container>
            
          <b-button class="btn-submit" type="submit" variant="primary">Register</b-button>
          <b-button class="btn-reset" type="reset" v-on:click="reset()" variant="danger">Reset</b-button>
@@ -110,66 +135,15 @@
             </b-table>
           </div>
           <b-modal id="modal-agent-details" ref="modal-agent-details" ok-only centered title="Agent details">
-            <p class="my-4">First name: {{modal_firstName}}</p>
-            <p class="my-4">Last name: {{modal_lastName}}</p> 
-            <p class="my-4">Company name: {{modal_companyName}}</p>
-            <p class="my-4">Company number: {{modal_companyNumber}}</p>
-            <p class="my-4">Address: {{modal_address}}</p>
-            <p class="my-4">Email: {{modal_email}}</p>
+            <p class="my-4"><b>First name:</b> {{modal_firstName}}</p>
+            <p class="my-4"><b>Last name:</b> {{modal_lastName}}</p> 
+            <p class="my-4"><b>Company name:</b> {{modal_companyName}}</p>
+            <p class="my-4"><b>Company number:</b> {{modal_companyNumber}}</p>
+            <p class="my-4"><b>Address:</b> {{modal_address}}</p>
+            <p class="my-4"><b>Email: </b>{{modal_email}}</p>
           </b-modal>
            <!--Codebook management-->
-          <div class="sub-work-div" v-if="showCodeBook">
-               <b-container style="margin-top:2em;width:90%;">
-                 <b-row>
-                   <b-col style="padding-bottom:1em;">
-                     <b-form @submit.prevent="addCarBrand()">
-                     <b-form-group label="Car brand:" label-for="carBrandID">
-                       <b-input id="carBrandID" v-model="carBrand" type="text" required placeholder="Enter car brand"></b-input>
-                     </b-form-group>
-                      <b-button variant="success" type="submit">Add</b-button>
-                     </b-form>
-                   </b-col>
-                   <b-col>
-                     <b-form @submit.prevent="addCarModel()">
-                     <b-form-group label="Car model:" label-for="carModelID">
-                       <b-input id="carModelID" v-model="carModel" type="text" required placeholder="Enter car model"></b-input>
-                     </b-form-group>
-                     <b-button variant="success" type="submit">Add</b-button>
-                     </b-form>
-                   </b-col>
-                 </b-row>
-                 <b-row>
-                   <b-col style="padding-bottom:1em;">
-                     <b-form @submit.prevent="addCarClass()">
-                     <b-form-group label="Car class:" label-for="carClassID">
-                       <b-input id="carClassID" v-model="carClass" type="text" required placeholder="Enter car class"></b-input>
-                     </b-form-group>
-                      <b-button variant="success" type="submit">Add</b-button>
-                     </b-form>
-                   </b-col>
-                   <b-col>
-                     <b-form @submit.prevent="addFuelType()">
-                     <b-form-group label="Fuel type:" label-for="fuelTypeID">
-                       <b-input id="fuelTypeID" v-model="fuelType" type="text" required placeholder="Enter fuel type"></b-input>
-                     </b-form-group>
-                     <b-button variant="success" type="submit">Add</b-button>
-                     </b-form>
-                   </b-col>
-                 </b-row>
-                 <b-row>
-                   <b-col>
-                     <b-form @submit.prevent="addGearType()">
-                     <b-form-group label="Gear type:" label-for="gearTypeID">
-                       <b-input id="gearTypeID" v-model="gearType" type="text" required placeholder="Enter gear type"></b-input>
-                     </b-form-group>
-                      <b-button variant="success" type="submit">Add</b-button>
-                     </b-form>
-                   </b-col>
-                   <b-col>
-                   </b-col>
-                 </b-row>
-               </b-container>
-          </div>
+           <codebookManagement v-if="showCodeBook"></codebookManagement>
            <!--Comments management-->
           <div class="sub-work-div" v-if="showComments">
             <b-table id="table-comments" striped hover bordered borderless :items="itemsComments" :fields="fields_comments">
@@ -191,7 +165,12 @@
 </template>
 
 <script>
+import codebookManagement from "../components/CodebookManagement.vue";
+
 export default {
+  components:{
+    codebookManagement
+  },
 
     data() {
         return {
@@ -255,11 +234,6 @@ export default {
           modal_companyNumber: "",
           modal_address: "",
           modal_email: "",
-          carModel: "",
-          carBrand: "",
-          carClass: "",
-          fuelType: "",
-          gearType: "",
           itemsComments: [{"id":"1", "carAdDetails":"Details about car ad", "commenter": "Petar Petrovic", "text":"Bla bla bla asdasd asd asd as dasd  sdaaasd asdasd asdasd asda sd asd adasd sad asd"},
                           {"id":"2", "carAdDetails":"Details about car ad bla bla", "commenter": "Pera Peric", "text":"Bla bla bla asasd asd asdasd dasd"}],
           fields_comments: [
@@ -424,56 +398,6 @@ export default {
           this.modal_email = agent.email;
           this.$refs["modal-agent-details"].show();
         },
-        addCarBrand(){
-             //posalje se zahtev
-             this.$notify({
-                group: 'mainHolder',
-                title: 'Success',
-                text: 'New car brand successfully added!',
-                type: 'success'
-            });
-            this.carBrand = "";
-        },
-        addCarModel(){
-          //posalje se zahtev
-           this.$notify({
-                group: 'mainHolder',
-                title: 'Success',
-                text: 'New car model successfully added!',
-                type: 'success'
-            });
-            this.carModel = "";
-        },
-        addCarClass(){
-          //posalje se zahtev
-          this.$notify({
-                group: 'mainHolder',
-                title: 'Success',
-                text: 'New car class successfully added!',
-                type: 'success'
-            });
-            this.carClass = "";
-        },
-        addFuelType(){
-          //posalje se zahtev
-          this.$notify({
-                group: 'mainHolder',
-                title: 'Success',
-                text: 'New fuel type successfully added!',
-                type: 'success'
-            });
-            this.fuelType = "";
-        },
-        addGearType(){
-          //posalje se zahtev
-          this.$notify({
-                group: 'mainHolder',
-                title: 'Success',
-                text: 'New gear type successfully added!',
-                type: 'success'
-            });
-            this.gearType = "";
-        },
         approveComment(id){
           alert("Zahtev prihvacen");
           //poslati zahtev
@@ -533,6 +457,7 @@ export default {
 
   .sub-work-div{
     width: 100%;
+    padding-top:1em;
   }
 
  .h4-sidebar, .h4-work{
@@ -557,7 +482,7 @@ export default {
  }
 
  .reg-form{
-   width:60%;
+   width:70%;
    border: 1px solid black;
    border-radius: 10px;
    padding-left:2em;
@@ -566,6 +491,10 @@ export default {
    padding-bottom: 0.5em;
    margin-left:auto;
    margin-right:auto;
+ }
+
+ .btn-types{
+   margin-left:1em;
  }
 
 
