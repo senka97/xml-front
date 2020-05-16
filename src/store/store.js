@@ -26,7 +26,7 @@ export const store =  new Vuex.Store({
     actions:{
         retrieveToken(context, credentials){
             return new Promise((resolve, reject) => {
-                axios.post('http://localhost:8081/auth/login',{
+                axios.post('https://localhost:8083/user/auth/login',{
                     email: credentials.email,
                     password: credentials.password
                 })
