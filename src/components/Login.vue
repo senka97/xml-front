@@ -28,9 +28,10 @@
 
 <script>
 //import axios from "axios";
-//const baseUrl = "http://localhost:9000/api";
+//const baseUrl = "http://localhost:8081/api";
 
 export default {
+    name: 'Login',
     data() {
         return {
             email: "",
@@ -40,39 +41,26 @@ export default {
     },
     methods: {
         login: function(){
-
-            let loginDTO = {email: this.email, password: this.password};
-            console.log(loginDTO);
-            this.showError = true;
-            setTimeout(() => {this.showError = false;}, 4000);
-
-            /*const headers = {
-                  'Content-Type': 'application/json',
-                  'Accept': 'application/json'
-            }
-            axios.post(baseUrl + "/auth/login", loginDTO, headers).then(
-                response => {
-                  console.log("Login success");   
-                  this.localstorage.setItem("access_token", response.data.accessToken);  
-                  axios.get(baseUrl + "/auth/currentUser").then(
-                     response => {
-                         this.localstorage.setItem("user", response.data);
-                         this.$router.push({ path: 'homePage'});
-                     }
-            )            
-              }).catch(
-                  error => {
-                      if(error.response && error.response.status === 400){
-                             this.showError = true;
-                             setTimeout(() => {this.showError = false;}, 4000);
-                      }
-                  }
-              );*/   
-        },
-       
+            this.$store.dispatch('retrieveToken',{
+              email: this.email,
+              password: this.password
+            })
+            .then(response => {
+              console.log(response);
+              this.$router.push({ name: 'HomePage'})
+            }).catch(error => {
+                if (error.response) {
+                  this.errorLogin = true;
+                  setTimeout(() => {this.errorLogin = false;}, 3500);
+                }
+            });
+          } 
+          
     }
-
+       
 }
+
+
 </script>
 
 <style>

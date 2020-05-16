@@ -10,8 +10,9 @@
            <!--  <b-nav-item href="/cart">Cart</b-nav-item> -->
 
             <!--Za neregistrovane korisnike-->
-            <b-button class="mr-3"><a href="/login" class="removeDecoration">Login</a></b-button>
-            <b-button><a href="/registration" class="removeDecoration">Register</a></b-button>
+            <b-button  v-if="!loggedIn" class="mr-3"><a href="/login" class="removeDecoration">Login</a></b-button>
+            <b-button  v-if="!loggedIn" ><a href="/registration" class="removeDecoration">Register</a></b-button>
+            <b-button v-if="loggedIn" @click="logout()"><a class="removeDecoration">Log Out</a></b-button>
 
             <!--Za sve ulogovane korisnike-->
          <!--   <b-button @click="logout">Log out</b-button>  -->
@@ -30,7 +31,15 @@ export default {
         }
     },
     methods: {
-     //   logout: function() { }
+       logout: function() {
+          this.$store.dispatch('destroyToken');
+          this.$router.push({'name': 'Login'});
+        }
+    },
+    computed: {
+      loggedIn(){
+        return this.$store.getters.loggedIn;
+      }
     }
 
 }

@@ -71,7 +71,7 @@
 
 
 export default {
-    name: "StartPage",
+    name: "Welcome",
     components: {
        
     },
