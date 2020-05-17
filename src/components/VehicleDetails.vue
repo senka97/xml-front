@@ -76,18 +76,19 @@
           <h5 class="mb-0">Comment</h5>
         </template>
         <b-card-text>
-          <b-form-textarea
-            id="textarea"
-            v-model="text"
-            placeholder="Enter something..."
-            rows="3"
-            max-rows="6"
-          ></b-form-textarea>
-          <b-btn class="mr-5 mt-2">Add comment</b-btn>
+          <b-form-textarea id="textarea" placeholder="Enter comment..." rows="3" no-resize v-model="textarea"></b-form-textarea>
+          <b-row class="mt-2">
+            <b-col class="col-2">
+              <b-btn class="buttons">Add comment</b-btn>
+            </b-col>
+            <b-col>
+              <b-btn class="buttons" @click="clear">Clear</b-btn>
+            </b-col>          
+          </b-row>
         </b-card-text>
       </b-card>
     </div>
-    <div class="container mt-3 custom-dim-comment" v-for="c in comments" :key="c.id">    
+    <div class="container mt-3 custom-dim-comment" v-for="c in comments" :key="c.id">
       <b-card class="mb-3 shadow">
         <b-card-text>
           <p class="font-weight-bold">{{c.name + ' ' + c.surname}}</p>
@@ -133,23 +134,27 @@ export default {
       comments: [
         {
           id: 1,
-          comment: 'Lorem ipsum dolor, sit amet consectetur adipisicing elit. Quia, beatae? Lorem ipsum dolor sit, amet consectetur adipisicing elit.Unde id animi at hic reprehenderit praesentium aliquam vero quae! Sint, officiis!',
-          name: 'Pera',
-          surname: 'Peric',
+          comment:
+            "Lorem ipsum dolor, sit amet consectetur adipisicing elit. Quia, beatae? Lorem ipsum dolor sit, amet consectetur adipisicing elit.Unde id animi at hic reprehenderit praesentium aliquam vero quae! Sint, officiis!",
+          name: "Pera",
+          surname: "Peric"
         },
         {
           id: 2,
-          comment: 'Lorem ipsum dolor, sit amet consectetur adipisicing elit. Quia, beatae? Lorem ipsum dolor sit, amet consectetur adipisicing elit.Unde id animi at hic reprehenderit praesentium aliquam vero quae! Sint, officiis!',
-          name: 'Djura',
-          surname: 'Djuric',
+          comment:
+            "Lorem ipsum dolor, sit amet consectetur adipisicing elit. Quia, beatae? Lorem ipsum dolor sit, amet consectetur adipisicing elit.Unde id animi at hic reprehenderit praesentium aliquam vero quae! Sint, officiis!",
+          name: "Djura",
+          surname: "Djuric"
         },
         {
           id: 3,
-          comment: 'Lorem ipsum dolor, sit amet consectetur adipisicing elit. Quia, beatae? Lorem ipsum dolor sit, amet consectetur adipisicing elit.Unde id animi at hic reprehenderit praesentium aliquam vero quae! Sint, officiis!',
-          name: 'Marko',
-          surname: 'Markovic',
+          comment:
+            "Lorem ipsum dolor, sit amet consectetur adipisicing elit. Quia, beatae? Lorem ipsum dolor sit, amet consectetur adipisicing elit.Unde id animi at hic reprehenderit praesentium aliquam vero quae! Sint, officiis!",
+          name: "Marko",
+          surname: "Markovic"
         }
-      ]
+      ],
+      textarea: '',
     };
   },
   methods: {
@@ -160,7 +165,10 @@ export default {
     next() {
       this.currentImage = this.images.length + 1;
       this.$refs.imageCarousel.setSlide(this.images.length + 1);
-    }
+    },
+    clear() {
+      this.textarea = '';
+    },
   }
 };
 </script>
@@ -189,5 +197,9 @@ export default {
 .shadow {
   -webkit-box-shadow: 5px 5px 5px 5px;
   box-shadow: 5px 5px 5px 5px;
+}
+
+.buttons {
+  width: 130px;
 }
 </style>
