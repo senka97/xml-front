@@ -36,7 +36,9 @@ Vue.config.productionTip = false
 
 axios.interceptors.request.use(config => {
   const token = localStorage.getItem("access_token");
-  config.headers.common["Authorization"] = `Bearer ${token}`;
+  if(token != null){
+      config.headers.common["Authorization"] = `Bearer ${token}`;
+  }
   return config;
 })
 
