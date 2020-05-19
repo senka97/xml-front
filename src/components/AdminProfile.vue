@@ -5,7 +5,7 @@
           <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
           <b-collapse id="nav-collapse" is-nav>
             <b-navbar-nav class="ml-auto">
-              <b-nav-item href="/homePage" link-classes="text-light"><b>Homepage</b></b-nav-item>
+              <b-nav-item href="/home" link-classes="text-light"><b>Homepage</b></b-nav-item>
               <b-nav-item v-on:click="logout()" link-classes="text-light"><b>Log out</b></b-nav-item>
             </b-navbar-nav>
           </b-collapse>  
@@ -248,7 +248,9 @@ export default {
     methods:{
         logout(){
             //logout
-            this.$router.push({ path: '/homePage'});
+            this.$store.dispatch('destroyToken');
+            this.$store.dispatch('destroyCurrentUser');
+            this.$router.push({ path: '/'});
         },
         showRequestsF(){
           //posalje se zahtev za svim request-ovima
