@@ -1,22 +1,25 @@
 <template>
     <div id="div">
         <b-navbar toggleable="lg" type="dark" variant="dark">
-          <b-navbar-brand href="/"> <b> Rent a Car </b> </b-navbar-brand>
+          <b-navbar-brand href="/"> <b> Rent A Car </b> </b-navbar-brand>
 
           <b-navbar-toggle target="nav-collapse1"></b-navbar-toggle>
 
           <b-collapse id="nav-collapse1" is-nav>
             <b-navbar-nav class="ml-auto">
               <b-nav-item href="/home" link-classes="text-light"><b>Search Cars</b></b-nav-item>
-              <b-nav-item href="/post/ad" link-classes="text-light"><b>Post Ad</b></b-nav-item>
+              <b-nav-item v-if="showPostAd" href="/post/ad" link-classes="text-light"><b>Post Ad</b></b-nav-item>
             </b-navbar-nav>
 
           <b-navbar-toggle target="nav-collapse2"></b-navbar-toggle>
           <b-collapse id="nav-collapse2" is-nav>
             <b-navbar-nav class="ml-auto">
               <!--<b-nav-item href="#"><b-icon style="width: 1.7em; height: 1.7em;" icon="bell-fill" class="rounded-circle bg-info p-2" variant="light"></b-icon><span class="badge badge-notify">3</span></b-nav-item> -->
-              <b-nav-item href="/login" link-classes="text-light"><b>Login</b></b-nav-item>
-              <b-nav-item href="/registration" link-classes="text-light"><b>Register</b></b-nav-item>
+              <b-nav-item v-if="showCart" href="/cart" link-classes="text-light"><b>Cart</b></b-nav-item>
+              <b-nav-item v-if="showAdminProfile" href="/adminProfile" link-classes="text-light"><b>Admin profile</b></b-nav-item>
+              <b-nav-item v-if="loggedIn" @click="logout()" link-classes="text-light"><b>Logout</b></b-nav-item>
+              <b-nav-item v-if="!loggedIn" href="/login" link-classes="text-light"><b>Login</b></b-nav-item>
+              <b-nav-item v-if="!loggedIn" href="/registration" link-classes="text-light"><b>Register</b></b-nav-item>
             </b-navbar-nav>
           </b-collapse>  
           </b-collapse>
@@ -87,7 +90,26 @@ export default {
       },
       onSlideEnd() {
         this.sliding = false
+      },
+      logout: function() {
+          this.$store.dispatch('destroyToken');
+          this.$store.dispatch('destroyCurrentUser');
+        }
+    },
+    computed: {
+      loggedIn(){
+        return this.$store.getters.loggedIn;
+      },
+      showPostAd(){
+        return (this.$store.getters.userRole == "ROLE_CLIENT" || this.$store.getters.userRole == "ROLE_AGENT") && this.$store.getters.loggedIn;
+      },
+      showAdminProfile(){
+        return this.$store.getters.userRole == "ROLE_ADMIN" && this.$store.getters.loggedIn;
+      },
+      showCart(){
+        return this.$store.getters.userRole == "ROLE_CLIENT" && this.$store.getters.loggedIn;
       }
+
     }
     
     

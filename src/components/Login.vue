@@ -47,7 +47,17 @@ export default {
             })
             .then(response => {
               console.log(response);
-              this.$router.push({ name: 'HomePage'})
+              this.$store.dispatch('retrieveCurrentUser')
+              .then(response => {
+                console.log(response);
+                this.$router.push({ name: 'Welcome'});
+              }).catch(error => {
+                 if(error.response){
+                    this.$store.dispatch('destroyToken');
+                   alert("Error occured while retrieving current user.");
+                  }
+              })
+              
             }).catch(error => {
                 if (error.response) {
                   this.errorLogin = true;

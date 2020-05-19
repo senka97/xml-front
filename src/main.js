@@ -35,7 +35,7 @@ Vue.use(Notifications)
 Vue.config.productionTip = false
 
 axios.interceptors.request.use(config => {
-  const token = localStorage.getItem("access_token");
+  let token = localStorage.getItem("access_token");
   if(token != null){
       config.headers.common["Authorization"] = `Bearer ${token}`;
   }
