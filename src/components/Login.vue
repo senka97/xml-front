@@ -20,15 +20,12 @@
          </b-form-group>
          <b-button type="submit" variant="primary">Login</b-button>
          <p>Don't have an account? <a href="/registration">Create a new account.</a></p>
-         <p v-if="showError" class="p-error">Invalid email or password.</p>
     </b-form>
       </div>
   </div>
 </template>
 
 <script>
-//import axios from "axios";
-//const baseUrl = "http://localhost:8081/api";
 
 export default {
     name: 'Login',
@@ -59,9 +56,28 @@ export default {
               })
               
             }).catch(error => {
-                if (error.response) {
-                  this.errorLogin = true;
-                  setTimeout(() => {this.errorLogin = false;}, 3500);
+                if (error.response && error.response.status === 404) {
+                    this.$bvToast.toast(error.response.data, {
+                      title: 'Not Found',
+                      variant: 'danger',
+                      solid: true
+                    });
+                }
+                else if(error.response && error.response.status === 400)
+                {
+                   this.$bvToast.toast(error.response.data, {
+                    title: 'Bad Request',
+                    variant: 'danger',
+                    solid: true
+                });
+                }
+                else if(error.response && error.response.status === 417)
+                {
+                   this.$bvToast.toast(error.response.data, {
+                    title: 'Expectation Failed',
+                    variant: 'danger',
+                    solid: true
+                });
                 }
             });
           } 
