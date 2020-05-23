@@ -14,6 +14,12 @@
           <b-navbar-toggle target="nav-collapse2"></b-navbar-toggle>
           <b-collapse id="nav-collapse2" is-nav>
             <b-navbar-nav class="ml-auto">
+              <b-nav-item v-if="loggedIn" @click="clickAdminUS()" link-classes="text-light"><b>Admin-US</b></b-nav-item>
+              <b-nav-item v-if="loggedIn" @click="clickAgentUS()" link-classes="text-light"><b>Agent-US</b></b-nav-item>
+              <b-nav-item v-if="loggedIn" @click="clickClientUS()" link-classes="text-light"><b>Client-US</b></b-nav-item>
+              <b-nav-item v-if="loggedIn" @click="clickAdminCS()" link-classes="text-light"><b>Admin-CS</b></b-nav-item>
+              <b-nav-item v-if="loggedIn" @click="clickAgentCS()" link-classes="text-light"><b>Agent-CS</b></b-nav-item>
+              <b-nav-item v-if="loggedIn" @click="clickClientCS()" link-classes="text-light"><b>Client-CS</b></b-nav-item>
               <!--<b-nav-item href="#"><b-icon style="width: 1.7em; height: 1.7em;" icon="bell-fill" class="rounded-circle bg-info p-2" variant="light"></b-icon><span class="badge badge-notify">3</span></b-nav-item> -->
               <b-nav-item v-if="showCart" href="/cart" link-classes="text-light"><b>Cart</b></b-nav-item>
               <b-nav-item v-if="showAdminProfile" href="/adminProfile" link-classes="text-light"><b>Admin profile</b></b-nav-item>
@@ -71,7 +77,7 @@
 </template>
 
 <script>
-
+import axios from 'axios';
 
 export default {
     name: "Welcome",
@@ -94,7 +100,67 @@ export default {
       logout: function() {
           this.$store.dispatch('destroyToken');
           this.$store.dispatch('destroyCurrentUser');
-        }
+        },
+        clickAdminUS(){
+            axios.get("https://localhost:8083/user/helloAdmin").then(
+              response => {
+                alert(response.data);
+              }
+            ).catch(error => {
+                alert(error);
+            })
+        },
+        clickAgentUS(){
+          axios.get("https://localhost:8083/user/helloAgent").then(
+              response => {
+                alert(response.data);
+              }
+            ).catch(error => {
+                alert(error);
+            })
+
+        },
+        clickClientUS(){
+            axios.get("https://localhost:8083/user/helloClient").then(
+              response => {
+                alert(response.data);
+              }
+            ).catch(error => {
+                alert(error);
+            })
+        },
+        clickAdminCS(){
+
+          axios.get("https://localhost:8083/car-service/test/helloAdmin").then(
+              response => {
+                alert(response.data);
+              }
+            ).catch(error => {
+                alert(error);
+            })
+
+        },
+        clickAgentCS(){
+            axios.get("https://localhost:8083/car-service/test/helloAgent").then(
+              response => {
+                alert(response.data);
+              }
+            ).catch(error => {
+                alert(error);
+            })
+
+        },
+        clickClientCS(){
+            axios.get("https://localhost:8083/car-service/test/helloClient").then(
+              response => {
+                alert(response.data);
+              }
+            ).catch(error => {
+                alert(error);
+            })
+
+        },
+
     },
     computed: {
       loggedIn(){
@@ -108,7 +174,8 @@ export default {
       },
       showCart(){
         return this.$store.getters.userRole == "ROLE_CLIENT" && this.$store.getters.loggedIn;
-      }
+      },
+
 
     }
     
