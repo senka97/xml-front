@@ -13,7 +13,7 @@
         <h2>Login to your account</h2>
         <b-form @submit.prevent="login">
           <b-form-group id="input-group-1" label="Email address:" label-for="emailID" description="We'll never share your email with anyone else.">
-           <b-form-input id="emailID" v-model="email" type="email" required placeholder="Enter email"></b-form-input>
+           <b-form-input id="emailID" v-model.trim="email" type="email" required placeholder="Enter email"></b-form-input>
          </b-form-group>
          <b-form-group id="input-group-2" label="Password:" label-for="passwordID">
            <b-form-input id="passwordID" v-model="password" type="password" required placeholder="Enter password"></b-form-input>
