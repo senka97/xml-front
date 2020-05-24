@@ -8,6 +8,10 @@ import PostAd from '../components/PostAd.vue'
 import AdminProfile from '../components/AdminProfile.vue'
 import Cart from '../components/Cart.vue'
 import VehicleDetails from '../components/VehicleDetails.vue'
+import NotAuthorized from '../components/NotAuthorized.vue'
+import { store } from '../store/store'
+
+
 
 Vue.use(Router)
 
@@ -52,7 +56,19 @@ export default new Router({
         {
             path: '/adminProfile',
             name: 'AdminProfile',
-            component: AdminProfile
+            component: AdminProfile,
+            beforeEnter: (to, from, next) => {
+                if(!store.getters.loggedIn || store.getters.userRole !== 'ROLE_ADMIN'){
+                    next({ name: 'NotAuthorized' })
+                }else{
+                    next()
+                }
+              }
+        },
+        {
+            path: '/notAuthorized',
+            name: 'NotAuthorized',
+            component: NotAuthorized
         },
         {
             path: '*',
