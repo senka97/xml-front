@@ -67,7 +67,7 @@
 
           <validation-provider
             name="Password"
-            :rules="{ required: true, regex: /^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&+=])(?=\S+$).{8,}$/ }"
+            :rules="{ required: true, regex: /^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&+=])(?=\S+$).{10,}$/ }"
             v-slot="validationContext"
           >
           <b-form-group
@@ -85,7 +85,7 @@
             <b-tooltip
               target="passwordID"
               triggers="hover"
-            >Password must contain at least 1 uppercase letter, 1 lowercase letter, 1 digit and must be minimum 8 characters long.</b-tooltip>
+            >Password must contain at least 1 uppercase letter, 1 lowercase letter, 1 digit and must be minimum 10 characters long.</b-tooltip>
             <b-form-invalid-feedback id="passwordID">{{ validationContext.errors[0] }}</b-form-invalid-feedback>
           </b-form-group>
           </validation-provider>
