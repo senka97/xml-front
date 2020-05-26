@@ -50,7 +50,7 @@
           </validation-provider>
           <validation-provider
             name="Email"
-            rules="required|email"
+            :rules="{required: true, regex: /^[a-zA-Z0-9_+&*-]+(?:\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+\.)+[a-zA-Z]{2,7}$/ }"
             v-slot="validationContext"
           >
             <b-form-group id="input-group-3" label="Email address:" label-for="emailID">
@@ -85,7 +85,7 @@
             <b-tooltip
               target="passwordID"
               triggers="hover"
-            >Password must contain at least 1 uppercase letter, 1 lowercase letter, 1 digit and must be minimum 10 characters long.</b-tooltip>
+            >Password must contain at least 1 uppercase letter, 1 lowercase letter, 1 digit, 1 special character and must be minimum 10 characters long.</b-tooltip>
             <b-form-invalid-feedback id="passwordID">{{ validationContext.errors[0] }}</b-form-invalid-feedback>
           </b-form-group>
           </validation-provider>

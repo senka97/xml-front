@@ -15,7 +15,11 @@
       <h2>Login to your account</h2>
       <validation-observer ref="observer" v-slot="{ handleSubmit }">
         <b-form @submit.prevent="handleSubmit(login)">
-          <validation-provider name="Email" rules="required|email" v-slot="validationContext">
+          <validation-provider 
+            name="Email" 
+            :rules="{required: true, regex: /^[a-zA-Z0-9_+&*-]+(?:\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+\.)+[a-zA-Z]{2,7}$/ }"
+            v-slot="validationContext"
+          >
             <b-form-group
               id="input-group-1"
               label="Email address:"
