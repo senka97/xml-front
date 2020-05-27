@@ -102,7 +102,7 @@ export default {
           this.$store.dispatch('destroyCurrentUser');
         },
         clickAdminUS(){
-            axios.get("https://localhost:8083/user/helloAdmin").then(
+            axios.get("https://localhost:8083/user-service/helloAdmin").then(
               response => {
                 alert(response.data);
               }
@@ -111,7 +111,7 @@ export default {
             })
         },
         clickAgentUS(){
-          axios.get("https://localhost:8083/user/helloAgent").then(
+          axios.get("https://localhost:8083/user-service/helloAgent").then(
               response => {
                 alert(response.data);
               }
@@ -121,7 +121,7 @@ export default {
 
         },
         clickClientUS(){
-            axios.get("https://localhost:8083/user/helloClient").then(
+            axios.get("https://localhost:8083/user-service/helloClient").then(
               response => {
                 alert(response.data);
               }
