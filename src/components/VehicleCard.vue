@@ -1,11 +1,11 @@
 <template>
   <b-card no-body class="overflow-hidden custom-width mb-3">
     <template v-slot:header>
-      <h3 class="mb-0 text-center">{{vehicle.brand + ' ' + vehicle.model}}</h3>
+      <h3 class="mb-0 text-center">{{vehicle.car.carBrand + ' ' + vehicle.car.carModel}}</h3>
     </template>
     <b-row no-gutters>
       <b-col md="6">
-        <b-card-img :src="vehicle.image" width="415" height="277" alt="Image" class="rounded-0 mt-2 ml-2 mb-2"></b-card-img>
+        <b-card-img src="https://www.polovniautomobili.com/user-images/agencies/37910/a9fe4a39d28e.jpg" width="415" height="277" alt="Image" class="rounded-0 mt-2 ml-2 mb-2"></b-card-img>
       </b-col>
       <b-col md="6">
         <b-card-body>
@@ -13,39 +13,42 @@
               <b-row class="mt-2">
                   <b-col col-3>
                        <b-icon icon="star-fill"></b-icon>
-                        {{vehicle.rate}}
+                        {{vehicle.car.rate}}
                   </b-col>
                   <b-col col-3>
-                        <b>Price:</b> {{vehicle.price}} <b>€</b>
+                        <b>Price per day:</b> {{vehicle.priceList.pricePerDay}} <b>€</b>
                     </b-col>
               </b-row>   
               <b-row class="mt-2">
                 <b-col>
-                  <b>Vehicle type:</b> {{vehicle.vehicletype}}                 
+                  <b>Vehicle type:</b> {{vehicle.car.carClass}}                 
                 </b-col>
                 <b-col>
-                  <b>Fuel type:</b> {{vehicle.fuelType}}
+                  <b>Fuel type:</b> {{vehicle.car.fuelType}}
                 </b-col>
               </b-row>       
               <b-row class="mt-2">
                   <b-col>
-                    <b>Transmission:</b> {{vehicle.transmission}}
+                    <b>Transmission:</b> {{vehicle.car.tranType}}
                   </b-col>
                   <b-col>
-                    <b>Children seats:</b> {{vehicle.childrenSeats}}
+                    <b>Children seats:</b> {{vehicle.car.childrenSeats}}
                   </b-col>
               </b-row> 
               <b-row class="mt-2">
                   <b-col>
-                    <b>Mileage:</b> {{vehicle.mileage}} <b>km</b>
+                    <b>Mileage:</b> {{vehicle.car.mileage}} <b>km</b>
                   </b-col>
                   <b-col>
-                    <b>Km limit:</b> {{vehicle.kilometerLimit}}
+                    <b>Km limit:</b> {{vehicle.limitKm}}
                   </b-col>
               </b-row>     
               <b-row class="mt-2">
                   <b-col>
-                      <b>Collision Damage Waiver:</b> Yes
+                    <b> Location </b> {{vehicle.location}}
+                  </b-col>
+                  <b-col>
+                      <b>Collision Damage Waiver:</b> {{ vehicle.cdw == true ? 'Yes' : 'No' }}
                   </b-col>
               </b-row>     
           </b-card-text>       
@@ -53,7 +56,7 @@
         <b-row>
           <!--Dugme "Add to {korpica}" ce se prikazivati samo ako je korisnik ulogovan-->
           <b-button v-show="showDiffButtons" type="button" class="ml-auto mr-2 mt-5 buttons"> <a class="removeDecoration" href="/cart">Add to <b-icon icon="bucket-fill"></b-icon></a></b-button>
-          <b-button v-show="showDiffButtons" type="button" class="mr-4 mt-5 buttons"><a class="removeDecoration" href="/vehicle/details">Details</a></b-button>
+          <b-button v-show="showDiffButtons" type="button" class="mr-4 mt-5 buttons"><a class="removeDecoration" @click="details(vehicle.id)">Details</a></b-button>
         </b-row> 
       </b-col>
     </b-row>
@@ -73,6 +76,11 @@ export default {
         }
     },
     methods: {
+
+      details: function(id)
+      {
+        this.$router.push({ path: 'vehicle/details', query: { id: id } });
+      },
       
     }
 

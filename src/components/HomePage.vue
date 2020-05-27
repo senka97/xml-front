@@ -155,6 +155,9 @@
 <script>
 import NavBar from "../components/NavBar.vue";
 import VehicleCard from "../components/VehicleCard.vue";
+import axios from "axios";
+//import moment from 'moment';
+
 
 export default {
   name: "HomePage",
@@ -220,40 +223,7 @@ export default {
         { text: "Semi-automatic", value: "semi-automatic" },
         { text: "Automatic", value: "automatic" }
       ],
-      vehicles: [
-        {
-          id: 1,
-          image:
-            "https://audimediacenter-a.akamaihd.net/system/production/media/49930/images/28318372b7f78fa640c07e629929a92fffb90804/A178321_x500.jpg?1582358914",
-          brand: "Audi",
-          model: "A8",
-          price: 75,
-          fuelType: "Disel",
-          vehicletype: "Saloon",
-          transmission: "Manual",
-          mileage: 15000,
-          kilometerLimit: "Unlimited",
-          childrenSeats: 0,
-          cdw: true,
-          rate: 4.5
-        },
-        {
-          id: 2,
-          image:
-            "https://stimg.cardekho.com/images/carexteriorimages/630x420/Audi/Audi-A8-2019/6722/1544785682176/front-left-side-47.jpg?tr=h-140",
-          brand: "Audi",
-          model: "A8",
-          price: 75,
-          fuelType: "Disel",
-          vehicletype: "Saloon",
-          transmission: "Manual",
-          mileage: 15000,
-          kilometerLimit: "Unlimited",
-          childrenSeats: 0,
-          cdw: true,
-          rate: 4.5
-        }
-      ],
+      vehicles: [],
       show: false,
       sortSelected: null,
       sortingOptions: [
@@ -269,6 +239,11 @@ export default {
   },
   methods: {
     search: function() {
+      axios.get("https://localhost:8083/ad-service/api/ads").then(
+        response => {
+          this.vehicles = response.data;
+        }
+      )
       this.show = true;
     }
   }
