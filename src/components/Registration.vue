@@ -165,7 +165,7 @@
 
 <script>
 import axios from "axios";
-const baseUrl = "https://localhost:8083/user/auth/registration";
+const baseUrl = "https://localhost:8083/user-service/auth/registration";
 
 export default {
   data() {
