@@ -3,14 +3,14 @@
             <div class="col-xs-1 text-center">
             <b-button class="btn-types" @click="showCarBrand()">Car brand</b-button>
             <b-button class="btn-types" @click="showCarModel()">Car model</b-button>
-            <b-button class="btn-types" @click="showCarType()">Car type</b-button>
+            <b-button class="btn-types" @click="showCarClass()">Car class</b-button>
             <b-button class="btn-types" @click="showFuelType()">Fuel type</b-button>
             <b-button class="btn-types" @click="showTransmissionType()">Transmission type</b-button>
             </div>
             <b-container v-if="showCarBrandB" style="margin-top:2em;width:90%;">
                      <b-form class="form-style" @submit.prevent="addCarBrand()">
                      <b-form-group label="Car brand:" label-for="carBrandID">
-                       <b-input id="carBrandID" v-model="carBrand" type="text" required placeholder="Enter a new car brand"></b-input>
+                       <b-input id="carBrandID" v-model="carBrandName" type="text" required placeholder="Enter a new car brand"></b-input>
                      </b-form-group>
                       <b-button variant="success" type="submit">Add</b-button>
                      </b-form>
@@ -26,14 +26,14 @@
             <b-container v-if="showCarModelB" style="margin-top:2em;width:90%;">
                      <b-form class="form-style" @submit.prevent="addCarModel()">
                      <b-form-group label="Car brand:" label-for="carBrand-modelID">
-                        <b-form-select size="sm" text="Car brand" v-model="carBrandChosen" :options="allCarBrands" required>
+                        <b-form-select text="Car brand" v-model="carBrandChosen" :options="allCarBrands" required>
                            <template v-slot:first>
                              <b-form-select-option :value="null">Select car brand</b-form-select-option>
                            </template>
                         </b-form-select>                     
                     </b-form-group>    
                      <b-form-group label="Car model:" label-for="carModelID">
-                       <b-input id="carModelID" v-model="carModel" type="text" required placeholder="Enter a new car model"></b-input>
+                       <b-input id="carModelID" v-model="carModelName" type="text" required placeholder="Enter a new car model"></b-input>
                      </b-form-group>
                       <b-button variant="success" type="submit">Add</b-button>
                      </b-form>
@@ -46,26 +46,26 @@
                      </template>
                   </b-table>
             </b-container>
-            <b-container v-if="showCarTypeB" style="margin-top:2em;width:90%;">
-                     <b-form class="form-style" @submit.prevent="addCarType()">
-                     <b-form-group label="Car type:" label-for="carTypeID">
-                       <b-input id="carTypeID" v-model="carType" type="text" required placeholder="Enter a new car type"></b-input>
+            <b-container v-if="showCarClassB" style="margin-top:2em;width:90%;">
+                     <b-form class="form-style" @submit.prevent="addCarClass()">
+                     <b-form-group label="Car class:" label-for="carTypeID">
+                       <b-input id="carTypeID" v-model="carClassName" type="text" required placeholder="Enter a new car class"></b-input>
                      </b-form-group>
                       <b-button variant="success" type="submit">Add</b-button>
                      </b-form>
-                  <b-table class="table-style" id="table-carTypes" striped hover bordered borderless :items="itemsCarTypes" :fields="fields_types">
+                  <b-table class="table-style" id="table-carClasses" striped hover bordered borderless :items="itemsCarClasses" :fields="fields_types">
                      <template v-slot:cell(edit)="row">
-                       <b-button size="sm" variant="outline-primary" @click="editName(row.item, 'carType')">Edit</b-button>
+                       <b-button size="sm" variant="outline-primary" @click="editName(row.item, 'carClass')">Edit</b-button>
                      </template>
                      <template v-slot:cell(remove)="row">
-                       <b-button size="sm" variant="outline-danger" @click="removeCarType(row.item.id)">Remove</b-button>
+                       <b-button size="sm" variant="outline-danger" @click="removeCarClass(row.item.id)">Remove</b-button>
                      </template>
                   </b-table>
             </b-container>
             <b-container v-if="showFuelTypeB" style="margin-top:2em;width:90%;">
                      <b-form class="form-style" @submit.prevent="addFuelType()">
                      <b-form-group label="Fuel type:" label-for="fuelTypeID">
-                       <b-input id="fuelTypeID" v-model="fuelType" type="text" required placeholder="Enter a new fuel type"></b-input>
+                       <b-input id="fuelTypeID" v-model="fuelTypeName" type="text" required placeholder="Enter a new fuel type"></b-input>
                      </b-form-group>
                       <b-button variant="success" type="submit">Add</b-button>
                      </b-form>
@@ -81,7 +81,7 @@
             <b-container v-if="showTransmissionTypeB" style="margin-top:2em;width:90%;">
                      <b-form class="form-style" @submit.prevent="addTransmissionType()">
                      <b-form-group label="Transmission type:" label-for="transmissionTypeID">
-                       <b-input id="transmissionTypeID" v-model="transmissionType" type="text" required placeholder="Enter a new transmission type"></b-input>
+                       <b-input id="transmissionTypeID" v-model="transmissionTypeName" type="text" required placeholder="Enter a new transmission type"></b-input>
                      </b-form-group>
                       <b-button variant="success" type="submit">Add</b-button>
                      </b-form>
@@ -103,15 +103,18 @@
 </template>
 
 <script>
+import axios from "axios";
+const baseUrl = "https://localhost:8083/car-service"
+
 export default {
     name: 'codebookManagement',
      data() {
         return {
-          carModel: "",
-          carBrand: "",
-          carType: "",
-          fuelType: "",
-          transmissionType: "",
+          carModelName: '',
+          carBrandName: '',
+          carClassName: '',
+          fuelTypeName: '',
+          transmissionTypeName: '',
           fields_types: [
             "name",
             "edit",
@@ -119,14 +122,14 @@ export default {
           ],
           showCarBrandB: false,
           showCarModelB: false,
-          showCarTypeB: false,
+          showCarClassB: false,
           showFuelTypeB: false,
           showTransmissionTypeB: false,
-          itemsCarBrands: [{"id":"1", "name": "BMW"}, {"id":"2","name":"Volkswagen"}],
+          itemsCarBrands: [],
           itemsCarModels: [],
-          itemsCarTypes: [{"id":"1", "name": "SUV"}, {"id":"2","name":"Cabriolet"}],
-          itemsFuelTypes: [{"id":"1", "name": "Diesel"}, {"id":"2","name":"Petrol"}],
-          itemsTransmissionTypes: [{"id":"1", "name": "Automatic"}, {"id":"2","name":"Manual gearbox"}],
+          itemsCarClasses: [],
+          itemsFuelTypes: [],
+          itemsTransmissionTypes: [],
           carBrandChosen: null,
           allCarBrands: [],
           headerBgVariant: 'dark',
@@ -137,161 +140,229 @@ export default {
 
         }
      },
+     created() {
+       this.getBrands();
+     },
      methods:{
+        getBrands() {
+          axios.get(baseUrl + "/brand").then((response) => {
+            this.allCarBrands = [];
+            response.data.forEach(carBrand =>
+              this.allCarBrands.push({value: carBrand.id, text: carBrand.name})
+             );
+          })
+        },
         showCarBrand(){
-          //posalje se zahtev za svim brendovima
+          
+          axios.get(baseUrl + "/brand").then((response) => {
+            this.itemsCarBrands = response.data;
+          })
+
           this.showCarBrandB = true;
           this.showCarModelB = false;
-          this.showCarTypeB = false;
+          this.showCarClassB = false;
           this.showFuelTypeB = false;
           this.showTransmissionTypeB = false;
 
         },
         showCarModel(){
-          //posalje se zahtev za svim brendovima
-          this.allCarBrands = [{"value":"1", "text":"BMW"}, {"value":"2", "text":"Volkswagen"}, {"value":"3", "text":"Tesla"}];  
+
           this.showCarBrandB = false;
           this.showCarModelB = true;
-          this.showCarTypeB = false;
+          this.showCarClassB = false;
           this.showFuelTypeB = false;
           this.showTransmissionTypeB = false;
         },
-        showCarType(){
-          //posalje se zahtev za svim tipovima
+        showCarClass(){
+          
+          axios.get(baseUrl + "/class").then((response) => {
+            this.itemsCarClasses = response.data;
+          })
+
           this.showCarBrandB = false;
           this.showCarModelB = false;
-          this.showCarTypeB = true;
+          this.showCarClassB = true;
           this.showFuelTypeB = false;
           this.showTransmissionTypeB = false;
 
         },
         showFuelType(){
-          //posalje se zahtev za svim tipovima goriva  
+          
+          axios.get(baseUrl + "/fuel").then((response) => {
+            this.itemsFuelTypes = response.data;
+          })
+
           this.showCarBrandB = false;
           this.showCarModelB = false;
-          this.showCarTypeB = false;
+          this.showCarClassB = false;
           this.showFuelTypeB = true;
           this.showTransmissionTypeB = false;
 
         },
         showTransmissionType(){
-          //posalje se zahtev za svim tipovima menjaca
+          
+          axios.get(baseUrl + "/transmission").then((response) => {
+            this.itemsTransmissionTypes = response.data;
+          })
+
           this.showCarBrandB = false;
           this.showCarModelB = false;
-          this.showCarTypeB = false;
+          this.showCarClassB = false;
           this.showFuelTypeB = false;
           this.showTransmissionTypeB = true;
 
         },
         addCarBrand(){
-             //posalje se zahtev za dodavanje
-             this.$notify({
+             
+            axios.post(baseUrl + "/brand", {
+              name: this.carBrandName
+            }).then(() => {
+              this.$notify({
                 group: 'mainHolder',
                 title: 'Success',
                 text: 'New car brand successfully added!',
                 type: 'success'
-            });
-            this.carBrand = "";
-            //posalje se zahtev za prikaz svih
+              });
+              this.carBrandName = '';
+              this.showCarBrand();
+            })
+             
         },
         addCarModel(){
           //posalje se zahtev
           //osvezi se lista modela za brend sa id carBrandChosen
-           this.$notify({
+
+          axios.post(baseUrl + "/model/brand/" + this.carBrandChosen, {
+              name: this.carModelName
+          }).then(() => {
+            this.$notify({
                 group: 'mainHolder',
                 title: 'Success',
                 text: 'New car model successfully added!',
                 type: 'success'
             });
-            this.carModel = "";
+            this.carModelName = '';
+            this.refreshModelTable(this.carBrandChosen);
+          })
         },
-        addCarType(){
-          //posalje se zahtev
-          this.$notify({
+         refreshModelTable: function(newValue){
+            axios.get(baseUrl + "/model/brand/" + newValue).then((response) => {
+            this.itemsCarModels = response.data;
+          })
+         },
+        addCarClass(){
+          axios.post(baseUrl + "/class", {
+            name: this.carClassName
+          }).then(() => {
+             this.$notify({
                 group: 'mainHolder',
                 title: 'Success',
-                text: 'New car type successfully added!',
+                text: 'New car class successfully added!',
                 type: 'success'
             });
-            this.carType = "";
-            //osvezi se prikaz svih
+            this.carClassName = '';
+            this.showCarClass();
+          })
+         
         },
         addFuelType(){
-          //posalje se zahtev
-          this.$notify({
+          axios.post(baseUrl + "/fuel", {
+            name: this.fuelTypeName
+          }).then(() => {
+            this.$notify({
                 group: 'mainHolder',
                 title: 'Success',
                 text: 'New fuel type successfully added!',
                 type: 'success'
             });
-            this.fuelType = "";
-            //osvezi se prikaz svih
+            this.fuelTypeName = '';
+            this.showFuelType();
+          })
         },
         addTransmissionType(){
-          //posalje se zahtev
-          this.$notify({
+          axios.post(baseUrl + "/transmission", {
+            name: this.transmissionTypeName
+          }).then(() => {
+            this.$notify({
                 group: 'mainHolder',
                 title: 'Success',
                 text: 'New transmission type successfully added!',
                 type: 'success'
             });
-            this.transmissionType = "";
-            //osvezi se prikaz svih
+            this.transmissionTypeName = '';
+            this.showTransmissionType();
+          })
         },
         removeCarBrand(id){
             //posalje se zahtev za brisanje
             //ozvezi se prikaz svih
-            console.log(id);
-            this.$notify({
+            axios.delete(baseUrl + "/brand/" + id).then(() => {
+              this.$notify({
                 group: 'mainHolder',
                 title: 'Success',
                 text: 'Car brand successfully removed!',
                 type: 'success'
             });
+            this.showCarBrand();
+            this.getBrands();
+            })
+            
         },
         removeCarModel(id){
             //posalje se zahtev za brisanje
             //ozvezi se prikaz svih modela za brend sa id carBrandChosen
-            console.log(id);
-            this.$notify({
+            axios.delete(baseUrl + "/model/" + id).then(() => {
+               this.$notify({
                 group: 'mainHolder',
                 title: 'Success',
                 text: 'Car model successfully removed!',
                 type: 'success'
-            });
+              });
+              this.refreshModelTable(this.carBrandChosen);
+            })
+           
         },
-        removeCarType(id){
+        removeCarClass(id){
             //posalje se zahtev za brisanje
             //ozvezi se prikaz svih
-            console.log(id);
-            this.$notify({
+            axios.delete(baseUrl + "/class/" + id).then(() => {
+              this.$notify({
                 group: 'mainHolder',
                 title: 'Success',
                 text: 'Car type successfully removed!',
                 type: 'success'
-            });
+              });
+              this.showCarClass();
+            })
+            
         },
         removeFuelType(id){
             //posalje se zahtev za brisanje
             //ozvezi se prikaz svih
-            console.log(id);
-            this.$notify({
+            axios.delete(baseUrl + "/fuel/" + id).then(() => {
+               this.$notify({
                 group: 'mainHolder',
                 title: 'Success',
                 text: 'Fuel type successfully removed!',
                 type: 'success'
-            });
+              });
+              this.showFuelType();
+            })
+           
         },
         removeTransmissionType(id){
             //posalje se zahtev za brisanje
             //ozvezi se prikaz svih
-            console.log(id);
-            this.$notify({
+            axios.delete(baseUrl + "/transmission/" + id).then(() => {
+              this.$notify({
                 group: 'mainHolder',
                 title: 'Success',
                 text: 'Transmission type successfully removed!',
                 type: 'success'
-            });
+              });
+              this.showTransmissionType();
+            })
+            
         },
         editName(item, type){
     
@@ -354,9 +425,9 @@ export default {
      },
      watch: {
          carBrandChosen: function(newValue){
-             //posalje se zahtev za svim modelima brenda sa id newValue
-             console.log(newValue);
-             this.itemsCarModels = [{"id":"1", "name": "R8"}, {"id":"2","name":"Golf 4"}];
+            axios.get(baseUrl + "/model/brand/" + newValue).then((response) => {
+            this.itemsCarModels = response.data;
+          })
          }
      }
 
