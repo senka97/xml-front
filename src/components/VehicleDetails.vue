@@ -16,54 +16,81 @@
     <div class="overflow-hidden container m-auto custom-width">
       <b-card class="mt-1 mb-3 text-center shadow">
         <template v-slot:header>
-          <h3 class="mb-0 text-center">{{vehicle.brand + ' ' + vehicle.model}}</h3>
+          <h3 class="mb-0 text-center">{{vehicle.car.carBrand + ' ' + vehicle.car.carModel}}</h3>
         </template>
         <b-card-text>
-          <b-row>
+          <b-row >
+            <b-col class="col-12">
+                  <b> Available from: </b> {{format_date(vehicle.startDate)}} <b> to </b> {{format_date(vehicle.endDate)}}
+            </b-col>
+          </b-row>
+          <b-row class="mt-2">
             <b-col col-3>
               <b-icon icon="star-fill"></b-icon>
-              {{vehicle.rate}}
+              {{vehicle.car.rate}}
             </b-col>
             <b-col col-3>
-              <b>Price:</b>
-              {{vehicle.price}}
-              <b>€</b>
+              <b>Location:</b>
+              {{vehicle.location}}
+            </b-col>
+          </b-row>
+          <b-row class="mt-2">
+            <b-col col-3>
+              <b> Price per Day:</b>
+              {{vehicle.priceList.pricePerDay}} <b>€</b>
+            </b-col>
+            <b-col col-3>
+              <b>Price per Km:</b>
+              {{vehicle.priceList.pricePerKm}} <b>€</b>
+            </b-col>
+          </b-row>
+          <b-row class="mt-2">
+            <b-col col-3>
+              <b> Discount over 20 Days:</b>
+              {{vehicle.priceList.discount20Days}} <b>%</b>
+            </b-col>
+            <b-col col-3>
+              <b>Discount over 30 Days:</b>
+              {{vehicle.priceList.discount30Days}} <b>%</b>
             </b-col>
           </b-row>
           <b-row class="mt-2">
             <b-col>
               <b>Vehicle type:</b>
-              {{vehicle.vehicletype}}
+              {{vehicle.car.carClass}}
             </b-col>
             <b-col>
               <b>Fuel type:</b>
-              {{vehicle.fuelType}}
+              {{vehicle.car.fuelType}}
             </b-col>
           </b-row>
           <b-row class="mt-2">
             <b-col>
               <b>Transmission:</b>
-              {{vehicle.transmission}}
+              {{vehicle.car.transType}}
             </b-col>
             <b-col>
               <b>Children seats:</b>
-              {{vehicle.childrenSeats}}
+              {{vehicle.car.childrenSeats}}
             </b-col>
           </b-row>
           <b-row class="mt-2">
             <b-col>
               <b>Mileage:</b>
-              {{vehicle.mileage}}
+              {{vehicle.car.mileage}}
               <b>km</b>
             </b-col>
             <b-col>
               <b>Km limit:</b>
-              {{vehicle.kilometerLimit}}
+              {{vehicle.car.limitKm}}
             </b-col>
           </b-row>
           <b-row class="mt-2">
             <b-col>
-              <b>Collision Damage Waiver:</b> Yes
+              <b>Collision Damage Waiver:</b> {{ vehicle.cdw == true ? 'Yes' : 'No' }}
+            </b-col>
+            <b-col>
+              <b>Android app present:</b> {{ vehicle.car.hasAndroidApp == true ? 'Yes' : 'No' }}
             </b-col>
           </b-row>
         </b-card-text>
@@ -101,6 +128,8 @@
 
 <script>
 import NavBar from "../components/NavBar.vue";
+import axios from "axios";
+import moment from 'moment'
 
 export default {
   name: "VehicleDetails",
@@ -109,22 +138,7 @@ export default {
   },
   data() {
     return {
-      vehicle: {
-        id: 1,
-        image:
-          "https://audimediacenter-a.akamaihd.net/system/production/media/49930/images/28318372b7f78fa640c07e629929a92fffb90804/A178321_x500.jpg?1582358914",
-        brand: "Audi",
-        model: "A8",
-        price: 75,
-        fuelType: "Disel",
-        vehicletype: "Saloon",
-        transmission: "Manual",
-        mileage: 15000,
-        kilometerLimit: "Unlimited",
-        childrenSeats: 0,
-        cdw: true,
-        rate: 4.5
-      },
+      vehicle: {},
       images: [
         "https://stimg.cardekho.com/images/carexteriorimages/930x620/Audi/Audi-A8-2019/6722/1544785682176/front-left-side-47.jpg",
         "https://audimediacenter-a.akamaihd.net/system/production/media/49930/images/28318372b7f78fa640c07e629929a92fffb90804/A178321_x500.jpg?1582358914",
@@ -169,7 +183,36 @@ export default {
     clear() {
       this.textarea = '';
     },
-  }
+
+    format_date(value){
+         if (value) {
+           return moment(String(value)).format("DD-MMM-YYYY")
+          }
+      },
+  },
+  created() {
+        var id = this.$route.fullPath;
+        id = id.split('?')[1];
+        id = id.split('=')[1];
+  
+        
+        axios.get("https://localhost:8083/ad-service/api/ads/"+id).then(
+            response=> {
+                this.vehicle = response.data;
+                
+                var x = new Date(this.item.endDate[0], this.item.endDate[1]-1, this.item.endDate[2]);
+                var maxD = new Date(x);
+                this.maxDate = maxD;
+
+                var y = new Date(this.item.startDate[0], this.item.startDate[1]-1, this.item.startDate[2]);
+                var minD = new Date(y);
+                this.minDate = minD;
+
+                     
+            }
+        );
+                
+    },
 };
 </script>
 
