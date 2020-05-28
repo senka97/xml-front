@@ -7,7 +7,6 @@
         v-model="currentImage"
         controls
         indicators
-        
         class="mt-3 carousel-custom shadow"
       >
         <b-carousel-slide class="cutom-height" v-for="img in images" :key="img" :img-src="img"></b-carousel-slide>
@@ -21,7 +20,7 @@
         <b-card-text>
           <b-row >
             <b-col class="col-12">
-                  <b> Available from: </b> {{format_date(vehicle.startDate)}} <b> to </b> {{format_date(vehicle.endDate)}}
+                <b> Available from: </b> {{format_date(vehicle.startDate)}} <b> to </b> {{format_date(vehicle.endDate)}}
             </b-col>
           </b-row>
           <b-row class="mt-2">
@@ -103,75 +102,74 @@
         </template>
       </b-card>
         
-          <b-collapse id="collapse" class="mx-5 my-3">
-            <b-card class="mb-3 shadow">
-                  <validation-observer ref="observer" v-slot="{ handleSubmit }">
-                    <b-form @submit.prevent="handleSubmit(reserve)">         
-                        <b-row class="text-center" >
-                          <b-col>
-                            <h3> <b> User information </b> </h3>
-                          </b-col>
-                        </b-row>
+      <b-collapse id="collapse" class="mx-5 my-3">
+        <b-card class="mb-3 shadow">
+          <validation-observer ref="observer" v-slot="{ handleSubmit }">
+            <b-form @submit.prevent="handleSubmit(reserve)">         
+              <b-row class="text-center" >
+                <b-col>
+                  <h3> <b> User information </b> </h3>
+                </b-col>
+              </b-row>
                         
-                        <b-row >
-                          <b-col>
-                            <validation-provider name="First name" :rules="{ required: true,alpha_spaces: true, min: 2, max: 20 }" v-slot="validationContext">
-                              <b-form-group  align="left" label="Name:" label-for="name">
-                                <b-form-input class="col-12" id="name" v-model="name" type="text" placeholder="Enter name" :state="getValidationState(validationContext)"></b-form-input>
-                                <b-form-invalid-feedback id="name">{{ validationContext.errors[0] }}</b-form-invalid-feedback>
-                              </b-form-group>
-                            </validation-provider>
-                          </b-col>
-                          <b-col>
-                            <validation-provider name="Last name" :rules="{ required: true, alpha_spaces: true, min: 2, max: 20 }" v-slot="validationContext" >
-                              <b-form-group  align="left" label="Last name:" label-for="userLastname">
-                                <b-form-input class="col-12" id="userLastname" v-model="userLastname" type="text" placeholder="Enter lastname" :state="getValidationState(validationContext)"></b-form-input>
-                                <b-form-invalid-feedback id="userLastname">{{ validationContext.errors[0] }}</b-form-invalid-feedback>
-                              </b-form-group>
-                            </validation-provider>
-                          </b-col>
-                        </b-row>
-                        <b-row >
-                          <b-col>
-                            <validation-provider name="Email" rules="required|email" v-slot="validationContext" >
-                              <b-form-group  align="left" label="Email:" label-for="email">
-                                <b-form-input class="col-12" id="email" v-model="email" type="email" placeholder="Enter email" :state="getValidationState(validationContext)"></b-form-input>
-                                <b-form-invalid-feedback id="email">{{ validationContext.errors[0] }}</b-form-invalid-feedback>
-                              </b-form-group>
-                            </validation-provider>
-                          </b-col>
-                          <b-col>
-                            <validation-provider name="Phone number" :rules="{required: true, numeric: true, min: 9, max: 11}" v-slot="validationContext" >
-                              <b-form-group  align="left" label="Phone number:" label-for="phoneNumber" > 
-                                <b-form-input class="col-12" id="phoneNumber" v-model="phoneNumber" type="number" placeholder="Enter phone number" :state="getValidationState(validationContext)"></b-form-input>
-                                <b-form-invalid-feedback id="phoneNumber">{{ validationContext.errors[0] }}</b-form-invalid-feedback>
-                              </b-form-group>
-                            </validation-provider>
-                           </b-col>
-                        </b-row>
-                        <b-row >
-                          <b-col>                           
-                            <b-form-group  align="left" label="Start date:" label-for="startDate">
-                              <b-form-datepicker :min="minDate" :max="maxDate" id="startDate" v-model="startDate" locale="en" placeholder="Start date"></b-form-datepicker>                            
-                            </b-form-group>                                 
-                          </b-col>
-                          <b-col>
-                            <b-form-group  align="left" label="End date:" label-for="endDate" > 
-                              <b-form-datepicker :min="minDate" :max="maxDate" v-model="endDate" locale="en" placeholder="End date"></b-form-datepicker>
-                            </b-form-group>
-                          </b-col>
-                        </b-row>                    
-                        <hr>
-                      <b-row>       
-                        <b-button type="submit" :disabled="!formIsValid" class=" ml-auto mr-3 mb-0" title=" You need to select date" >Reserve</b-button>
-                       </b-row>
-                    </b-form>
-                  </validation-observer>
-                </b-card>
-              </b-collapse>         
-        
-     
+              <b-row >
+                <b-col>
+                  <validation-provider name="First name" :rules="{ required: true,alpha_spaces: true, min: 2, max: 20 }" v-slot="validationContext">
+                    <b-form-group  align="left" label="Name:" label-for="name">
+                      <b-form-input class="col-12" id="name" v-model="name" type="text" placeholder="Enter name" :state="getValidationState(validationContext)"></b-form-input>
+                      <b-form-invalid-feedback id="name">{{ validationContext.errors[0] }}</b-form-invalid-feedback>
+                    </b-form-group>
+                  </validation-provider>
+                </b-col>
+                <b-col>
+                  <validation-provider name="Last name" :rules="{ required: true, alpha_spaces: true, min: 2, max: 20 }" v-slot="validationContext" >
+                    <b-form-group  align="left" label="Last name:" label-for="userLastname">
+                      <b-form-input class="col-12" id="userLastname" v-model="userLastname" type="text" placeholder="Enter lastname" :state="getValidationState(validationContext)"></b-form-input>
+                      <b-form-invalid-feedback id="userLastname">{{ validationContext.errors[0] }}</b-form-invalid-feedback>
+                    </b-form-group>
+                  </validation-provider>
+                </b-col>
+              </b-row>
+              <b-row >
+                <b-col>
+                  <validation-provider name="Email" rules="required|email" v-slot="validationContext" >
+                    <b-form-group  align="left" label="Email:" label-for="email">
+                      <b-form-input class="col-12" id="email" v-model="email" type="email" placeholder="Enter email" :state="getValidationState(validationContext)"></b-form-input>
+                      <b-form-invalid-feedback id="email">{{ validationContext.errors[0] }}</b-form-invalid-feedback>
+                    </b-form-group>
+                  </validation-provider>
+                </b-col>
+                <b-col>
+                  <validation-provider name="Phone number" :rules="{required: true, numeric: true, min: 9, max: 11}" v-slot="validationContext" >
+                    <b-form-group  align="left" label="Phone number:" label-for="phoneNumber" > 
+                      <b-form-input class="col-12" id="phoneNumber" v-model="phoneNumber" type="number" placeholder="Enter phone number" :state="getValidationState(validationContext)"></b-form-input>
+                      <b-form-invalid-feedback id="phoneNumber">{{ validationContext.errors[0] }}</b-form-invalid-feedback>
+                    </b-form-group>
+                  </validation-provider>
+                </b-col>
+              </b-row>
+              <b-row >
+                <b-col>                           
+                  <b-form-group  align="left" label="Start date:" label-for="startDate">
+                    <b-form-datepicker :min="minDate" :max="maxDate" id="startDate" v-model="startDate" locale="en" placeholder="Start date"></b-form-datepicker>                            
+                    </b-form-group>                                 
+                </b-col>
+                <b-col>
+                  <b-form-group  align="left" label="End date:" label-for="endDate" > 
+                    <b-form-datepicker :min="minDate" :max="maxDate" v-model="endDate" locale="en" placeholder="End date"></b-form-datepicker>
+                  </b-form-group>
+                </b-col>
+              </b-row>                    
+              <hr>
+              <b-row>       
+                <b-button type="submit" :disabled="!formIsValid" class=" ml-auto mr-3 mb-0" title=" You need to select date" >Reserve</b-button>
+              </b-row>
+            </b-form>
+          </validation-observer>
+        </b-card>
+      </b-collapse>             
     </div>
+
     <!--Ova kartica ce se prikazivati samo ako je korisnik ulogovan" -->
     <div class="container custom-dim-comment">
       <b-card class="mb-3">
