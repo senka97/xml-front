@@ -13,19 +13,19 @@
                   <b-input-group-prepend is-text>
                     <b-icon icon="geo-alt"></b-icon>
                   </b-input-group-prepend>
-                  <b-form-input type="text" required></b-form-input>
+                  <b-form-input v-model="location" type="text" required></b-form-input>
                 </b-input-group>
               </b-col>
               <b-col>
                 <b-label>Pick-Up Date</b-label>
                 <b-input-group>
-                  <b-form-datepicker :min="minDate" locale="en"></b-form-datepicker>
+                  <b-form-datepicker :min="minDate" locale="en" v-model="startDate"></b-form-datepicker>
                 </b-input-group>
               </b-col>
               <b-col>
                 <b-label>Return Date</b-label>
                 <b-input-group>
-                  <b-form-datepicker :min="minDate" locale="en"></b-form-datepicker>
+                  <b-form-datepicker :min="minDate" locale="en" v-model="endDate"></b-form-datepicker>
                 </b-input-group>
               </b-col>
               <b-col>
@@ -39,7 +39,7 @@
               </b-col>
               <b-col>
                 <b-input-group>
-                  <b-button type="button" class="col-12 mt-4" @click="search">Search</b-button>
+                  <b-button type="button" class="col-12 mt-4" :disabled="!isValidForm" @click="search()">Search</b-button>
                 </b-input-group>
               </b-col>
             </b-row>
@@ -147,7 +147,7 @@
       ></b-form-select>
     </div>
     <div class="container mt-4 d-flex justify-content-center" v-for="v in vehicles" :key="v.id">
-      <VehicleCard v-if="show" :showDiffButtons="true" :vehicle="v" />
+      <VehicleCard v-if="show" :showDiffButtons="true" :vehicle="v" :startDate="startDate" :endDate="endDate" />
     </div>
   </div>
 </template>
@@ -171,6 +171,9 @@ export default {
     const min_date = new Date(today);
     return {
       minDate: min_date,
+      startDate: null,
+      endDate: null,
+      location: "",
       selectedBrand: null,
       vehicletypeSelected: [],
       fueltypeSelected: [],
@@ -245,6 +248,15 @@ export default {
         }
       )
       this.show = true;
+    }
+  },
+  computed: {
+    isValidForm: function(){
+      if(this.startDate != null && this.endDate != null && this.location !== ""){
+        return true;
+      }else{
+        return false;
+      }
     }
   }
 };
