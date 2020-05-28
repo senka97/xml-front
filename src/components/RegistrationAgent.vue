@@ -1,31 +1,20 @@
 <template>
-  <div id="base-div-reg">
-    <b-navbar toggleable="lg" type="dark" variant="dark">
-      <b-navbar-brand href="/">Rent A Car</b-navbar-brand>
-      <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
-      <b-collapse id="nav-collapse" is-nav>
-        <b-navbar-nav class="ml-auto">
-          <b-nav-item href="/home" link-classes="text-light">
-            <b>Homepage</b>
-          </b-nav-item>
-        </b-navbar-nav>
-      </b-collapse>
-    </b-navbar>
-    <div id="div-reg">
+  <div>
+    <div>
       <h2>Create an account</h2>
       <validation-observer ref="observer" v-slot="{ handleSubmit }">
         <b-form @submit.prevent="handleSubmit(createAccount)">
           <validation-provider
-            name="First name"
+            name="Owner's first name"
             :rules="{ required: true,alpha_spaces: true, min: 2, max: 20 }"
             v-slot="validationContext"
           >
-            <b-form-group id="input-group-1" label="First name:" label-for="firstNameID">
+            <b-form-group id="input-group-1" label="Owner's first name:" label-for="firstNameID">
               <b-form-input
                 id="firstNameID"
                 v-model="name"
                 type="text"
-                placeholder="Enter first name"
+                placeholder="Enter owner's first name"
                 :state="getValidationState(validationContext)"
               ></b-form-input>
               <b-form-invalid-feedback id="firstNameID">{{ validationContext.errors[0] }}</b-form-invalid-feedback>
@@ -33,17 +22,17 @@
           </validation-provider>
 
           <validation-provider
-            name="Last name"
+            name="Owner's last name"
             :rules="{ required: true, alpha_spaces: true, min: 2, max: 20 }"
             v-slot="validationContext"
           >
-            <b-form-group id="input-group-2" label="Last name:" label-for="lastNameID">
+            <b-form-group id="input-group-2" label="Owner's last name:" label-for="lastNameID">
               <b-form-input
                 id="lastNameID"
                 v-model="surname"
                 type="text"
                 :state="getValidationState(validationContext)"
-                placeholder="Enter last name"
+                placeholder="Enter owner's last name"
               ></b-form-input>
               <b-form-invalid-feedback id="lastNameID">{{ validationContext.errors[0] }}</b-form-invalid-feedback>
             </b-form-group>
@@ -113,19 +102,53 @@
           </validation-provider>
 
           <validation-provider
-            name="Phone number"
+            name="Company name"
+            :rules="{required: true, regex: /^[a-zA-Z0-9_ ]*$/}"
+            v-slot="validationContext"
+          >
+          <b-form-group id="input-group-6" label="Company name:" label-for="companyNameID">
+            <b-form-input
+              id="companyNameID"
+              v-model="companyName"
+              type="text"
+              :state="getValidationState(validationContext)"
+              placeholder="Enter company name"
+            ></b-form-input>
+            <b-form-invalid-feedback id="companyNameID">{{ validationContext.errors[0] }}</b-form-invalid-feedback>
+          </b-form-group>
+          </validation-provider> 
+
+          <validation-provider
+            name="Company number"
             :rules="{required: true, numeric: true, min: 9, max: 11}"
             v-slot="validationContext"
           >
-          <b-form-group id="input-group-6" label="Phone number:" label-for="phoneNumberID">
+          <b-form-group id="input-group-7" label="Company number:" label-for="companyNumberID">
             <b-form-input
-              id="phoneNumberID"
-              v-model="phoneNumber"
+              id="companyNumberID"
+              v-model="companyNumber"
               type="text"
               :state="getValidationState(validationContext)"
-              placeholder="Enter phone number"
+              placeholder="Enter company number"
             ></b-form-input>
-            <b-form-invalid-feedback id="phoneNumberID">{{ validationContext.errors[0] }}</b-form-invalid-feedback>
+            <b-form-invalid-feedback id="companyNumberID">{{ validationContext.errors[0] }}</b-form-invalid-feedback>
+          </b-form-group>
+          </validation-provider> 
+
+          <validation-provider
+            name="Address"
+            :rules="{required: true, regex: /^[a-zA-Z0-9_ ]*$/}"
+            v-slot="validationContext"
+          >
+          <b-form-group id="input-group-8" label="Address:" label-for="addressID">
+            <b-form-input
+              id="addressID"
+              v-model="address"
+              type="text"
+              :state="getValidationState(validationContext)"
+              placeholder="Enter address"
+            ></b-form-input>
+            <b-form-invalid-feedback id="addressID">{{ validationContext.errors[0] }}</b-form-invalid-feedback>
           </b-form-group>
           </validation-provider> 
 
@@ -165,9 +188,10 @@
 
 <script>
 import axios from "axios";
-const baseUrl = "https://localhost:8083/user/auth/registration";
+const baseUrl = "https://localhost:8083/user/auth/registration/agent";
 
 export default {
+  name: 'RegistartionAgent',
   data() {
     return {
       name: '',
@@ -175,7 +199,9 @@ export default {
       email: '',
       password: '',
       passwordConfirm: '',
-      phoneNumber: '',
+      companyName: '',
+      companyNumber: '',
+      address: '',
       showError: false,
       headerBgVariantSuccess: "success",
       headerBgVariantError: "danger",
@@ -183,16 +209,9 @@ export default {
       errorMessage: 'An error occured while sending the request. Plase try again.'
     };
   },
-  methods: {
+ methods: {
     createAccount: function() {
-      //this.$router.push({ path: '/login'});
-      /*this.$notify({
-                group: 'mainHolder',
-                title: 'Important message',
-                text: 'Hello user! This is a notification!',
-                type: 'success'
-            });*/
-
+    
       const headers = {
         'Content-Type': 'application/json',
         'Accept': 'application/json'
@@ -220,7 +239,9 @@ export default {
       this.email = '';
       this.password = '';
       this.passwordConfirm = '';
-      this.phoneNumber = '';
+      this.companyName = '';
+      this.companyNumber = '';
+      this.address = '';
       this.$refs.observer.reset();
     },
     getValidationState({ dirty, validated, valid = null }) {
@@ -258,27 +279,6 @@ h2 {
   text-align: center;
   margin-top: 10px;
 }
-
-#base-div-reg {
-  background-image: url("../assets/login.jpg");
-  background-repeat: no-repeat;
-  background-attachment: fixed;
-  background-size: cover;
-  height: 110vh;
-}
-
-#div-reg {
-  margin-left: auto;
-  margin-right: auto;
-  margin-top: 0.1em;
-  width: 40%;
-  padding: 2em;
-  padding-top: 0;
-  padding-bottom: 0.5em;
-  border-width: 0.5px;
-  border-style: solid;
-}
-
 .btn-reset {
   margin-left: 1em;
 }
