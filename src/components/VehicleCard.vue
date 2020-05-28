@@ -55,8 +55,8 @@
         </b-card-body>
         <b-row>
           <!--Dugme "Add to {korpica}" ce se prikazivati samo ako je korisnik ulogovan-->
-          <b-button v-show="showDiffButtons" type="button" class="ml-auto mr-2 mt-5 buttons"> <a class="removeDecoration" href="/cart">Add to <b-icon icon="bucket-fill"></b-icon></a></b-button>
-          <b-button v-show="showDiffButtons" type="button" class="mr-4 mt-5 buttons"><a class="removeDecoration" @click="details(vehicle.id)">Details</a></b-button>
+          <b-button v-show="showCartButton" type="button" class="ml-auto mt-5 buttons cartButton"> <a class="removeDecoration" @click="addToCart(vehicle.id, startDate, endDate)">Add to <b-icon icon="bucket-fill"></b-icon></a></b-button>
+          <b-button v-show="showDiffButtons" type="button" class="ml-auto mr-4 mt-5 buttons"><a class="removeDecoration" @click="details(vehicle.id)">Details</a></b-button>
         </b-row> 
       </b-col>
     </b-row>
@@ -64,11 +64,14 @@
 </template>
 
 <script>
+import axios from 'axios';
 export default {
     name: 'VehicleCard',
     props: {
         vehicle: {},
         showDiffButtons: Boolean,
+        startDate: Date,
+        endDate: Date
     },
     data() {
         return {
@@ -81,8 +84,33 @@ export default {
       {
         this.$router.push({ path: 'vehicle/details', query: { id: id } });
       },
+      addToCart: function(id, startDate, endDate){
+        axios.post("https://localhost:8083/rent-service/api/cartItem", {"adID":id, "startDate":startDate, "endDate":endDate}).then(
+          response => {
+            console.log(response);
+              this.$bvToast.toast("You have successfully added the ad in the cart.", {
+              title: "Success",
+              variant: "success",
+              solid: true
+            });
+            this.$refs.observer.reset();
+          }).catch(error => {
+            this.$bvToast.toast(error.response.data, {
+              title: "Error",
+              variant: "danger",
+              solid: true
+            });
+            this.$refs.observer.reset();
+          })
+      },
+      },
+      computed: {
+        showCartButton(){
+          return this.$store.getters.userRole == "ROLE_CLIENT" && this.$store.getters.loggedIn;
+        }
+      }
       
-    }
+    
 
 }
 </script>
@@ -100,6 +128,10 @@ export default {
 
 .buttons {
   width: 110px;
+}
+
+.cartButton {
+  margin-right: -8em;
 }
 
 </style>

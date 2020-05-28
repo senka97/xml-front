@@ -31,7 +31,14 @@ export default new Router({
         {
             path: '/cart',
             name: 'Cart',
-            component: Cart
+            component: Cart,
+            beforeEnter: (to, from, next) => {
+                if(!store.getters.loggedIn || store.getters.userRole !== 'ROLE_CLIENT'){
+                    next({ name: 'NotAuthorized' })
+                }else{
+                    next()
+                }
+              }
         },
         {
             path: '/vehicle/details',
