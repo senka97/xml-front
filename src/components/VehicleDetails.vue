@@ -7,7 +7,7 @@
         v-model="currentImage"
         controls
         indicators
-        interval="4000"
+        
         class="mt-3 carousel-custom shadow"
       >
         <b-carousel-slide class="cutom-height" v-for="img in images" :key="img" :img-src="img"></b-carousel-slide>
@@ -96,6 +96,82 @@
         </b-card-text>
       </b-card>
     </div>
+    <div v-if="loggedInClientAgent" class="container custom-dim-comment">
+      <b-card class="mb-3" id="reserve-card" no-body v-b-toggle.collapse>
+        <template v-slot:header >
+          <h5 class="mb-0 text-center">Reserve car</h5> 
+        </template>
+      </b-card>
+        
+          <b-collapse id="collapse" class="mx-5 my-3">
+            <b-card class="mb-3 shadow">
+                  <validation-observer ref="observer" v-slot="{ handleSubmit }">
+                    <b-form @submit.prevent="handleSubmit(reserve)">         
+                        <b-row class="text-center" >
+                          <b-col>
+                            <h3> <b> User information </b> </h3>
+                          </b-col>
+                        </b-row>
+                        
+                        <b-row >
+                          <b-col>
+                            <validation-provider name="First name" :rules="{ required: true,alpha_spaces: true, min: 2, max: 20 }" v-slot="validationContext">
+                              <b-form-group  align="left" label="Name:" label-for="name">
+                                <b-form-input class="col-12" id="name" v-model="name" type="text" placeholder="Enter name" :state="getValidationState(validationContext)"></b-form-input>
+                                <b-form-invalid-feedback id="name">{{ validationContext.errors[0] }}</b-form-invalid-feedback>
+                              </b-form-group>
+                            </validation-provider>
+                          </b-col>
+                          <b-col>
+                            <validation-provider name="Last name" :rules="{ required: true, alpha_spaces: true, min: 2, max: 20 }" v-slot="validationContext" >
+                              <b-form-group  align="left" label="Last name:" label-for="userLastname">
+                                <b-form-input class="col-12" id="userLastname" v-model="userLastname" type="text" placeholder="Enter lastname" :state="getValidationState(validationContext)"></b-form-input>
+                                <b-form-invalid-feedback id="userLastname">{{ validationContext.errors[0] }}</b-form-invalid-feedback>
+                              </b-form-group>
+                            </validation-provider>
+                          </b-col>
+                        </b-row>
+                        <b-row >
+                          <b-col>
+                            <validation-provider name="Email" rules="required|email" v-slot="validationContext" >
+                              <b-form-group  align="left" label="Email:" label-for="email">
+                                <b-form-input class="col-12" id="email" v-model="email" type="email" placeholder="Enter email" :state="getValidationState(validationContext)"></b-form-input>
+                                <b-form-invalid-feedback id="email">{{ validationContext.errors[0] }}</b-form-invalid-feedback>
+                              </b-form-group>
+                            </validation-provider>
+                          </b-col>
+                          <b-col>
+                            <validation-provider name="Phone number" :rules="{required: true, numeric: true, min: 9, max: 11}" v-slot="validationContext" >
+                              <b-form-group  align="left" label="Phone number:" label-for="phoneNumber" > 
+                                <b-form-input class="col-12" id="phoneNumber" v-model="phoneNumber" type="number" placeholder="Enter phone number" :state="getValidationState(validationContext)"></b-form-input>
+                                <b-form-invalid-feedback id="phoneNumber">{{ validationContext.errors[0] }}</b-form-invalid-feedback>
+                              </b-form-group>
+                            </validation-provider>
+                           </b-col>
+                        </b-row>
+                        <b-row >
+                          <b-col>                           
+                            <b-form-group  align="left" label="Start date:" label-for="startDate">
+                              <b-form-datepicker :min="minDate" :max="maxDate" id="startDate" v-model="startDate" locale="en" placeholder="Start date"></b-form-datepicker>                            
+                            </b-form-group>                                 
+                          </b-col>
+                          <b-col>
+                            <b-form-group  align="left" label="End date:" label-for="endDate" > 
+                              <b-form-datepicker :min="minDate" :max="maxDate" v-model="endDate" locale="en" placeholder="End date"></b-form-datepicker>
+                            </b-form-group>
+                          </b-col>
+                        </b-row>                    
+                        <hr>
+                      <b-row>       
+                        <b-button type="submit" :disabled="!formIsValid" class=" ml-auto mr-3 mb-0" title=" You need to select date" >Reserve</b-button>
+                       </b-row>
+                    </b-form>
+                  </validation-observer>
+                </b-card>
+              </b-collapse>         
+        
+     
+    </div>
     <!--Ova kartica ce se prikazivati samo ako je korisnik ulogovan" -->
     <div class="container custom-dim-comment">
       <b-card class="mb-3">
@@ -138,13 +214,24 @@ export default {
   },
   data() {
     return {
-      vehicle: {},
+      vehicle: {
+        priceList: [],
+          car: [],
+      },
       images: [
         "https://stimg.cardekho.com/images/carexteriorimages/930x620/Audi/Audi-A8-2019/6722/1544785682176/front-left-side-47.jpg",
         "https://audimediacenter-a.akamaihd.net/system/production/media/49930/images/28318372b7f78fa640c07e629929a92fffb90804/A178321_x500.jpg?1582358914",
-        "https://stimg.cardekho.com/images/carexteriorimages/930x620/Audi/Audi-A8-2019/6722/1544785682176/front-left-side-47.jpg"
       ],
       currentImage: 0,
+      name: "",
+      userLastname: "",
+      email: "",
+      phoneNumber: null,
+      currentPriceKM: 0,
+      startDate: null,
+      endDate: null,
+      minDate: null,
+      maxDate: null,
       comments: [
         {
           id: 1,
@@ -172,6 +259,45 @@ export default {
     };
   },
   methods: {
+
+  reserve() {
+      axios.post("https://localhost:8083/rent-service/api/reservations",{
+                startDate: this.startDate,
+                endDate: this.endDate,
+                clientFirstName: this.name,
+                clientLastName: this.userLastname,
+                clientPhoneNumber:this.phoneNumber,
+                clientEmail: this.email,
+                adId: this.vehicle.id,
+                currentPricePerKm : this.vehicle.priceList.pricePerKm
+            })
+           .then(() => {
+                 this.$bvToast.toast('Car reserved from '+ this.startDate + ' to '+ this.endDate, {
+                title: 'Reservation Successful',
+                variant: 'success',
+                solid: true
+                });                        
+          })
+          .catch(error => {
+          if (error.response && error.response.status === 400) {
+              this.$bvToast.toast(error.response.data, {
+                title: 'Bad Request',
+                variant: 'danger',
+                solid: true
+                });
+          }
+          else if(error.response && error.response.status === 417)
+          {
+              this.$bvToast.toast(error.response.data, {
+                title: 'Reservation failed',
+                variant: 'danger',
+                solid: true
+                });
+          }
+          
+          });
+    },
+
     prev() {
       this.currentImage = this.images.length - 1;
       this.$refs.imageCarousel.setSlide(this.images.length - 1);
@@ -188,7 +314,11 @@ export default {
          if (value) {
            return moment(String(value)).format("DD-MMM-YYYY")
           }
-      },
+    },
+    
+    getValidationState({ dirty, validated, valid = null }) {
+      return dirty || validated ? valid : null;
+    }
   },
   created() {
         var id = this.$route.fullPath;
@@ -199,20 +329,49 @@ export default {
         axios.get("https://localhost:8083/ad-service/api/ads/"+id).then(
             response=> {
                 this.vehicle = response.data;
+              
+                var now = new Date();
+                var today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+                var z= new Date(today);
+                console.log(z)
+
+                var x = new Date(this.vehicle.startDate);
+                console.log(x);
                 
-                var x = new Date(this.item.endDate[0], this.item.endDate[1]-1, this.item.endDate[2]);
-                var maxD = new Date(x);
-                this.maxDate = maxD;
+                if(z > x) 
+                {
+                  this.minDate = z;
+                }
+                else
+                {
+                  this.minDate = x;
+                }               
 
-                var y = new Date(this.item.startDate[0], this.item.startDate[1]-1, this.item.startDate[2]);
-                var minD = new Date(y);
-                this.minDate = minD;
-
+                var y = new Date(this.vehicle.endDate);
+                this.maxDate = y;
+                console.log(y);
                      
             }
         );
                 
     },
+    computed: {
+      loggedIn(){
+        return this.$store.getters.loggedIn;
+      },
+      loggedInClientAgent(){
+        return (this.$store.getters.userRole == "ROLE_CLIENT" || this.$store.getters.userRole == "ROLE_AGENT") && this.$store.getters.loggedIn;
+      },
+      
+       formIsValid: function()
+      {
+          if(this.startDate!=null && this.endDate!=null  && this.startDate <= this.endDate)
+          {
+            return true;
+          }
+          else return false;
+      },
+    }
 };
 </script>
 
@@ -244,5 +403,9 @@ export default {
 
 .buttons {
   width: 130px;
+}
+
+#reserve-card{
+    cursor: grab;
 }
 </style>
