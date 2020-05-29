@@ -54,7 +54,7 @@
         caption="Here you can find a car that fits your needs"
         text= "Start your search here"
         :img-src="require('@/assets/welcome2.jpeg')">
-       <b-button pill variant="secondary" href="/homePage" style="width: 13em;">Search</b-button>
+       <b-button pill variant="secondary" href="/home" style="width: 13em;">Search</b-button>
       
       </b-carousel-slide>
 

@@ -9,7 +9,7 @@
         indicators
         class="mt-3 carousel-custom shadow"
       >
-        <b-carousel-slide class="cutom-height" v-for="img in images" :key="img" :img-src="img"></b-carousel-slide>
+        <b-carousel-slide class="cutom-height" v-for="img in vehicle.car.photos64" :key="img" :img-src="img"></b-carousel-slide>
       </b-carousel>
     </div>
     <div class="overflow-hidden container m-auto custom-width">
@@ -81,7 +81,7 @@
             </b-col>
             <b-col>
               <b>Km limit:</b>
-              {{vehicle.car.limitKm}}
+              {{vehicle.limitKm == 0 ? 'UNLIMITED' : vehicle.limitKm + ' km' }}             
             </b-col>
           </b-row>
           <b-row class="mt-2">
@@ -198,12 +198,12 @@
           <p>{{c.content}}</p>
         </b-card-text>
       </b-card>
-      <b-btn v-show="!c.isReplayed" class="buttons ml-1" v-b-modal.modal-1>Replay</b-btn>
+      <b-btn v-show="!c.isReplied" class="buttons ml-1" v-b-modal.modal-1>Reply</b-btn>
       
-      <b-card v-show="c.isReplayed" class="mb-3 shadow custom-dim-replay">
+      <b-card v-show="c.isReplied" class="mb-3 shadow custom-dim-replay">
         <b-card-text>
           <p class="font-weight-bold"> The owner </p>
-          <p>{{c.replayContent}}</p>
+          <p>{{c.replyContent}}</p>
         </b-card-text>
       </b-card>
     </div>
@@ -230,10 +230,6 @@ export default {
         priceList: [],
           car: [],
       },
-      images: [
-        "https://stimg.cardekho.com/images/carexteriorimages/930x620/Audi/Audi-A8-2019/6722/1544785682176/front-left-side-47.jpg",
-        "https://audimediacenter-a.akamaihd.net/system/production/media/49930/images/28318372b7f78fa640c07e629929a92fffb90804/A178321_x500.jpg?1582358914",
-      ],
       currentImage: 0,
       name: "",
       userLastname: "",
@@ -401,11 +397,11 @@ export default {
 <style scoped>
 .carousel-custom {
   width: 75%;
-  height: 480px;
+  height: 550px;
 }
 
 .custom-height {
-  max-height: 480px;
+  max-height: 550px;
   display: flex;
   justify-content: center;
 }
