@@ -42,9 +42,9 @@
         :items="itemsCarBrands"
         :fields="fields_types"
       >
-        <template v-slot:cell(edit)="row">
+      <!--  <template v-slot:cell(edit)="row">
           <b-button size="sm" variant="outline-primary" @click="editName(row.item, 'carBrand')">Edit</b-button>
-        </template>
+        </template> -->
         <template v-slot:cell(remove)="row">
           <b-button size="sm" variant="outline-danger" @click="removeCarBrand(row.item.id)">Remove</b-button>
         </template>
@@ -105,9 +105,9 @@
         :items="itemsCarModels"
         :fields="fields_types"
       >
-        <template v-slot:cell(edit)="row">
+     <!--   <template v-slot:cell(edit)="row">
           <b-button size="sm" variant="outline-primary" @click="editName(row.item, 'carModel')">Edit</b-button>
-        </template>
+        </template> -->
         <template v-slot:cell(remove)="row">
           <b-button size="sm" variant="outline-danger" @click="removeCarModel(row.item.id)">Remove</b-button>
         </template>
@@ -149,9 +149,9 @@
         :items="itemsCarClasses"
         :fields="fields_types"
       >
-        <template v-slot:cell(edit)="row">
+      <!--  <template v-slot:cell(edit)="row">
           <b-button size="sm" variant="outline-primary" @click="editName(row.item, 'carClass')">Edit</b-button>
-        </template>
+        </template> -->
         <template v-slot:cell(remove)="row">
           <b-button size="sm" variant="outline-danger" @click="removeCarClass(row.item.id)">Remove</b-button>
         </template>
@@ -193,9 +193,9 @@
         :items="itemsFuelTypes"
         :fields="fields_types"
       >
-        <template v-slot:cell(edit)="row">
+      <!--  <template v-slot:cell(edit)="row">
           <b-button size="sm" variant="outline-primary" @click="editName(row.item, 'fuelType')">Edit</b-button>
-        </template>
+        </template> -->
         <template v-slot:cell(remove)="row">
           <b-button size="sm" variant="outline-danger" @click="removeFuelType(row.item.id)">Remove</b-button>
         </template>
@@ -237,13 +237,13 @@
         :items="itemsTransmissionTypes"
         :fields="fields_types"
       >
-        <template v-slot:cell(edit)="row">
+     <!--   <template v-slot:cell(edit)="row">
           <b-button
             size="sm"
             variant="outline-primary"
             @click="editName(row.item, 'transmissionType')"
           >Edit</b-button>
-        </template>
+        </template> -->
         <template v-slot:cell(remove)="row">
           <b-button
             size="sm"
@@ -253,7 +253,7 @@
         </template>
       </b-table>
     </b-container>
-    <b-modal
+  <!--  <b-modal
       id="modal-edit"
       ref="modal-edit"
       centered
@@ -270,7 +270,7 @@
           placeholder="Enter a new name"
         ></b-input>
       </b-form-group>
-    </b-modal>
+    </b-modal> -->
   </div>
 </template>
 
@@ -287,7 +287,7 @@ export default {
       carClassName: "",
       fuelTypeName: "",
       transmissionTypeName: "",
-      fields_types: ["name", "edit", "remove"],
+      fields_types: ["name", "remove"],
       showCarBrandB: false,
       showCarModelB: false,
       showCarClassB: false,
@@ -600,7 +600,7 @@ export default {
           }
         });
     },
-    editName(item, type) {
+   /* editName(item, type) {
       this.currentlyChangingType = type;
       this.currentlyChangingID = item.id;
       this.originalName = item.name;
@@ -653,8 +653,8 @@ export default {
           console.log(this.changedName);
           //ponovo osvezi listu tipova menjaca
         }
-      }
-    }
+      } 
+    }*/
   },
   watch: {
     carBrandChosen: function(newValue) {
@@ -679,7 +679,7 @@ export default {
 }
 
 .table-style {
-  width: 70%;
+  width: 60%;
   margin-left: auto;
   margin-right: auto;
   margin-top: 1em;
