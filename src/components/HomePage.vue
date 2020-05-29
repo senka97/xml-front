@@ -256,9 +256,9 @@ export default {
     isValidForm: function(){
       if(this.startDate != null && this.endDate != null && this.location !== ""){
         let date1 = this.startDate.split("-");
-        let sDate = new Date(date1[2],date1[1]-1,date1[0]);
+        let sDate = new Date(date1[0],date1[1]-1,date1[2]);
         let date2 = this.endDate.split("-");
-        let eDate = new Date(date2[2],date2[1]-1,date2[0]);
+        let eDate = new Date(date2[0],date2[1]-1,date2[2]);
         if(sDate <= eDate){
          return true;
         }else{

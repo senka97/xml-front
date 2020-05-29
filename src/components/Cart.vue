@@ -9,12 +9,12 @@
         <b-row>
           <b-form-checkbox
           id="checkbox-1"
-          v-model="separateOrders"
+          v-model="bundle"
           name="checkbox-1"
           :value="true"
           class="mr-2 mt-1"
-        >Create separate orders</b-form-checkbox>
-        <b-button>Create request</b-button>
+        >Create bundle request for the ads with the same owner</b-form-checkbox>
+        <b-button @click="createRequest()">Create request</b-button>
         </b-row>        
       </b-form-group>
     </div>
@@ -26,7 +26,7 @@
         </template>
       <b-row no-gutters>
         <b-col md="5">
-          <b-card-img src="https://www.polovniautomobili.com/user-images/agencies/37910/a9fe4a39d28e.jpg" width="415" height="277" alt="Image" class="rounded-0 mt-2 ml-2 mb-2"></b-card-img>
+          <b-card-img :src="ci.ad.car.photos64[0]" width="415" height="277" alt="Image" class="rounded-0 mt-2 ml-2 mb-2"></b-card-img>
         </b-col>
         <b-col md="7">
           <b-card-body>
@@ -107,7 +107,7 @@ export default {
   },
   data() {
     return {
-      separateOrders: false,
+      bundle: false,
       showEmpty: false,
       cartItems:[],
       /*vehicles: [
@@ -191,6 +191,33 @@ export default {
       let dateParts = [];
       dateParts = date.split("-");
       return dateParts[2] + "/" + dateParts[1] + "/" + dateParts[0];
+    },
+    createRequest(){
+      let cartItemsIDs = [];
+      for(let i=0;i<this.cartItems.length;i++){
+        cartItemsIDs.push(this.cartItems[i].id);
+      }
+      let dto = {"cartItemsIDs": cartItemsIDs, "bundle":this.bundle};
+      axios.post("https://localhost:8083/rent-service/api/request", dto).then(
+        response => {
+          console.log(response.data);
+             this.cartItems = [];
+             this.$bvToast.toast("You have successfully sent the requests.", {
+              title: "Sucess",
+              variant: "success",
+              solid: true
+            });
+            this.$refs.observer.reset();
+
+        }).catch(error => {
+            this.$bvToast.toast(error.response.data, {
+              title: "Error",
+              variant: "error",
+              solid: true
+            });
+            this.$refs.observer.reset();
+        })
+      
     }
   }
 };
