@@ -10,7 +10,8 @@ const baseUrl = "https://localhost:8083/user-service"; //za user service
 export const store =  new Vuex.Store({
     state: {
         token: localStorage.getItem("access_token") || null,
-        userRole: localStorage.getItem("userRole") || null
+        userRole: localStorage.getItem("userRole") || null,
+        currentUserId: localStorage.getItem("currentUserId") || null
             
     },
     getters:{
@@ -19,6 +20,10 @@ export const store =  new Vuex.Store({
         },
         userRole(state){
             return state.userRole;
+        },
+        currentUserId(state)
+        {
+            return state.currentUserId;
         }
 
     },
@@ -34,6 +39,14 @@ export const store =  new Vuex.Store({
         },
         destroyedUserRole(state){
             state.userRole = null;
+        },
+        retrievedCurrentUserId(state, currentUserId)
+        {
+            state.currentUserId = currentUserId;
+        },
+        destroyedCurrentUserId(state)
+        {
+            state.currentUserId = null;
         }
     },
     actions:{
@@ -70,6 +83,8 @@ export const store =  new Vuex.Store({
                     localStorage.setItem("currentUser", JSON.stringify(currentUser));
                     localStorage.setItem('userRole', currentUser.role);
                     context.commit('retrievedUserRole', currentUser.role);
+                    localStorage.setItem('currentUserId', currentUser.id);
+                    context.commit('currentUserId', currentUser.id);
                     resolve(response);
                 })
                 .catch(error => {
@@ -82,6 +97,8 @@ export const store =  new Vuex.Store({
             localStorage.removeItem("currentUser");
             localStorage.removeItem("userRole");
             context.commit('destroyedUserRole');
+            localStorage.removeItem('currentUserId');
+            context.commit('destroyedCurrentUserId');
         }
     }
 })

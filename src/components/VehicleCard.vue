@@ -5,7 +5,7 @@
     </template>
     <b-row no-gutters>
       <b-col md="6">
-        <b-card-img src="https://www.polovniautomobili.com/user-images/agencies/37910/a9fe4a39d28e.jpg" width="415" height="277" alt="Image" class="rounded-0 mt-2 ml-2 mb-2"></b-card-img>
+        <b-card-img :src="vehicle.car.photos64[0]" width="415" height="277" alt="Image" class="rounded-0 mt-2 ml-2 mb-2"></b-card-img>
       </b-col>
       <b-col md="6">
         <b-card-body>
@@ -40,7 +40,7 @@
                     <b>Mileage:</b> {{vehicle.car.mileage}} <b>km</b>
                   </b-col>
                   <b-col>
-                    <b>Km limit:</b> {{vehicle.limitKm}}
+                    <b>Km limit:</b>  {{vehicle.limitKm == 0 ? 'UNLIMITED' : vehicle.limitKm + ' km' }} 
                   </b-col>
               </b-row>     
               <b-row class="mt-2">
@@ -55,8 +55,8 @@
         </b-card-body>
         <b-row>
           <!--Dugme "Add to {korpica}" ce se prikazivati samo ako je korisnik ulogovan-->
-          <b-button v-show="showCartButton" type="button" class="ml-auto mt-5 buttons cartButton"> <a class="removeDecoration" @click="addToCart(vehicle.id, startDate, endDate)">Add to <b-icon icon="bucket-fill"></b-icon></a></b-button>
-          <b-button v-show="showDiffButtons" type="button" class="ml-auto mr-4 mt-5 buttons"><a class="removeDecoration" @click="details(vehicle.id)">Details</a></b-button>
+          <b-button v-show="showCartButton" type="button" class="ml-auto mt-5 mb-2 buttons cartButton"> <a class="removeDecoration" @click="addToCart(vehicle.id, startDate, endDate)">Add to <b-icon icon="bucket-fill"></b-icon></a></b-button>
+          <b-button v-show="showDiffButtons" type="button" class="ml-auto mr-4 mt-5 mb-2 buttons"><a class="removeDecoration" @click="details(vehicle.id)">Details</a></b-button>
         </b-row> 
       </b-col>
     </b-row>
