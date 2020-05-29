@@ -240,6 +240,8 @@ export default {
       endDate: null,
       minDate: null,
       maxDate: null,
+      startDateRent: localStorage.getItem("startDate"),
+      endDateRent: localStorage.getItem("endDate"),
       comments: [],
       textarea: '',
     };
