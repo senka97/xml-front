@@ -14,7 +14,7 @@
           :value="true"
           class="mr-2 mt-1"
         >Create separate orders</b-form-checkbox>
-        <b-button>Create request</b-button>
+        <b-button @click="createRequest()">Create request</b-button>
         </b-row>        
       </b-form-group>
     </div>
@@ -191,6 +191,33 @@ export default {
       let dateParts = [];
       dateParts = date.split("-");
       return dateParts[2] + "/" + dateParts[1] + "/" + dateParts[0];
+    },
+    createRequest(){
+      let cartItemsIDs = [];
+      for(let i=0;i<this.cartItems.length;i++){
+        cartItemsIDs.push(this.cartItems[i].id);
+      }
+      let dto = {"cartItemsIDs": cartItemsIDs, "bundle":this.separateOrders};
+      axios.post("https://localhost:8083/rent-service/api/request", dto).then(
+        response => {
+          console.log(response.data);
+             this.cartItems = [];
+             this.$bvToast.toast("You have successfully sent the requests.", {
+              title: "Sucess",
+              variant: "success",
+              solid: true
+            });
+            this.$refs.observer.reset();
+
+        }).catch(error => {
+            this.$bvToast.toast(error.response.data, {
+              title: "Error",
+              variant: "error",
+              solid: true
+            });
+            this.$refs.observer.reset();
+        })
+      
     }
   }
 };

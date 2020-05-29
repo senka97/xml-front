@@ -323,7 +323,7 @@ export default {
     addToCart: function(id, startDate, endDate){
         axios.post("https://localhost:8083/rent-service/api/cartItem", {"adID":id, "startDate":startDate, "endDate":endDate}).then(
           response => {
-            console.log(response);
+            console.log(response.data);
               this.$bvToast.toast("You have successfully added the ad in the cart.", {
               title: "Success",
               variant: "success",
