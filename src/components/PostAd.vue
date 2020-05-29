@@ -21,8 +21,8 @@
             </b-container>
             <b-container class="mt-2">
               <b-row>
-                <b-button class="buttons" @click="$refs.file.click()" >Add an image</b-button>
-                <b-button variant="outline-secondary" class="buttons ml-2" @click="removeImage()" >Remove an image</b-button>
+                <b-button :disabled="carChosen" class="buttons" @click="$refs.file.click()" >Add an image</b-button>
+                <b-button :disabled="carChosen" variant="outline-secondary" class="buttons ml-2" @click="removeImage()" >Remove an image</b-button>
               </b-row>
             </b-container>
             <hr>
@@ -45,7 +45,7 @@
             <b-row class="mt-2">
               <b-col class="col-4">
                   <b-form-group :disabled="carChosen"  label="Brand:" >
-                    <b-form-select @change="getModelsForBrand()" required v-model="selectedBrand">
+                    <b-form-select required @change="getModelsForBrand()" v-model="selectedBrand">
                       <template v-slot:first>
                           <b-form-select-option selected :value="null">Select brand</b-form-select-option>
                       </template>
@@ -58,7 +58,7 @@
                 </b-form-group>
               </b-col>
               <b-col class="col-4">
-                <b-form-group :disabled="carChosen || selectedBrand == null " label="Model:">
+                <b-form-group required :disabled="carChosen || selectedBrand == null " label="Model:">
                   <b-form-select :disabled="selectedBrand == null" required v-model="selectedModel">
                       <template v-slot:first>
                           <b-form-select-option selected :value="null">Select model</b-form-select-option>
@@ -72,7 +72,7 @@
                 </b-form-group>
               </b-col>
               <b-col class="col-4">
-                 <b-form-group :disabled="carChosen" label="Vehicle type:">
+                 <b-form-group required :disabled="carChosen" label="Vehicle type:">
                   <b-form-select required v-model="vehicletypeSelected">
                       <template v-slot:first>
                           <b-form-select-option selected :value="null">Select Vehicle Type</b-form-select-option>
@@ -89,7 +89,7 @@
             <hr />
             <b-row>
               <b-col>
-                <b-form-group :disabled="carChosen" label="Fuel type:">
+                <b-form-group required :disabled="carChosen" label="Fuel type:">
                 <b-form-select required v-model="fueltypeSelected">
                       <template v-slot:first>
                           <b-form-select-option selected :value="null">Select Fuel Type</b-form-select-option>
@@ -103,7 +103,7 @@
                 </b-form-group>
               </b-col>
               <b-col>
-                <b-form-group :disabled="carChosen" label="Transmision type:">
+                <b-form-group required :disabled="carChosen" label="Transmision type:">
                  <b-form-select required v-model="transmissionSelected">
                       <template v-slot:first>
                           <b-form-select-option selected :value="null">Select Transmission Type</b-form-select-option>
@@ -119,7 +119,7 @@
               </b-col>
               <b-col>
                 <b-form-group label="Number of children seats:">
-                  <b-form-input :disabled="carChosen" v-model="seatsChildren" type="number" min="0"></b-form-input>
+                  <b-form-input required :disabled="carChosen" v-model="seatsChildren" type="number" min="0"></b-form-input>
                 </b-form-group>
               </b-col>
             </b-row>
@@ -127,7 +127,7 @@
             <b-row>
               <b-col>
                 <b-form-group label="Mileage:">
-                  <b-form-input :disabled="carChosen" v-model="kmDriven" type="number" min="0"></b-form-input>
+                  <b-form-input required :disabled="carChosen" v-model="kmDriven" type="number" min="0"></b-form-input>
                 </b-form-group>
               </b-col>
               <b-col>
@@ -150,7 +150,7 @@
             <b-row>
               <b-col>
                 <b-form-group label="Rentable from:">
-                  <b-input-group>
+                  <b-input-group required>
                     <b-form-datepicker v-model="startDate" :min="minDate" locale="en" placeholder="Start date"></b-form-datepicker>
                   </b-input-group>
                 </b-form-group>
@@ -158,14 +158,14 @@
               <b-col>
                 <b-form-group label="Rentable to:">
                   <b-input-group>
-                    <b-form-datepicker v-model="endDate" :min="minDate" locale="en" placeholder="End date"></b-form-datepicker>
+                    <b-form-datepicker required v-model="endDate" :min="minDate" locale="en" placeholder="End date"></b-form-datepicker>
                   </b-input-group>
                 </b-form-group>
               </b-col>
               <b-col>
                 <b-form-group label="Location:">
                   <b-input-group>
-                    <b-form-input v-model="location" type="text"></b-form-input>
+                    <b-form-input required v-model="location" type="text"></b-form-input>
                   </b-input-group>
                 </b-form-group>
               </b-col>
@@ -177,7 +177,7 @@
                 <b-col>
                 </b-col>
                 <b-col cols ="6">
-                    <b-form-group  label-cols-lg="4" label-size="sm"  label="Pricing list:" >
+                    <b-form-group required label-cols-lg="4" label-size="sm"  label="Pricing list:" >
                         <b-form-select required v-model="pricingListSelected" size="sm">
                             <template v-slot:first>
                                 <b-form-select-option :value="{}">Choose the pricing</b-form-select-option>
