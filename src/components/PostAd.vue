@@ -6,7 +6,7 @@
         <template v-slot:header>
           <h3 class="mb-0 text-center">Post an Ad</h3>
         </template>
-        <b-form>
+        <b-form @submit.prevent="postAd()">
           <b-form-group>
             <b-container fluid class="p-4 bg-light">
               <input @change="getImage" type="file" ref="file" style="display: none">
@@ -26,53 +26,100 @@
               </b-row>
             </b-container>
             <hr>
+            <b-row>
+              <b-col class="mt-2">
+                <b-form-group label="Choose a car:" >
+                  <b-form-select @change="chooseCar()" v-model="car" size="sm">
+                      <template v-slot:first>
+                          <b-form-select-option selected :value="null">New car</b-form-select-option>
+                      </template>
+                      <option v-for="(carSelected,index) in cars"
+                          :key="index"
+                          :value="carSelected">
+                          {{carSelected.carBrand.name}} {{carSelected.carModel.name}}
+                  </option>
+                  </b-form-select>
+                </b-form-group>
+              </b-col>
+            </b-row>
             <b-row class="mt-2">
               <b-col class="col-4">
-                <b-form-group label="Brand:">
-                  <b-form-select v-model="selectedBrand" :options="brands"></b-form-select>
+                  <b-form-group :disabled="carChosen"  label="Brand:" >
+                    <b-form-select @change="getModelsForBrand()" required v-model="selectedBrand">
+                      <template v-slot:first>
+                          <b-form-select-option selected :value="null">Select brand</b-form-select-option>
+                      </template>
+                      <option v-for="(brand,index) in brands"
+                          :key="index"
+                          :value="brand">
+                          {{brand.name}}
+                    </option>
+                    </b-form-select>
                 </b-form-group>
               </b-col>
               <b-col class="col-4">
-                <b-form-group label="Model:">
-                  <b-form-select v-model="selectedModel" :options="models"></b-form-select>
+                <b-form-group :disabled="carChosen || selectedBrand == null " label="Model:">
+                  <b-form-select :disabled="selectedBrand == null" required v-model="selectedModel">
+                      <template v-slot:first>
+                          <b-form-select-option selected :value="null">Select model</b-form-select-option>
+                      </template>
+                      <option v-for="(models,index) in models"
+                          :key="index"
+                          :value="models">
+                          {{models.name}}
+                    </option>
+                    </b-form-select>
                 </b-form-group>
               </b-col>
               <b-col class="col-4">
-                <b-form-group label="Vehicle type:">
-                  <b-form-checkbox-group
-                    id="checkboxVehicleType"
-                    v-model="vehicletypeSelected"
-                    :options="vehicletype"
-                    name="checkboxVehicleType"
-                  ></b-form-checkbox-group>
+                 <b-form-group :disabled="carChosen" label="Vehicle type:">
+                  <b-form-select required v-model="vehicletypeSelected">
+                      <template v-slot:first>
+                          <b-form-select-option selected :value="null">Select Vehicle Type</b-form-select-option>
+                      </template>
+                      <option v-for="(vehicletype,index) in vehicletype"
+                          :key="index"
+                          :value="vehicletype">
+                          {{vehicletype.name}}
+                    </option>
+                    </b-form-select>
                 </b-form-group>
               </b-col>
             </b-row>
             <hr />
             <b-row>
               <b-col>
-                <b-form-group label="Fuel type:">
-                  <b-form-checkbox-group
-                    id="checkboxFuelType"
-                    v-model="fueltypeSelected"
-                    :options="fuelType"
-                    name="checkboxFuelType"
-                  ></b-form-checkbox-group>
+                <b-form-group :disabled="carChosen" label="Fuel type:">
+                <b-form-select required v-model="fueltypeSelected">
+                      <template v-slot:first>
+                          <b-form-select-option selected :value="null">Select Fuel Type</b-form-select-option>
+                      </template>
+                      <option v-for="(fuelType,index) in fuelType"
+                          :key="index"
+                          :value="fuelType">
+                          {{fuelType.name}}
+                    </option>
+                    </b-form-select>
                 </b-form-group>
               </b-col>
               <b-col>
-                <b-form-group label="Transmission:">
-                  <b-form-checkbox-group
-                    id="checkboxTransmission"
-                    v-model="transmissionSelected"
-                    :options="transmission"
-                    name="checkboxTransmission"
-                  ></b-form-checkbox-group>
+                <b-form-group :disabled="carChosen" label="Transmision type:">
+                 <b-form-select required v-model="transmissionSelected">
+                      <template v-slot:first>
+                          <b-form-select-option selected :value="null">Select Transmission Type</b-form-select-option>
+                      </template>
+                      <option v-for="(transmission,index) in transmission"
+                          :key="index"
+                          :value="transmission">
+                          {{transmission.name}}
+                    </option>
+                    </b-form-select>
                 </b-form-group>
+                
               </b-col>
               <b-col>
                 <b-form-group label="Number of children seats:">
-                  <b-form-input type="number" min="0"></b-form-input>
+                  <b-form-input :disabled="carChosen" v-model="seatsChildren" type="number" min="0"></b-form-input>
                 </b-form-group>
               </b-col>
             </b-row>
@@ -80,12 +127,12 @@
             <b-row>
               <b-col>
                 <b-form-group label="Mileage:">
-                  <b-form-input type="number" min="0"></b-form-input>
+                  <b-form-input :disabled="carChosen" v-model="kmDriven" type="number" min="0"></b-form-input>
                 </b-form-group>
               </b-col>
               <b-col>
                 <b-form-group label="Kilometers limit:">
-                  <b-form-input type="number" min="0" placeholder="Unlimited"></b-form-input>
+                  <b-form-input v-model="limitkm" type="number" min="0" placeholder="Unlimited"></b-form-input>
                 </b-form-group>
               </b-col>
               <b-col>
@@ -104,37 +151,86 @@
               <b-col>
                 <b-form-group label="Rentable from:">
                   <b-input-group>
-                    <b-form-datepicker :min="minDate" locale="en" placeholder="Start date"></b-form-datepicker>
+                    <b-form-datepicker v-model="startDate" :min="minDate" locale="en" placeholder="Start date"></b-form-datepicker>
                   </b-input-group>
                 </b-form-group>
               </b-col>
               <b-col>
                 <b-form-group label="Rentable to:">
                   <b-input-group>
-                    <b-form-datepicker :min="minDate" locale="en" placeholder="End date"></b-form-datepicker>
-                  </b-input-group>
-                </b-form-group>
-              </b-col>
-              <b-col>
-                <b-form-group label="Price:">
-                  <b-input-group append="€">
-                    <b-form-input type="number" min="0"></b-form-input>
+                    <b-form-datepicker v-model="endDate" :min="minDate" locale="en" placeholder="End date"></b-form-datepicker>
                   </b-input-group>
                 </b-form-group>
               </b-col>
               <b-col>
                 <b-form-group label="Location:">
                   <b-input-group>
-                    <b-form-input type="text"></b-form-input>
+                    <b-form-input v-model="location" type="text"></b-form-input>
                   </b-input-group>
                 </b-form-group>
               </b-col>
+            </b-row>
+            <hr />
+            <b-row >
+          </b-row>
+            <b-row>
+                <b-col>
+                </b-col>
+                <b-col cols ="6">
+                    <b-form-group  label-cols-lg="4" label-size="sm"  label="Pricing list:" >
+                        <b-form-select required v-model="pricingListSelected" size="sm">
+                            <template v-slot:first>
+                                <b-form-select-option :value="{}">Choose the pricing</b-form-select-option>
+                            </template>
+                            <option v-for="(priceList,index) in priceLists"
+                                :key="index"
+                                :value="priceList">
+                                {{priceList.alias}}
+                        </option>
+                        </b-form-select>
+                    </b-form-group>
+                </b-col>
+                <b-col>
+                </b-col>
+            </b-row>
+            <b-row >
+                <b-col>
+                    <b-form-group label-cols="1" label-cols-lg="5" label-size="sm" label="Price per km:" >
+                        <b-input-group size="sm" append="€">
+                        <b-form-input label-cols="1" size="sm" v-model="pricingListSelected.pricePerKm" disabled></b-form-input>
+                        </b-input-group>
+                    </b-form-group>
+                </b-col>
+                <b-col>
+                    <b-form-group label-cols="1" label-cols-lg="5" label-size="sm" label="Price per day:" >
+                        <b-input-group size="sm" append="€">
+                        <b-form-input label-cols="1" size="sm" v-model="pricingListSelected.pricePerDay" disabled></b-form-input>
+                        </b-input-group>
+                    </b-form-group>
+                </b-col>
+            </b-row>
+              <b-row >
+                <b-col>
+                    <b-form-group label-cols="1" label-cols-lg="5" label-size="sm" label="Discount 20 days:" >
+                    <b-input-group size="sm" append="%">
+                        <b-form-input label-cols="1" size="sm" v-model="pricingListSelected.discount20Days" disabled></b-form-input>
+                    </b-input-group>
+                    </b-form-group>
+                </b-col>
+                <b-col>
+                    <b-form-group label-cols="1" label-cols-lg="5" label-size="sm" label="Discount 30 days:" >
+                        <b-input-group size="sm" append="%">
+                        <b-form-input label-cols="1" size="sm" v-model="pricingListSelected.discount30Days" disabled></b-form-input>
+                        </b-input-group>
+                    </b-form-group>
+                </b-col>
             </b-row>
             <hr />
             <b-row>
               <b-col>
                 <b-form-group>
                   <b-form-checkbox
+                  :disabled="carChosen"
                     id="checkboxAndroid"
                     v-model="android"
                     name="checkboxAndroid"
@@ -144,7 +240,7 @@
               </b-col>
             </b-row>
             <b-row>
-              <b-button class="buttons ml-auto mr-3" >Post ad</b-button>
+              <b-button type="submit" class="buttons ml-auto mr-3" >Post ad</b-button>
             </b-row>           
           </b-form-group>
         </b-form>
@@ -155,6 +251,9 @@
 
 <script>
 import NavBar from "../components/NavBar.vue";
+const baseUrlCar = "https://localhost:8083/car-service";
+const baseUrlAd = "https://localhost:8083/ad-service";
+import axios from "axios";
 
 export default {
   name: "PostAd",
@@ -168,40 +267,14 @@ export default {
     return {
       minDate: min_date,
       selectedBrand: null,
-      vehicletypeSelected: [],
-      fueltypeSelected: [],
-      transmissionSelected: [],
+      vehicletypeSelected: null,
+      fueltypeSelected: null,
+      transmissionSelected: null,
       cdw: false,
       android: false,
-      brands: [
-        { value: null, text: "Select brand", disabled: true },
-        { value: "a", text: "Alfa Romeo" },
-        { value: "b", text: "Audi" },
-        { value: "c", text: "BMW" },
-        { value: "d", text: "Chevrolet" },
-        { value: "e", text: "Ferrari" },
-        { value: "f", text: "Fiat" },
-        { value: "g", text: "Ford" },
-        { value: "h", text: "Hyundai" },
-        { value: "i", text: "Mercedes Benz" },
-        { value: "j", text: "Peugeot" },
-        { value: "k", text: "Toyota" }
-      ],
+      brands: [],
       selectedModel: null,
-      models: [
-        { value: null, text: "Select model", disabled: true },
-        { value: "a", text: "Alfa Romeo" },
-        { value: "b", text: "A8" },
-        { value: "c", text: "BMW" },
-        { value: "d", text: "Chevrolet" },
-        { value: "e", text: "Ferrari" },
-        { value: "f", text: "Fiat" },
-        { value: "g", text: "Ford" },
-        { value: "h", text: "Hyundai" },
-        { value: "i", text: "Mercedes Benz" },
-        { value: "j", text: "Peugeot" },
-        { value: "k", text: "Toyota" }
-      ],
+      models: [],
       fuelType: [
         { text: "Petrol", value: "petrol" },
         { text: "Diesel", value: "diesel" },
@@ -209,19 +282,26 @@ export default {
         { text: "Gas", value: "gas" },
         { text: "Electric", value: "electric" }
       ],
-      vehicletype: [
-        { text: "SUV", value: "suv" },
-        { text: "Saloon", value: "saloon" },
-        { text: "Coupe", value: "coupe" },
-        { text: "Cabriolet", value: "cabriolet" }
-      ],
+      vehicletype: [],
       transmission: [
         { text: "Manual gearbox", value: "manual" },
         { text: "Semi-automatic", value: "semi-automatic" },
         { text: "Automatic", value: "automatic" }
       ],
       images: [],
-      currentImage: 0
+      currentImage: 0,
+      startDate:null,
+      endDate:null,
+      limitkm:null,
+      location:null,
+      carId:null,
+      seatsChildren:null,
+      kmDriven:null,
+      pricingListSelected:{},
+      priceLists:[],
+      cars:[],
+      car:null,
+      carChosen:false
     };
   },
   methods: {
@@ -238,7 +318,153 @@ export default {
     },
     removeImage() {
       this.images.pop()
-    }
+    },
+    getModelsForBrand(){
+      if(this.selectedBrand == null){
+        this.selectedModel = null;
+        
+      }else{ 
+        axios.get(baseUrlCar + "/model/brand/"+this.selectedBrand.id).then((response) => {
+        this.models = response.data;
+        })
+      }
+    },
+    postAd(){
+        if(this.limitKm == null)
+          this.limitKm=0;
+
+        axios.post(baseUrlAd+'/api/ad',{
+            ownerId:null,
+            startDate: this.startDate,
+            endDate: this.endDate,
+            limitKm: this.limitkm,
+            cdw: this.cdw,
+            priceList:this.pricingListSelected,
+            location:this.location, 
+            car:{
+                id:this.carId,
+                childrenSeats:this.seatsChildren,
+                mileage:this.kmDriven,
+                carModel: this.selectedModel.name,
+                carClass: this.vehicletypeSelected.name,
+                transType: this.transmissionSelected.name,
+                fuelType: this.fueltypeSelected.name,
+                hasAndroidApp: this.android,
+                photos64: this.images,
+                carBrand:this.selectedBrand.name
+
+
+            }
+        }).then(response => {
+                this.selectedFeul=response;
+                this.$bvToast.toast('Ad posted for '+this.selectedBrand.name + ' '+this.selectedModel.name, {
+                title: `Succesfuly posted ad`,
+                variant: 'success',
+                solid: true
+                });
+                this.refreshForm();
+            })
+            .catch(error =>{
+                if(error.response.data.status != 400){ 
+                    this.$bvToast.toast(error.response.data, {
+                    title: 'Incorrect input',
+                    variant: 'danger',
+                    solid: true
+                    });
+                }else{ 
+                    this.$bvToast.toast(error.response.data.errors[0].defaultMessage, {
+                    title: 'Incorrect input',
+                    variant: 'danger',
+                    solid: true
+                    });
+                }
+            });
+    },
+    chooseCar(){
+       if(this.car === null){
+                this.car=null;
+                this.selectedBrand=null;
+                this.selectedModel=null;
+                this.vehicletypeSelected = null;
+                this.fueltypeSelected=null;
+                this.transmissionSelected = null;
+                this.seatsChildren = null;
+                this.carId = null;
+                this.kmDriven = null;
+                this.cdw = false;
+                this.location = null;
+                this.images=[];
+                this.carChosen=false;
+                
+            }else{
+               this.selectedBrand = this.car.carBrand;
+                 axios.get(baseUrlCar + "/model/brand/"+this.selectedBrand.id).then((response) => {
+                  this.models = response.data;
+                  this.selectedModel = this.car.carModel;
+                })
+                
+                this.vehicletypeSelected = this.car.carClass;
+                
+                this.fueltypeSelected=this.car.fuelType;
+                this.transmissionSelected = this.car.transType;
+                this.seatsChildren = this.car.childrenSeats;
+                this.carId = this.car.id;
+                this.kmDriven = this.car.mileage;
+
+                this.android= this.car.hasAndroidApp;
+                this.carChosen=true;
+                this.images = this.car.photos64;
+                // axios.get(baseUrl+'/car/'+this.carId+'/photo')
+                // .then(response => {
+                //     this.images = response.data;
+                // });
+            }
+    },
+     refreshForm(){
+            this.car = null;
+            this.carChosen= false;
+            this.selectedModel = null;
+            this.vehicletypeSelected= null;
+            this.fueltypeSelected = null;
+            this.transmissionSelected = null;
+            this.seatsChildren = null;
+            this.kmDriven = null;
+            this.cdw=false;
+            this.startDate=null;
+            this.endDate=null;
+            this.android=false;
+            this.pricingListSelected={};
+            this.carChosen=false;
+            this.location = null;
+            this.images= [];
+            this.selectedBrand=null;
+            this.limitKm=null;
+            axios.get(baseUrlCar + "/api/car/ad/notActive")
+            .then(response => {
+                this.cars = response.data;
+            });
+                
+        }
+  },
+  mounted(){
+    axios.get(baseUrlCar + "/brand").then((response) => {
+      this.brands = response.data;
+    })
+    axios.get(baseUrlCar + "/fuel").then((response) => {
+      this.fuelType = response.data;
+    })
+    axios.get(baseUrlCar + "/transmission").then((response) => {
+      this.transmission = response.data;
+    })
+    axios.get(baseUrlCar + "/class").then((response) => {
+      this.vehicletype = response.data;
+    })
+    axios.get(baseUrlAd + "/api/priceList/owner").then((response) => {
+      this.priceLists = response.data;
+    })
+    axios.get(baseUrlCar + "/api/car/ad/notActive").then((response) => {
+      this.cars = response.data;
+    })
   }
 };
 </script>

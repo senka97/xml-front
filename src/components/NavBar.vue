@@ -2,6 +2,10 @@
    <div>
     <b-navbar toggleable="lg" type="dark" variant="dark" class="navbar">
     <b-navbar-brand href="/" class="title font-weight-bold">Rent A Car</b-navbar-brand>
+          <b-navbar-nav class="ml-auto">
+            <b-nav-item  v-if="showClientProfile" href="/post/ad" link-classes="text-light"><b>Post Ad</b></b-nav-item>
+
+          </b-navbar-nav>
       <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
       <b-collapse id="nav-collapse" is-nav>
         <b-navbar-nav class="ml-auto">
@@ -39,6 +43,12 @@ export default {
       },
       showAdminProfile(){
         return this.$store.getters.userRole == "ROLE_ADMIN" && this.$store.getters.loggedIn;
+      },
+      showClientProfile(){
+        return this.$store.getters.userRole == "ROLE_CLIENT" && this.$store.getters.loggedIn;
+      },
+      showAgentProfile(){
+        return this.$store.getters.userRole == "ROLE_AGENT" && this.$store.getters.loggedIn;
       }
     }
 
