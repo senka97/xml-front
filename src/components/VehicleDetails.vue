@@ -95,7 +95,7 @@
         </b-card-text>
       </b-card>
     </div>
-    <div v-if="loggedInClientAgent" class="container custom-dim-comment">
+    <div v-if="loggedInOwner" class="container custom-dim-comment">
       <b-card class="mb-3" id="reserve-card" no-body v-b-toggle.collapse>
         <template v-slot:header >
           <h5 class="mb-0 text-center">Reserve car</h5> 
@@ -171,7 +171,7 @@
     </div>
 
     <!--Ova kartica ce se prikazivati samo ako je korisnik ulogovan" -->
-    <div class="container custom-dim-comment">
+    <div v-if="loggedInClient" class="container custom-dim-comment">
       <b-card class="mb-3">
         <template v-slot:header>
           <h5 class="mb-0">Comment</h5>
@@ -189,15 +189,28 @@
         </b-card-text>
       </b-card>
     </div>
+  
     <div class="container mt-3 custom-dim-comment" v-for="c in comments" :key="c.id">
-      <b-card class="mb-3 shadow">
+      <b-card class="mb-1 shadow">
         <b-card-text>
-          <p class="font-weight-bold">{{c.name + ' ' + c.surname}}</p>
-          <p>{{c.comment}}</p>
+          <p class="font-weight-bold">{{c.userName + ' ' + c.userLastname}}</p>
+          <p>{{c.content}}</p>
+        </b-card-text>
+      </b-card>
+      <b-btn v-show="!c.isReplayed" class="buttons ml-1" v-b-modal.modal-1>Replay</b-btn>
+      
+      <b-card v-show="c.isReplayed" class="mb-3 shadow custom-dim-replay">
+        <b-card-text>
+          <p class="font-weight-bold"> The owner </p>
+          <p>{{c.replayContent}}</p>
         </b-card-text>
       </b-card>
     </div>
-  </div>
+
+    <b-modal id="modal-1" title="Your replay">
+        <b-form-textarea id="textarea" placeholder="Enter comment..." rows="3" no-resize v-model="textarea"></b-form-textarea>
+    </b-modal>
+  </div> 
 </template>
 
 <script>
@@ -230,29 +243,7 @@ export default {
       endDate: null,
       minDate: null,
       maxDate: null,
-      comments: [
-        {
-          id: 1,
-          comment:
-            "Lorem ipsum dolor, sit amet consectetur adipisicing elit. Quia, beatae? Lorem ipsum dolor sit, amet consectetur adipisicing elit.Unde id animi at hic reprehenderit praesentium aliquam vero quae! Sint, officiis!",
-          name: "Pera",
-          surname: "Peric"
-        },
-        {
-          id: 2,
-          comment:
-            "Lorem ipsum dolor, sit amet consectetur adipisicing elit. Quia, beatae? Lorem ipsum dolor sit, amet consectetur adipisicing elit.Unde id animi at hic reprehenderit praesentium aliquam vero quae! Sint, officiis!",
-          name: "Djura",
-          surname: "Djuric"
-        },
-        {
-          id: 3,
-          comment:
-            "Lorem ipsum dolor, sit amet consectetur adipisicing elit. Quia, beatae? Lorem ipsum dolor sit, amet consectetur adipisicing elit.Unde id animi at hic reprehenderit praesentium aliquam vero quae! Sint, officiis!",
-          name: "Marko",
-          surname: "Markovic"
-        }
-      ],
+      comments: [],
       textarea: '',
     };
   },
@@ -351,14 +342,25 @@ export default {
                      
             }
         );
+        
+        axios.get("https://localhost:8083/car-service/api/comments/"+ id).then(
+            response=> {
+                this.comments = response.data;                    
+            }
+        );
                 
     },
     computed: {
       loggedIn(){
         return this.$store.getters.loggedIn;
       },
-      loggedInClientAgent(){
-        return (this.$store.getters.userRole == "ROLE_CLIENT" || this.$store.getters.userRole == "ROLE_AGENT") && this.$store.getters.loggedIn;
+      loggedInOwner(){
+        return this.$store.getters.currentUserId == this.vehicle.ownerId  && this.$store.getters.loggedIn;
+      },
+
+      loggedInClient()
+      {
+        return this.$store.getters.userRole == "ROLE_CLIENT" && this.$store.getters.loggedIn;
       },
       
        formIsValid: function()
@@ -392,6 +394,12 @@ export default {
 .custom-dim-comment {
   width: 57%;
   height: 25%;
+}
+
+.custom-dim-replay{
+  width: 90%;
+  height: 25%;
+  margin-left: 5em;
 }
 
 .shadow {
