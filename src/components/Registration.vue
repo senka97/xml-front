@@ -12,6 +12,8 @@
       </b-collapse>
     </b-navbar>
     <div id="div-reg">
+      <b-tabs content-class="mt-3" fill>
+        <b-tab title="Client">
       <h2>Create an account</h2>
       <validation-observer ref="observer" v-slot="{ handleSubmit }">
         <b-form @submit.prevent="handleSubmit(createAccount)">
@@ -133,6 +135,11 @@
           <b-button class="btn-reset" type="reset" v-on:click="clear" variant="danger">Reset</b-button>
         </b-form>
       </validation-observer>
+      </b-tab>
+      <b-tab title="Agent/Company">
+        <RegistrationAgent />
+      </b-tab>
+      </b-tabs>
     </div>
     <b-modal
       id="modal-center"
@@ -164,10 +171,14 @@
 </template>
 
 <script>
+import RegistrationAgent from '../components/RegistrationAgent.vue';
 import axios from "axios";
 const baseUrl = "https://localhost:8083/user-service/auth/registration";
 
 export default {
+  components: {
+    RegistrationAgent
+  },
   data() {
     return {
       name: '',
@@ -264,7 +275,7 @@ h2 {
   background-repeat: no-repeat;
   background-attachment: fixed;
   background-size: cover;
-  height: 110vh;
+  height: 130vh;
 }
 
 #div-reg {
