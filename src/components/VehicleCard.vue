@@ -70,8 +70,8 @@ export default {
     props: {
         vehicle: {},
         showDiffButtons: Boolean,
-        startDate: Date,
-        endDate: Date
+        startDate: String,
+        endDate: String
     },
     data() {
         return {

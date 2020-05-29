@@ -93,6 +93,7 @@
             </b-col>
           </b-row>
         </b-card-text>
+        <b-button v-show="showCartButton" type="button" class="ml-auto mt-5 buttons cartButton"> <a class="removeDecoration" @click="addToCart(vehicle.id, startDateRent, endDateRent)">Add to <b-icon icon="bucket-fill"></b-icon></a></b-button>
       </b-card>
     </div>
     <div v-if="loggedInClientAgent" class="container custom-dim-comment">
@@ -230,6 +231,8 @@ export default {
       endDate: null,
       minDate: null,
       maxDate: null,
+      startDateRent: localStorage.getItem("startDate"),
+      endDateRent: localStorage.getItem("endDate"),
       comments: [
         {
           id: 1,
@@ -316,7 +319,26 @@ export default {
     
     getValidationState({ dirty, validated, valid = null }) {
       return dirty || validated ? valid : null;
-    }
+    },
+    addToCart: function(id, startDate, endDate){
+        axios.post("https://localhost:8083/rent-service/api/cartItem", {"adID":id, "startDate":startDate, "endDate":endDate}).then(
+          response => {
+            console.log(response);
+              this.$bvToast.toast("You have successfully added the ad in the cart.", {
+              title: "Success",
+              variant: "success",
+              solid: true
+            });
+            this.$refs.observer.reset();
+          }).catch(error => {
+            this.$bvToast.toast(error.response.data, {
+              title: "Error",
+              variant: "danger",
+              solid: true
+            });
+            this.$refs.observer.reset();
+          })
+      },
   },
   created() {
         var id = this.$route.fullPath;
@@ -369,6 +391,9 @@ export default {
           }
           else return false;
       },
+      showCartButton(){
+          return this.$store.getters.userRole == "ROLE_CLIENT" && this.$store.getters.loggedIn;
+        }
     }
 };
 </script>

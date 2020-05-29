@@ -242,6 +242,8 @@ export default {
   },
   methods: {
     search: function() {
+      localStorage.setItem("startDate", this.startDate);
+      localStorage.setItem("endDate", this.endDate);
       axios.get("https://localhost:8083/ad-service/api/ads").then(
         response => {
           this.vehicles = response.data;
@@ -253,7 +255,15 @@ export default {
   computed: {
     isValidForm: function(){
       if(this.startDate != null && this.endDate != null && this.location !== ""){
-        return true;
+        let date1 = this.startDate.split("-");
+        let sDate = new Date(date1[2],date1[1]-1,date1[0]);
+        let date2 = this.endDate.split("-");
+        let eDate = new Date(date2[2],date2[1]-1,date2[0]);
+        if(sDate <= eDate){
+         return true;
+        }else{
+          return false;
+        }
       }else{
         return false;
       }
