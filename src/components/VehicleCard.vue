@@ -93,14 +93,24 @@ export default {
               variant: "success",
               solid: true
             });
-            this.$refs.observer.reset();
+            //this.$refs.observer.reset();
           }).catch(error => {
-            this.$bvToast.toast(error.response.data, {
-              title: "Error",
-              variant: "danger",
-              solid: true
+            if(error.response && error.response.status === 500){
+               this.$bvToast.toast("Server error. Please try again.", {
+                  title: "Error",
+                  variant: "danger",
+                  solid: true
             });
-            this.$refs.observer.reset();
+            }
+            if(error.response && (error.response.status === 400 || error.response.status === 404)){
+              this.$bvToast.toast(error.response.data, {
+                title: "Error",
+                variant: "danger",
+                solid: true
+              });
+              
+            }
+            //this.$refs.observer.reset();
           })
       },
       },
