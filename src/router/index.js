@@ -10,7 +10,7 @@ import Cart from '../components/Cart.vue'
 import VehicleDetails from '../components/VehicleDetails.vue'
 import NotAuthorized from '../components/NotAuthorized.vue'
 import { store } from '../store/store'
-
+import NewRequestsPage from '../components/NewRequestsPage.vue'
 
 
 Vue.use(Router)
@@ -66,6 +66,18 @@ export default new Router({
             component: AdminProfile,
             beforeEnter: (to, from, next) => {
                 if(!store.getters.loggedIn || store.getters.userRole !== 'ROLE_ADMIN'){
+                    next({ name: 'NotAuthorized' })
+                }else{
+                    next()
+                }
+              }
+        },
+        {
+            path: '/newRequests',
+            name: 'NewRequests',
+            component: NewRequestsPage,
+            beforeEnter: (to, from, next) => {
+                if(!store.getters.loggedIn || store.getters.userRole == 'ROLE_ADMIN'){
                     next({ name: 'NotAuthorized' })
                 }else{
                     next()

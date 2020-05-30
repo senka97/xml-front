@@ -1,35 +1,6 @@
 <template>
     <div id="div">
-        <b-navbar toggleable="lg" type="dark" variant="dark">
-          <b-navbar-brand href="/"> <b> Rent A Car </b> </b-navbar-brand>
-
-          <b-navbar-toggle target="nav-collapse1"></b-navbar-toggle>
-
-          <b-collapse id="nav-collapse1" is-nav>
-            <b-navbar-nav class="ml-auto">
-              <b-nav-item href="/home" link-classes="text-light"><b>Search Cars</b></b-nav-item>
-              <b-nav-item v-if="showPostAd" href="/post/ad" link-classes="text-light"><b>Post Ad</b></b-nav-item>
-            </b-navbar-nav>
-
-          <b-navbar-toggle target="nav-collapse2"></b-navbar-toggle>
-          <b-collapse id="nav-collapse2" is-nav>
-            <b-navbar-nav class="ml-auto">
-              <b-nav-item v-if="loggedIn" @click="clickAdminUS()" link-classes="text-light"><b>Admin-US</b></b-nav-item>
-              <b-nav-item v-if="loggedIn" @click="clickAgentUS()" link-classes="text-light"><b>Agent-US</b></b-nav-item>
-              <b-nav-item v-if="loggedIn" @click="clickClientUS()" link-classes="text-light"><b>Client-US</b></b-nav-item>
-              <b-nav-item v-if="loggedIn" @click="clickAdminCS()" link-classes="text-light"><b>Admin-CS</b></b-nav-item>
-              <b-nav-item v-if="loggedIn" @click="clickAgentCS()" link-classes="text-light"><b>Agent-CS</b></b-nav-item>
-              <b-nav-item v-if="loggedIn" @click="clickClientCS()" link-classes="text-light"><b>Client-CS</b></b-nav-item>
-              <!--<b-nav-item href="#"><b-icon style="width: 1.7em; height: 1.7em;" icon="bell-fill" class="rounded-circle bg-info p-2" variant="light"></b-icon><span class="badge badge-notify">3</span></b-nav-item> -->
-              <b-nav-item v-if="showCart" href="/cart" link-classes="text-light"><b>Cart</b></b-nav-item>
-              <b-nav-item v-if="showAdminProfile" href="/adminProfile" link-classes="text-light"><b>Admin profile</b></b-nav-item>
-              <b-nav-item v-if="loggedIn" @click="logout()" link-classes="text-light"><b>Logout</b></b-nav-item>
-              <b-nav-item v-if="!loggedIn" href="/login" link-classes="text-light"><b>Login</b></b-nav-item>
-              <b-nav-item v-if="!loggedIn" href="/registration" link-classes="text-light"><b>Register</b></b-nav-item>
-            </b-navbar-nav>
-          </b-collapse>  
-          </b-collapse>
-        </b-navbar>  
+      <NavBar/>
     <div>
     <b-carousel
      id="carousel-1"
@@ -65,29 +36,26 @@
         :img-src="require('@/assets/welcome3.jpeg')">
         <b-button href="/registration" pill variant="secondary" style="width: 13em; margin: 1em">Register </b-button>
         <b-button href="/login" pill variant="secondary" style="width: 13em; margin: 1em">Log in </b-button>
-      </b-carousel-slide>
-        
-    
-    </b-carousel>
-
-    
+      </b-carousel-slide>   
+    </b-carousel> 
+    </div>     
   </div>
-        
-    </div>
+
 </template>
 
 <script>
-import axios from 'axios';
+import NavBar from "../components/NavBar.vue";
 
 export default {
     name: "Welcome",
     components: {
-       
+       NavBar
     },
     data() {
       return {
         slide: 0,
-        sliding: null
+        sliding: null,
+        numberOfNewRequests: 2,
       }
     },
     methods: {
@@ -97,86 +65,11 @@ export default {
       onSlideEnd() {
         this.sliding = false
       },
-      logout: function() {
-          this.$store.dispatch('destroyToken');
-          this.$store.dispatch('destroyCurrentUser');
-        },
-        clickAdminUS(){
-            axios.get("https://localhost:8083/user-service/helloAdmin").then(
-              response => {
-                alert(response.data);
-              }
-            ).catch(error => {
-                alert(error);
-            })
-        },
-        clickAgentUS(){
-          axios.get("https://localhost:8083/user-service/helloAgent").then(
-              response => {
-                alert(response.data);
-              }
-            ).catch(error => {
-                alert(error);
-            })
-
-        },
-        clickClientUS(){
-            axios.get("https://localhost:8083/user-service/helloClient").then(
-              response => {
-                alert(response.data);
-              }
-            ).catch(error => {
-                alert(error);
-            })
-        },
-        clickAdminCS(){
-
-          axios.get("https://localhost:8083/car-service/test/helloAdmin").then(
-              response => {
-                alert(response.data);
-              }
-            ).catch(error => {
-                alert(error);
-            })
-
-        },
-        clickAgentCS(){
-            axios.get("https://localhost:8083/car-service/test/helloAgent").then(
-              response => {
-                alert(response.data);
-              }
-            ).catch(error => {
-                alert(error);
-            })
-
-        },
-        clickClientCS(){
-            axios.get("https://localhost:8083/car-service/test/helloClient").then(
-              response => {
-                alert(response.data);
-              }
-            ).catch(error => {
-                alert(error);
-            })
-
-        },
-
+        
     },
+
     computed: {
-      loggedIn(){
-        return this.$store.getters.loggedIn;
-      },
-      showPostAd(){
-        return (this.$store.getters.userRole == "ROLE_CLIENT" || this.$store.getters.userRole == "ROLE_AGENT") && this.$store.getters.loggedIn;
-      },
-      showAdminProfile(){
-        return this.$store.getters.userRole == "ROLE_ADMIN" && this.$store.getters.loggedIn;
-      },
-      showCart(){
-        return this.$store.getters.userRole == "ROLE_CLIENT" && this.$store.getters.loggedIn;
-      },
-
-
+ 
     }
     
     
