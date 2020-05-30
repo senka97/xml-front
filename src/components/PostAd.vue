@@ -29,7 +29,7 @@
             <b-row>
               <b-col class="mt-2">
                 <b-form-group label="Choose a car:" >
-                  <b-form-select @change="chooseCar()" v-model="car" size="sm">
+                  <b-form-select @change="chooseCar()" v-model="car">
                       <template v-slot:first>
                           <b-form-select-option selected :value="null">New car</b-form-select-option>
                       </template>
@@ -103,7 +103,7 @@
                 </b-form-group>
               </b-col>
               <b-col>
-                <b-form-group required :disabled="carChosen" label="Transmision type:">
+                <b-form-group required :disabled="carChosen" label="Transmission type:">
                  <b-form-select required v-model="transmissionSelected">
                       <template v-slot:first>
                           <b-form-select-option selected :value="null">Select Transmission Type</b-form-select-option>
@@ -171,14 +171,10 @@
               </b-col>
             </b-row>
             <hr />
-            <b-row >
-          </b-row>
             <b-row>
                 <b-col>
-                </b-col>
-                <b-col cols ="6">
-                    <b-form-group required label-cols-lg="4" label-size="sm"  label="Pricing list:" >
-                        <b-form-select required v-model="pricingListSelected" size="sm">
+                    <b-form-group required label="Pricing list:" >
+                        <b-form-select required v-model="pricingListSelected">
                             <template v-slot:first>
                                 <b-form-select-option :value="{}">Choose the pricing</b-form-select-option>
                             </template>
@@ -190,37 +186,35 @@
                         </b-form-select>
                     </b-form-group>
                 </b-col>
-                <b-col>
-                </b-col>
             </b-row>
             <b-row >
                 <b-col>
-                    <b-form-group label-cols="1" label-cols-lg="5" label-size="sm" label="Price per km:" >
-                        <b-input-group size="sm" append="€">
-                        <b-form-input label-cols="1" size="sm" v-model="pricingListSelected.pricePerKm" disabled></b-form-input>
+                    <b-form-group label="Price per km:" >
+                        <b-input-group append="€">
+                        <b-form-input v-model="pricingListSelected.pricePerKm" disabled></b-form-input>
                         </b-input-group>
                     </b-form-group>
                 </b-col>
                 <b-col>
-                    <b-form-group label-cols="1" label-cols-lg="5" label-size="sm" label="Price per day:" >
-                        <b-input-group size="sm" append="€">
-                        <b-form-input label-cols="1" size="sm" v-model="pricingListSelected.pricePerDay" disabled></b-form-input>
+                    <b-form-group label="Price per day:" >
+                        <b-input-group append="€">
+                        <b-form-input v-model="pricingListSelected.pricePerDay" disabled></b-form-input>
                         </b-input-group>
                     </b-form-group>
                 </b-col>
             </b-row>
               <b-row >
                 <b-col>
-                    <b-form-group label-cols="1" label-cols-lg="5" label-size="sm" label="Discount 20 days:" >
-                    <b-input-group size="sm" append="%">
-                        <b-form-input label-cols="1" size="sm" v-model="pricingListSelected.discount20Days" disabled></b-form-input>
+                    <b-form-group label="Discount 20 days:" >
+                    <b-input-group append="%">
+                        <b-form-input v-model="pricingListSelected.discount20Days" disabled></b-form-input>
                     </b-input-group>
                     </b-form-group>
                 </b-col>
                 <b-col>
-                    <b-form-group label-cols="1" label-cols-lg="5" label-size="sm" label="Discount 30 days:" >
-                        <b-input-group size="sm" append="%">
-                        <b-form-input label-cols="1" size="sm" v-model="pricingListSelected.discount30Days" disabled></b-form-input>
+                    <b-form-group label="Discount 30 days:" >
+                        <b-input-group append="%">
+                        <b-form-input v-model="pricingListSelected.discount30Days" disabled></b-form-input>
                         </b-input-group>
                     </b-form-group>
                 </b-col>
