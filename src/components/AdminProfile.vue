@@ -367,6 +367,10 @@ export default {
       this.showCodeBook = false;
       this.showComments = false;
       this.showPermissions = false;
+
+      axios.get(baseUrl + "/request/agent").then(response => {
+        this.itemsReqAgent = response.data;
+      });
     },
     showUsersF() {
       this.currentOption = "Users management";

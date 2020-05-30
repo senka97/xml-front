@@ -203,19 +203,46 @@ export default {
           console.log(response.data);
              this.cartItems = [];
              this.$bvToast.toast("You have successfully sent the requests.", {
-              title: "Sucess",
+              title: "Success",
               variant: "success",
               solid: true
             });
-            this.$refs.observer.reset();
+            //this.$refs.observer.reset();
 
         }).catch(error => {
-            this.$bvToast.toast(error.response.data, {
-              title: "Error",
-              variant: "error",
-              solid: true
-            });
-            this.$refs.observer.reset();
+            if(error.response && error.response.status === 404){
+              this.$bvToast.toast(error.response.data, {
+                title: "Error",
+                variant: "danger",
+                solid: true
+              });
+              //this.$refs.observer.reset();
+            }
+            if(error.response && error.response.status === 500){
+              this.$bvToast.toast("Server error. Please try again.", {
+                title: "Error",
+                variant: "danger",
+                solid: true
+              });
+            }
+            if(error.response && error.response.status === 400){
+              this.$bvToast.toast(error.response.data, {
+                title: "Error",
+                variant: "danger",
+                solid: true
+              });
+              axios.get("https://localhost:8083/rent-service/api/cart").then(
+                  response=> {
+                      this.cartItems = response.data;
+                      console.log(this.cartItems);
+                      if(this.cartItems.length == 0){
+                        this.showEmpty = true;
+                      }
+
+                  }).catch(error => {
+                      alert(error.response);
+                  })
+            }
         })
       
     }

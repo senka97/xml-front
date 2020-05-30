@@ -188,7 +188,7 @@
 
 <script>
 import axios from "axios";
-const baseUrl = "https://localhost:8083/user/auth/registration/agent";
+const baseUrl = "https://localhost:8083/user-service/auth/registration/agent";
 
 export default {
   name: 'RegistartionAgent',
@@ -217,9 +217,10 @@ export default {
         'Accept': 'application/json'
       }
 
-      let registrationRequestDTO = {name: this.name, surname: this.surname, email: this.email, password: this.password, phoneNumber: this.phoneNumber};
+      let registrationRequestAgentDTO = {name: this.name, surname: this.surname, email: this.email, password: this.password, companyName: this.companyName,
+      companyNumber: this.companyNumber, address: this.address};
 
-      axios.post(baseUrl, registrationRequestDTO, headers)
+      axios.post(baseUrl, registrationRequestAgentDTO, headers)
       .then(() => {
             this.$refs["modal-success"].show();
             this.clear();
