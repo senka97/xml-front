@@ -9,7 +9,7 @@
         <div class="custom-width" v-for="req in newRequests" :key="req.id">
           <b-card no-body class="overflow-hidden custom-width mb-3 shadow" header-bg-variant="secondary" header-text-variant="white"  > <!-- Velika kartica za bundle -->
             <template v-slot:header>
-                <h3 class="mb-0 text-center">{{req.clientName + ' ' + req.clientLastName}}</h3>
+                <h3 class="mb-0 text-center">Client: {{req.clientName + ' ' + req.clientLastName}}</h3>
             </template>
             <div class="mt-2" v-for="reqAd in req.requestAds" :key="reqAd.id">
               <b-card no-body class="overflow-hidden shadow custom-width" header-bg-variant="info" header-text-variant="white" >
