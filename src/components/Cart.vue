@@ -173,7 +173,7 @@ export default {
               variant: "success",
               solid: true
             });
-            this.$refs.observer.reset();
+            //this.$refs.observer.reset();
         }
       ).catch(error => {
          this.$bvToast.toast(error.response.data, {
@@ -181,7 +181,7 @@ export default {
               variant: "danger",
               solid: true
             });
-            this.$refs.observer.reset();
+            //this.$refs.observer.reset();
       })
     },
     details(id){
