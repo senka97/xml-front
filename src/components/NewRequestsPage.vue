@@ -1,8 +1,14 @@
 <template>
   <div>
     <NavBar/>
+    <div  v-if="loading" align="center">
+      <br/>
+      <br/>
+     <b-spinner style="width: 5rem; height: 5rem;" label="Large Spinner"></b-spinner>
+    </div>
+     <div v-if="!loading">
       <div v-if="showEmpty">
-        <h1 class="empty">Your don't have new requests</h1>
+        <h1 class="empty">Your don't have new requests.</h1>
       </div>
 
       <div v-if="!showEmpty" class="container mt-2">
@@ -84,7 +90,7 @@
           </b-card>
         </div>
       </div>
-    
+     </div>
   </div>
 </template>
 
@@ -102,6 +108,7 @@ export default {
       return{
         showEmpty: false,
         newRequests: [],
+        loading: true,
         /*newRequests: [
             {
               id: 1,
@@ -276,7 +283,7 @@ export default {
   },
 
   created(){
-
+      this.loading = true;
       axios.get("https://localhost:8083/rent-service/api/request/pending").then(
             response=> {
                 this.newRequests = response.data; 
@@ -284,7 +291,8 @@ export default {
                 if(this.newRequests.length == 0)
                 {
                     this.showEmpty = true;
-                }                  
+                }        
+                this.loading = false;          
             } 
         ).catch(error => {
             alert(error.response);
