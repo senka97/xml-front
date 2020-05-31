@@ -1,6 +1,12 @@
 <template>
   <div>
     <NavBar />
+    <div  v-if="loading" align="center">
+      <br/>
+      <br/>
+     <b-spinner style="width: 5rem; height: 5rem;" label="Large Spinner"></b-spinner>
+    </div>
+    <div v-if="!loading">
     <div v-if="showEmpty">
       <h1 class="emptyCart">Your cart is empty.</h1>
     </div>
@@ -91,6 +97,7 @@
       </b-row>
     </b-card>
     </div>
+    </div>
   </div>
 </template>
 
@@ -109,6 +116,7 @@ export default {
     return {
       bundle: false,
       showEmpty: false,
+      loading: true,
       cartItems:[],
       /*vehicles: [
         {
@@ -131,6 +139,7 @@ export default {
     };
   },
   created() {
+    this.loading = true;
     axios.get("https://localhost:8083/rent-service/api/cart").then(
             response=> {
                 this.cartItems = response.data;
@@ -138,6 +147,7 @@ export default {
                 if(this.cartItems.length == 0){
                   this.showEmpty = true;
                 }
+                this.loading = false;
 
             }).catch(error => {
                  alert(error.response);
@@ -173,7 +183,7 @@ export default {
               variant: "success",
               solid: true
             });
-            this.$refs.observer.reset();
+            //this.$refs.observer.reset();
         }
       ).catch(error => {
          this.$bvToast.toast(error.response.data, {
@@ -181,7 +191,7 @@ export default {
               variant: "danger",
               solid: true
             });
-            this.$refs.observer.reset();
+            //this.$refs.observer.reset();
       })
     },
     details(id){

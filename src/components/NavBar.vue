@@ -23,11 +23,13 @@
 </template>
 
 <script>
+import axios from 'axios';
 export default {
     name: 'NavBar',
     data() {
         return {
            numberOfNewRequests: 2,
+           showNewRequests: false
         }
     },
     methods: {
@@ -38,13 +40,18 @@ export default {
         }
     },
     created() {
-        /*axios.get("https://localhost:8083/....." + this.$store.getters.currentUserId).then(
+      if((this.$store.getters.userRole == "ROLE_CLIENT" || this.$store.getters.userRole == "ROLE_AGENT") && this.$store.getters.loggedIn){
+        axios.get("https://localhost:8083/rent-service/api/request/pending/number").then(
               response => {
-                this.numberOfNewRequests = response.data
+                this.numberOfNewRequests = response.data;
+                if(this.numberOfNewRequests > 0){
+                  this.showNewRequests = true;
+                }
               }
             ).catch(error => {
                 alert(error.data);
-            })*/
+            })
+      }
 
     },
     computed: {
@@ -63,14 +70,14 @@ export default {
      clientAgentLoggedIn(){
         return (this.$store.getters.userRole == "ROLE_CLIENT" || this.$store.getters.userRole == "ROLE_AGENT") && this.$store.getters.loggedIn;
       },
-      showNewRequests()
+      /* showNewRequests()
       {
         if(this.numberOfNewRequests == 0)
         {
           return false;
         }
         else return true;
-      }
+      }*/
     }
 
 }
