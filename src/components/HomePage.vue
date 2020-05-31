@@ -34,6 +34,7 @@
                     v-b-toggle.collapse-2
                     type="button"
                     class="col-12 mt-4 m-1"
+                    @click="extendSearch()"
                   >Expanded Search</b-button>
                 </b-input-group>
               </b-col>
@@ -49,75 +50,105 @@
                   <b-row class="mt-3">
                     <b-col>
                       <b-form-group label="Brand:">
-                        <b-form-select v-model="selectedBrand" :options="brands"></b-form-select>
+                         <b-form-select @change="getModelsForBrand()" v-model="selectedBrand">
+                      <template v-slot:first>
+                          <b-form-select-option selected :value="null">All brands</b-form-select-option>
+                      </template>
+                      <option v-for="(brand,index) in brands"
+                          :key="index"
+                          :value="brand">
+                          {{brand.name}}
+                    </option>
+                    </b-form-select>
                       </b-form-group>
                     </b-col>
                     <b-col>
-                      <b-form-group label="Model:">
-                        <b-form-select v-model="selectedModel" :options="models"></b-form-select>
-                      </b-form-group>
+                     <b-form-group  :disabled="selectedBrand == null " label="Model:">
+                        <b-form-select :disabled="selectedBrand == null" v-model="selectedModel">
+                            <template v-slot:first>
+                                <b-form-select-option selected :value="null">All models</b-form-select-option>
+                            </template>
+                            <option v-for="(models,index) in models"
+                                :key="index"
+                                :value="models">
+                                {{models.name}}
+                          </option>
+                          </b-form-select>
+                        </b-form-group>
                     </b-col>
                     <b-col>
                       <b-form-group label="Price from:">
                         <b-input-group append="€">
-                          <b-form-input type="number" min="0"></b-form-input>
+                          <b-form-input v-model="priceFrom" type="number" min="0"></b-form-input>
                         </b-input-group>
                       </b-form-group>
                     </b-col>
                     <b-col>
                       <b-form-group label="Price to:">
                         <b-input-group append="€">
-                          <b-form-input type="number" min="0"></b-form-input>
+                          <b-form-input v-model="priceTo" type="number" min="0"></b-form-input>
                         </b-input-group>
                       </b-form-group>
                     </b-col>
                   </b-row>
                   <b-row class="mt-2">
                     <b-col>
-                      <b-form-group label="Fuel type:">
-                        <b-form-checkbox-group
-                          id="checkboxFuelType"
-                          v-model="fueltypeSelected"
-                          :options="fuelType"
-                          name="checkboxFuelType"
-                        ></b-form-checkbox-group>
-                      </b-form-group>                     
+                       <b-form-group label="Fuel type:">
+                        <b-form-select v-model="fueltypeSelected">
+                            <template v-slot:first>
+                              <b-form-select-option selected :value="null">All Fuel Types</b-form-select-option>
+                          </template>
+                          <option v-for="(fuelType,index) in fuelType"
+                              :key="index"
+                              :value="fuelType">
+                              {{fuelType.name}}
+                        </option>
+                        </b-form-select>
+                      </b-form-group>                   
                     </b-col>
                     <b-col>
                        <b-form-group label="Vehicle type:">
-                        <b-form-checkbox-group
-                          id="checkboxVehicleType"
-                          v-model="vehicletypeSelected"
-                          :options="vehicletype"
-                          name="checkboxVehicleType"
-                        ></b-form-checkbox-group>
+                        <b-form-select v-model="vehicletypeSelected">
+                           <template v-slot:first>
+                              <b-form-select-option selected :value="null">All Vehicle Types</b-form-select-option>
+                          </template>
+                          <option v-for="(vehicletype,index) in vehicletype"
+                              :key="index"
+                              :value="vehicletype">
+                              {{vehicletype.name}}
+                        </option>
+                        </b-form-select>
                       </b-form-group>
                     </b-col>
                     <b-col>
-                      <b-form-group label="Transmission:">
-                        <b-form-checkbox-group
-                          id="checkboxTransmission"
-                          v-model="transmissionSelected"
-                          :options="transmission"
-                          name="checkboxTransmission"
-                        ></b-form-checkbox-group>
+                       <b-form-group label="Transmission type:">
+                        <b-form-select v-model="transmissionSelected">
+                           <template v-slot:first>
+                              <b-form-select-option selected :value="null">All Transmission Types</b-form-select-option>
+                          </template>
+                          <option v-for="(transmission,index) in transmission"
+                              :key="index"
+                              :value="transmission">
+                              {{transmission.name}}
+                        </option>
+                        </b-form-select>
                       </b-form-group>
                     </b-col>
                   </b-row>
                   <b-row class="mt-2">
                     <b-col>
                       <b-form-group label="Mileage:">
-                        <b-form-input type="number" min="0"></b-form-input>
+                        <b-form-input v-model="mileage" type="number" min="0"></b-form-input>
                       </b-form-group>
                     </b-col>
                     <b-col>
                       <b-form-group label="Kilometers limit:">
-                        <b-form-input type="number" min="0" placeholder="Unlimited"></b-form-input>
+                        <b-form-input v-model="kmLimit" type="number" min="0" placeholder="Unlimited"></b-form-input>
                       </b-form-group>
                     </b-col>
                     <b-col>
                       <b-form-group label="Number of children seats:">
-                        <b-form-input type="number" min="0"></b-form-input>
+                        <b-form-input v-model="childrenSeats" type="number" min="0"></b-form-input>
                       </b-form-group>
                     </b-col>
                     <b-col>
@@ -138,6 +169,12 @@
         </b-form>
       </b-card>
     </div>
+     <div  v-if="loading == true"  align="center">
+      <br/>
+      <br/>
+     <b-spinner style="width: 5rem; height: 5rem;" label="Large Spinner"></b-spinner>
+    </div>
+    <div v-if="loading == false">
     <div class="container d-flex mt-5">
       <b-form-select
         v-model="sortSelected"
@@ -146,8 +183,9 @@
         v-if="show"
       ></b-form-select>
     </div>
-    <div class="container mt-4 d-flex justify-content-center" v-for="v in vehicles" :key="v.id">
+    <div  class="container mt-4 d-flex justify-content-center" v-for="v in vehicles" :key="v.id">
       <VehicleCard v-if="show" :showDiffButtons="true" :vehicle="v" :startDate="startDate" :endDate="endDate" />
+    </div>
     </div>
   </div>
 </template>
@@ -157,7 +195,8 @@ import NavBar from "../components/NavBar.vue";
 import VehicleCard from "../components/VehicleCard.vue";
 import axios from "axios";
 //import moment from 'moment';
-
+const baseUrlCar = "https://localhost:8083/car-service";
+const baseUrlAd = "https://localhost:8083/ad-service";
 
 export default {
   name: "HomePage",
@@ -175,10 +214,13 @@ export default {
       endDate: null,
       location: "",
       selectedBrand: null,
-      vehicletypeSelected: [],
-      fueltypeSelected: [],
-      transmissionSelected: [],
+      vehicletypeSelected: null,
+      fueltypeSelected: null,
+      transmissionSelected: null,
       cdw: false,
+      priceFrom:null,
+      priceTo:null,
+      kmLimit:null,
       brands: [
         { value: null, text: "Select brand", disabled: true },
         { value: "a", text: "Alfa Romeo" },
@@ -237,19 +279,124 @@ export default {
         { value: "mileageDesc", text: "Mileage descending" },
         { value: "rateAsc", text: "Rate ascending" },
         { value: "rateDesc", text: "Rate descending" }
-      ]
+      ],
+      loading:false,
+      extended:false,
+      mileage:null,
+      childrenSeats:null
+
     };
   },
   methods: {
     search: function() {
-      localStorage.setItem("startDate", this.startDate);
-      localStorage.setItem("endDate", this.endDate);
-      axios.get("https://localhost:8083/ad-service/api/ads").then(
-        response => {
-          this.vehicles = response.data;
-        }
-      )
+      this.loading=true;
+      if(this.extended ==false){
+        localStorage.setItem("startDate", this.startDate);
+        localStorage.setItem("endDate", this.endDate);
+        axios.get("https://localhost:8083/ad-service/api/ad/"+this.startDate+"/"+this.endDate+"/"+this.location).then(
+          response => {
+            this.vehicles = response.data;
+            this.loading=false;
+          }
+        )
+      }else{
+          var brand = "all";
+          var model = "all";
+          var fuel = "all";
+          var type = "all";
+          var transmission = "all";
+          var mile = this.mileage;
+          var priceF = this.priceFrom;
+          var priceT = this.priceTo;
+          var limit = this.kmLimit;
+          var seatsC = this.childrenSeats;
+
+
+          if(this.selectedBrand == null){
+              brand = "all";
+          }else{
+               brand = this.selectedBrand.name;
+          }
+          if(this.selectedModel == null){
+              model = "all";
+          }else{
+              model = this.selectedModel.name;
+          }
+          if(this.fueltypeSelected == null){
+              fuel = "all";
+          }else{
+              fuel = this.fueltypeSelected.name;
+          }
+          if(this.vehicletypeSelected  == null){
+              type = "all";
+          }else{
+              type = this.vehicletypeSelected.name;
+          }
+          if(this.transmissionSelected == null){
+              transmission = "all";
+          }else{
+             transmission = this.transmissionSelected.name;
+          }
+
+          if(this.mileage == null || this.mileage < 0 ||  this.mileage  == ""){
+              mile = 0;
+          }
+
+          if(this.priceFrom == null || this.priceFrom < 0 ||  this.priceFrom == ""){
+              priceF = 0;
+          }
+
+          if(this.priceTo == null || this.priceTo < 0 ||  this.priceTo  == ""){
+              priceT= 0;
+          }
+
+          if(this.kmLimit == null || this.kmLimit < 0 || this.kmLimit == ""){
+              limit = 0;
+          }
+
+          if(this.childrenSeats == null || this.childrenSeats < 0 || this.childrenSeats == ""){
+              seatsC = 0;
+          }
+          
+          axios.get(baseUrlAd+"/api/search/ad/" +this.startDate+"/"+this.endDate+"/"+this.location+"/"+priceF+"/"+priceT
+          +"/"+limit+"/"+this.cdw+"/car/"+brand+"/"+model+"/"+fuel
+          +"/"+type+"/"+transmission+"/"+mile+"/"+seatsC).then(
+          response => {
+            this.vehicles = response.data;
+            this.loading=false;
+          }).catch(error =>{
+                if(error.response.data.status != 400){ 
+                    this.$bvToast.toast(error.response.data, {
+                    title: 'Incorrect input',
+                    variant: 'danger',
+                    solid: true
+                    });
+                }else{ 
+                    this.$bvToast.toast(error.response.data.errors[0].defaultMessage, {
+                    title: 'Incorrect input',
+                    variant: 'danger',
+                    solid: true
+                    });
+                }
+            });
+          
+
+      }
+    
       this.show = true;
+    },
+    getModelsForBrand(){
+      if(this.selectedBrand == null){
+        this.selectedModel = null;
+        
+      }else{ 
+        axios.get(baseUrlCar + "/model/brand/"+this.selectedBrand.id).then((response) => {
+        this.models = response.data;
+        })
+      }
+    },
+    extendSearch(){
+      this.extended = !this.extended;
     }
   },
   computed: {
@@ -268,7 +415,21 @@ export default {
         return false;
       }
     }
-  }
+  },
+   mounted(){
+    axios.get(baseUrlCar + "/brand").then((response) => {
+      this.brands = response.data;
+    })
+    axios.get(baseUrlCar + "/fuel").then((response) => {
+      this.fuelType = response.data;
+    })
+    axios.get(baseUrlCar + "/transmission").then((response) => {
+      this.transmission = response.data;
+    })
+    axios.get(baseUrlCar + "/class").then((response) => {
+      this.vehicletype = response.data;
+    })
+   }
 };
 </script>
 
