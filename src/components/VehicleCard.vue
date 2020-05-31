@@ -29,7 +29,7 @@
               </b-row>       
               <b-row class="mt-2">
                   <b-col>
-                    <b>Transmission:</b> {{vehicle.car.tranType}}
+                    <b>Transmission:</b> {{vehicle.car.transType}}
                   </b-col>
                   <b-col>
                     <b>Children seats:</b> {{vehicle.car.childrenSeats}}
