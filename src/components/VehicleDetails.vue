@@ -172,21 +172,32 @@
     </div>
 
     <!--Ova kartica ce se prikazivati samo ako je korisnik ulogovan" -->
-    <div v-if="loggedInClient" class="container custom-dim-comment">
+    <div v-if="loggedInClient && this.userCanPostComment" class="container custom-dim-comment">
       <b-card class="mb-3">
         <template v-slot:header>
           <h5 class="mb-0">Comment</h5>
         </template>
         <b-card-text>
-          <b-form-textarea id="textarea" placeholder="Enter comment..." rows="3" no-resize v-model="textarea"></b-form-textarea>
+          <validation-observer ref="observer" v-slot="{ handleSubmit }">
+          <b-form @submit.prevent="handleSubmit(postComment)">  
+          <validation-provider name="Comment" :rules="{ required: true, alpha_spaces: true, min: 2 }" v-slot="validationContext">
+            <b-form-group  align="left">
+              <b-form-textarea id="Comment" placeholder="Enter comment..." rows="3" no-resize v-model="textarea" :state="getValidationState(validationContext)"></b-form-textarea>               
+              <b-form-invalid-feedback id="name">{{ validationContext.errors[0] }}</b-form-invalid-feedback>
+            </b-form-group>
+          </validation-provider>
+          
           <b-row class="mt-2">
             <b-col class="col-2">
-              <b-btn class="buttons">Add comment</b-btn>
+              <b-btn class="buttons" type="submit">Add comment</b-btn>
             </b-col>
             <b-col>
               <b-btn class="buttons" @click="clear">Clear</b-btn>
             </b-col>          
           </b-row>
+          
+          </b-form>
+          </validation-observer>
         </b-card-text>
       </b-card>
     </div>
@@ -198,9 +209,9 @@
           <p>{{c.content}}</p>
         </b-card-text>
       </b-card>
-      <b-btn v-show="!c.isReplied" class="buttons ml-1" v-b-modal.modal-1>Reply</b-btn>
+      <b-btn v-show="!c.isReplied && loggedInOwner" class="buttons ml-1" @click="showModal(c.id)">Reply</b-btn>
       
-      <b-card v-show="c.isReplied" class="mb-3 shadow custom-dim-replay">
+      <b-card v-show="c.isReplied && c.replyContent!=null" class="mb-3 shadow custom-dim-replay">
         <b-card-text>
           <p class="font-weight-bold"> The owner </p>
           <p>{{c.replyContent}}</p>
@@ -208,8 +219,22 @@
       </b-card>
     </div>
 
-    <b-modal id="modal-1" title="Your replay">
-        <b-form-textarea id="textarea" placeholder="Enter comment..." rows="3" no-resize v-model="textarea"></b-form-textarea>
+    <b-modal id="modal-1" ref="replyModal" title="Your replay" hide-footer>
+      <validation-observer ref="observer" v-slot="{ handleSubmit }">
+      <b-form @submit.prevent="handleSubmit(postReply)"> 
+       <validation-provider name="Comment" :rules="{ required: true, alpha_spaces: true, min: 2 }" v-slot="validationContext">
+        <b-form-group  align="left" >
+          <b-form-textarea id="textareaReply" placeholder="Enter reply..." rows="3" no-resize v-model="textareaReply" :state="getValidationState(validationContext)"></b-form-textarea>               
+          <b-form-invalid-feedback id="reply">{{ validationContext.errors[0] }}</b-form-invalid-feedback>
+        </b-form-group>
+      </validation-provider>
+      
+      <div class="row d-flex justify-content-center">
+        <b-button class="mt-3 mr-2 col-3" variant="outline-dark"  block @click="hideModal">Close</b-button>
+        <b-button class="mt-3 col-3" variant="dark" block type="submit">Post</b-button>
+      </div>
+      </b-form>
+      </validation-observer>  
     </b-modal>
   </div> 
 </template>
@@ -244,6 +269,10 @@ export default {
       endDateRent: localStorage.getItem("endDate"),
       comments: [],
       textarea: '',
+      textareaReply: '',
+      commentId: null,
+      adId: null,
+      userCanPostComment: null,
     };
   },
   methods: {
@@ -286,6 +315,73 @@ export default {
           });
     },
 
+    postComment(){
+        axios.post("https://localhost:8083/car-service/api/comments",{
+              "fromComment": this.$store.getters.currentUserId,
+              "content": this.textarea,
+              "adId": this.vehicle.id,
+        }).then(
+          response => {
+            console.log(response.data);
+            this.$bvToast.toast("Admin will have to approve before comment is shown.", {
+              title: "Comment sent",
+              variant: "success",
+              solid: true
+            });
+             this.textarea = '';
+             this.getComments();
+        }).catch(error => {
+            this.$bvToast.toast(error.response.data, {
+              title: "Error",
+              variant: "danger",
+              solid: true
+            });
+             this.textarea = '';
+          })
+    },
+
+    postReply()
+    {
+      axios.put("https://localhost:8083/car-service/api/comments/"+ this.commentId,{
+              "replyContent": this.textareaReply,
+        }).then(
+          response => {
+            console.log(response.data);
+            this.$bvToast.toast("Admin will have to approve before reply is shown.", {
+              title: "Reply sent",
+              variant: "success",
+              solid: true
+            });
+             this.textareaReply = '';
+             this.hideModal();
+             this.getComments();
+             
+        }).catch(error => {
+            this.$bvToast.toast(error.response.data, {
+              title: "Error",
+              variant: "danger",
+              solid: true
+            });
+             this.textareaReply = '';
+             this.hideModal();
+          })
+    },
+
+    getComments()
+    {
+        axios.get("https://localhost:8083/car-service/api/comments/"+ this.adId).then(
+            response=> {
+                this.comments = response.data;                    
+            }
+        );
+
+        axios.get("https://localhost:8083/ad-service/api/canPost/"+ this.adId + "/" + this.$store.getters.currentUserId).then(
+            response=> {
+                this.userCanPostComment = response.data;                    
+            }
+        );
+    },
+
     prev() {
       this.currentImage = this.images.length - 1;
       this.$refs.imageCarousel.setSlide(this.images.length - 1);
@@ -306,6 +402,16 @@ export default {
     
     getValidationState({ dirty, validated, valid = null }) {
       return dirty || validated ? valid : null;
+    },
+    showModal: function(id) {
+      this.$refs["replyModal"].show();
+      this.commentId = id;
+      console.log(id);
+    },
+
+    hideModal() {
+      this.textareaReply = '';
+      this.$refs["replyModal"].hide();
     },
     addToCart: function(id, startDate, endDate){
         axios.post("https://localhost:8083/rent-service/api/cartItem", {"adID":id, "startDate":startDate, "endDate":endDate}).then(
@@ -331,7 +437,7 @@ export default {
         var id = this.$route.fullPath;
         id = id.split('?')[1];
         id = id.split('=')[1];
-  
+        this.adId=id;
         
         axios.get("https://localhost:8083/ad-service/api/ads/"+id).then(
             response=> {
@@ -361,11 +467,9 @@ export default {
             }
         );
         
-        axios.get("https://localhost:8083/car-service/api/comments/"+ id).then(
-            response=> {
-                this.comments = response.data;                    
-            }
-        );
+        this.getComments();
+
+        
                 
     },
     computed: {
@@ -390,7 +494,7 @@ export default {
           else return false;
       },
       showCartButton(){
-          return this.$store.getters.userRole == "ROLE_CLIENT" && this.$store.getters.loggedIn;
+          return this.$store.getters.userRole == "ROLE_CLIENT" && this.$store.getters.loggedIn && this.$store.getters.currentUserId != this.vehicle.ownerId;
         }
     }
 };
