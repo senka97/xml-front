@@ -209,6 +209,7 @@
       <codebookManagement v-if="showCodeBook"></codebookManagement>
       <!--Comments management-->
       <div class="sub-work-div" v-if="showComments">
+        <p v-if="itemsComments.length < 1" class="text-center">No comments</p>
         <b-table
           id="table-comments"
           striped
@@ -217,7 +218,17 @@
           borderless
           :items="itemsComments"
           :fields="fields_comments"
+          v-else
         >
+          <template v-slot:cell(car)="row">
+            <p>{{row.item.brand + ' ' + row.item.model}}</p>
+          </template>
+          <template v-slot:cell(commenter)="row">
+            <p>{{row.item.userName + ' ' + row.item.userLastname}}</p>
+          </template>
+          <template v-slot:cell(content)="row">
+            <p class="bold-text">{{row.item.content}}</p>
+          </template>
           <template v-slot:cell(approve)="row">
             <b-button
               size="sm"
@@ -227,6 +238,38 @@
           </template>
           <template v-slot:cell(reject)="row">
             <b-button size="sm" variant="outline-danger" @click="rejectComment(row.item.id)">Reject</b-button>
+          </template>
+        </b-table>
+        <hr />
+        <p v-if="itemsReplies.length < 1" class="text-center">No replies</p>
+        <b-table
+          id="table-replies"
+          striped
+          hover
+          bordered
+          borderless
+          :items="itemsReplies"
+          :fields="fields_replies"
+          v-else
+        >         
+          <template v-slot:cell(car)="row">
+            <p>{{row.item.brand + ' ' + row.item.model}}</p>
+          </template>
+          <template v-slot:cell(content)="row">
+            <p>{{row.item.content}}</p>
+          </template>
+          <template v-slot:cell(replyContent)="row">
+            <p class="bold-text">{{row.item.replyContent}}</p>
+          </template>
+          <template v-slot:cell(approve)="row">
+            <b-button
+              size="sm"
+              variant="outline-success"
+              @click="approveReply(row.item.id)"
+            >Approve</b-button>
+          </template>
+          <template v-slot:cell(reject)="row">
+            <b-button size="sm" variant="outline-danger" @click="rejectReply(row.item.id)">Reject</b-button>
           </template>
         </b-table>
       </div>
@@ -240,6 +283,7 @@
 import codebookManagement from "../components/CodebookManagement.vue";
 import axios from "axios";
 const baseUrl = "https://localhost:8083/user-service";
+const baseCarUrl = "https://localhost:8083/car-service";
 
 export default {
   components: {
@@ -315,27 +359,49 @@ export default {
       modal_companyNumber: "",
       modal_address: "",
       modal_email: "",
-      itemsComments: [
+      itemsComments: [],
+      fields_comments: [
+        "Car",
+        "Commenter",
         {
-          id: "1",
-          carAdDetails: "Details about car ad",
-          commenter: "Petar Petrovic",
-          text:
-            "Bla bla bla asdasd asd asd as dasd  sdaaasd asdasd asdasd asda sd asd adasd sad asd"
+          key: 'content',
+          label:'Text comment'
         },
         {
-          id: "2",
-          carAdDetails: "Details about car ad bla bla",
-          commenter: "Pera Peric",
-          text: "Bla bla bla asasd asd asdasd dasd"
-        }
+          key: 'dateTime',
+          label: 'Date',
+          formatter: value => {
+              return new Date(value).toDateString();
+          }
+        },
+        {
+          key: 'commentStatus',
+          label: 'Comment status'
+        },
+        "Approve",
+        "Reject"
       ],
-      fields_comments: [
-        "carAdDetails",
-        "commenter",
-        "text",
-        "approve",
-        "reject"
+      itemsReplies: [],
+      fields_replies: [
+        "Car",
+        {
+          key: 'content',
+          label:'Text comment'
+        },
+        {
+          key: 'commentStatus',
+          label: 'Comment status'
+        },
+        {
+          key: 'replyContent',
+          label:'Text replay'
+        },
+        {
+          key: 'replyStatus',
+          label: 'Reply status'
+        },
+        "Approve",
+        "Reject"
       ]
     };
   },
@@ -398,6 +464,14 @@ export default {
       this.showRequestsAgent = false;
       this.showRequests = false;
       this.showPermissions = false;
+
+      axios.get(baseCarUrl + "/api/comments").then((response) => {
+        this.itemsComments = response.data;
+      })
+
+      axios.get(baseCarUrl + "/api/replies").then((response) => {
+        this.itemsReplies = response.data;
+      })
     },
     showPermissionsF() {
       this.currentOption = "Permissions management";
@@ -521,14 +595,80 @@ export default {
       this.$refs["modal-agent-details"].show();
     },
     approveComment(id) {
-      alert("Zahtev prihvacen");
-      //poslati zahtev
-      console.log(id);
+      axios.put(baseCarUrl + "/api/comments/approve/" + id).then(() => {
+         this.$notify({
+            group: "mainHolder",
+            title: "Success",
+            text: "Comment is approved!",
+            type: "success"
+          });
+      }).catch(() => {
+        this.$notify({
+            group: "mainHolder",
+            title: "Error",
+            text: "Comment is not approved!",
+            type: "error"
+        });
+      }).then(() => {
+        this.showCommentsF();
+      })      
     },
     rejectComment(id) {
-      //poslati zahtev
-      alert("Zahtev odbijen");
-      console.log(id);
+      axios.put(baseCarUrl + "/api/comments/reject/" + id).then(() => {
+        this.$notify({
+            group: "mainHolder",
+            title: "Success",
+            text: "Comment is rejected!",
+            type: "success"
+          });
+      }).catch(() => {
+        this.$notify({
+            group: "mainHolder",
+            title: "Error",
+            text: "Comment is not rejected!",
+            type: "error"
+        });
+      }).then(() => {
+        this.showCommentsF();
+      })   
+    },
+    approveReply(id) {
+      axios.put(baseCarUrl + "/api/replies/approve/" + id).then(() => {
+        this.$notify({
+            group: "mainHolder",
+            title: "Success",
+            text: "Reply is approved!",
+            type: "success"
+          });
+      }).catch(() => {
+        this.$notify({
+            group: "mainHolder",
+            title: "Error",
+            text: "Reply is not approved!",
+            type: "error"
+        });
+      }).then(() => {
+        this.showCommentsF();
+      })   
+    },
+    rejectReply(id) {
+      axios.put(baseCarUrl + "/api/replies/reject/" + id).then(() => {
+        this.$notify({
+            group: "mainHolder",
+            title: "Success",
+            text: "Reply is rejected!",
+            type: "success"
+          });
+      }).catch(() => {
+        this.$notify({
+            group: "mainHolder",
+            title: "Error",
+            text: "Reply is not rejected!",
+            type: "error"
+        });
+      }).then(() => {
+        this.showCommentsF();
+      })   
     }
   }
 };
@@ -590,5 +730,9 @@ export default {
 
 .btn-types {
   margin-left: 1em;
+}
+
+.bold-text {
+  font-weight: bold;
 }
 </style>
