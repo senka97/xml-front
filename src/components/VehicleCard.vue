@@ -55,7 +55,7 @@
         </b-card-body>
         <b-row>
           <!--Dugme "Add to {korpica}" ce se prikazivati samo ako je korisnik ulogovan-->
-          <b-button v-show="showCartButton" type="button" class="ml-auto mt-5 mb-2 buttons cartButton"> <a class="removeDecoration" @click="addToCart(vehicle.id, startDate, endDate)">Add to <b-icon icon="bucket-fill"></b-icon></a></b-button>
+          <b-button v-show="showCartButton && this.$store.getters.currentUserId != vehicle.ownerId" type="button" class="ml-auto mt-5 mb-2 buttons cartButton"> <a class="removeDecoration" @click="addToCart(vehicle.id, startDate, endDate)">Add to <b-icon icon="bucket-fill"></b-icon></a></b-button>
           <b-button v-show="showDiffButtons" type="button" class="ml-auto mr-4 mt-5 mb-2 buttons"><a class="removeDecoration" @click="details(vehicle.id)">Details</a></b-button>
         </b-row> 
       </b-col>

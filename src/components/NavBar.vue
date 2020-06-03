@@ -49,7 +49,7 @@ export default {
                 }
               }
             ).catch(error => {
-                alert(error.data);
+                console.log(error.data);
             })
       }
 
