@@ -375,11 +375,15 @@ export default {
             }
         );
 
+      if(this.loggedInClient) //ne salje se zahtev ako nije ulogovan klijent
+      {
         axios.get("https://localhost:8083/ad-service/api/canPost/"+ this.adId + "/" + this.$store.getters.currentUserId).then(
             response=> {
                 this.userCanPostComment = response.data;                    
             }
         );
+      }
+        
     },
 
     prev() {
