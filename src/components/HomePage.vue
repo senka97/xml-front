@@ -207,7 +207,7 @@ export default {
   },
   data() {
     const now = new Date();
-    const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    const today = new Date(now.getFullYear(), now.getMonth(), now.getDate()+2);
     const min_date = new Date(today);
     return {
       minDate: min_date,
@@ -299,7 +299,23 @@ export default {
             this.vehicles = response.data;
             this.loading=false;
           }
-        )
+        ).catch(error =>{
+                if(error.response.data.status != 400){ 
+                    this.$bvToast.toast(error.response.data, {
+                    title: 'Incorrect input',
+                    variant: 'danger',
+                    solid: true
+                    });
+                    
+                }else{ 
+                    this.$bvToast.toast(error.response.data.errors[0].defaultMessage, {
+                    title: 'Incorrect input',
+                    variant: 'danger',
+                    solid: true
+                    });
+                }
+                this.loading=false;
+            });
       }else{
           var brand = "all";
           var model = "all";
