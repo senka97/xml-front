@@ -553,7 +553,7 @@ export default {
     },
     blockUser(id, userType) {
       if (userType == "client") {
-        axios.put(baseUrl + "/client/block/" + id).then(() => {
+        axios.put(baseUrl + "/client/" + id + "/block").then(() => {
           this.$notify({
             group: "mainHolder",
             title: "Success",
@@ -570,7 +570,7 @@ export default {
     },
     activateUser(id, userType) {
       if (userType == "client") {
-        axios.put(baseUrl + "/client/activate/" + id).then(() => {
+        axios.put(baseUrl + "/client/" + id + "/activate").then(() => {
           this.$notify({
             group: "mainHolder",
             title: "Success",
@@ -595,7 +595,7 @@ export default {
       this.$refs["modal-agent-details"].show();
     },
     approveComment(id) {
-      axios.put(baseCarUrl + "/api/comments/approve/" + id).then(() => {
+      axios.put(baseCarUrl + "/api/comments/" + id + "/approve").then(() => {
          this.$notify({
             group: "mainHolder",
             title: "Success",
@@ -614,7 +614,7 @@ export default {
       })      
     },
     rejectComment(id) {
-      axios.put(baseCarUrl + "/api/comments/reject/" + id).then(() => {
+      axios.put(baseCarUrl + "/api/comments/" + id + "/reject").then(() => {
         this.$notify({
             group: "mainHolder",
             title: "Success",
@@ -633,7 +633,7 @@ export default {
       })   
     },
     approveReply(id) {
-      axios.put(baseCarUrl + "/api/replies/approve/" + id).then(() => {
+      axios.put(baseCarUrl + "/api/replies/" + id + "/approve").then(() => {
         this.$notify({
             group: "mainHolder",
             title: "Success",
@@ -652,7 +652,7 @@ export default {
       })   
     },
     rejectReply(id) {
-      axios.put(baseCarUrl + "/api/replies/reject/" + id).then(() => {
+      axios.put(baseCarUrl + "/api/replies/" + id + "/reject").then(() => {
         this.$notify({
             group: "mainHolder",
             title: "Success",
