@@ -18,6 +18,9 @@
           <h3 class="mb-0 text-center">{{vehicle.car.carBrand + ' ' + vehicle.car.carModel}}</h3>
         </template>
         <b-card-text>
+          <b-row class="justify-content-center align-items-center mb-2" v-show="userCanRate">
+              <b class="mr-2">Rate car:</b><StarRating :star-size="25" :show-rating="false" @rating-selected="rateCar" v-model="newRate"></StarRating>
+          </b-row>
           <b-row >
             <b-col class="col-12">
                 <b> Available from: </b> {{format_date(vehicle.startDate)}} <b> to </b> {{format_date(vehicle.endDate)}}
@@ -243,11 +246,13 @@
 import NavBar from "../components/NavBar.vue";
 import axios from "axios";
 import moment from 'moment'
+import StarRating from 'vue-star-rating';
 
 export default {
   name: "VehicleDetails",
   components: {
-    NavBar
+    NavBar,
+    StarRating,
   },
   data() {
     return {
@@ -273,6 +278,8 @@ export default {
       commentId: null,
       adId: null,
       userCanPostComment: null,
+      newRate: null,
+      userCanRate: null,
     };
   },
   methods: {
@@ -436,13 +443,39 @@ export default {
             this.$refs.observer.reset();
           })
       },
-  },
-  created() {
+      showStarRating() {
+        //ne salje se zahtev ako nije ulogovan klijent
+        if(this.loggedInClient)  {
+          axios.get("https://localhost:8083/ad-service/rating/user/" + this.$store.getters.currentUserId + "/ad/" + this.adId)
+          .then((response) => {
+              this.userCanRate = response.data;
+          });
+        }
+      },
+      rateCar: function() {
+        axios.put("https://localhost:8083/car-service/api/car/user/" + this.$store.getters.currentUserId + "/ad/" + this.adId + "/" + this.newRate)
+        .then(() => {
+            this.$bvToast.toast("You successfully rate this car.", {
+              title: "Rating",
+              variant: "success",
+              solid: true
+            });
+            this.vehicleDetails();
+            this.showStarRating();
+          }).catch((error) => {
+            this.$bvToast.toast(error.response.data, {
+              title: "Error",
+              variant: "danger",
+              solid: true
+            });
+        });
+      },
+      vehicleDetails: function() {
         var id = this.$route.fullPath;
         id = id.split('?')[1];
         id = id.split('=')[1];
-        this.adId=id;
-        
+        this.adId = id;
+ 
         axios.get("https://localhost:8083/ad-service/api/ads/"+id).then(
             response=> {
                 this.vehicle = response.data;
@@ -470,11 +503,14 @@ export default {
                      
             }
         );
-        
-        this.getComments();
+      }
 
-        
-                
+  },
+  created() {     
+      this.vehicleDetails();  
+      this.getComments();
+      this.showStarRating();
+                  
     },
     computed: {
       loggedIn(){
