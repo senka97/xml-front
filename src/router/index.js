@@ -11,6 +11,8 @@ import VehicleDetails from '../components/VehicleDetails.vue'
 import NotAuthorized from '../components/NotAuthorized.vue'
 import { store } from '../store/store'
 import NewRequestsPage from '../components/NewRequestsPage.vue'
+import Chat from '../components/Chat.vue'
+
 
 
 Vue.use(Router)
@@ -88,6 +90,18 @@ export default new Router({
             path: '/notAuthorized',
             name: 'NotAuthorized',
             component: NotAuthorized
+        },
+        {
+            path: '/requests/:id/chat',
+            name: 'Chat',
+            component: Chat,
+            beforeEnter: (to, from, next) => {
+                if(!store.getters.loggedIn || store.getters.userRole == 'ROLE_ADMIN'){
+                    next({ name: 'NotAuthorized' })
+                }else{
+                    next()
+                }
+              }
         },
         {
             path: '*',
