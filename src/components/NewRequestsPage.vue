@@ -8,7 +8,7 @@
     </div>
      <div v-if="!loading">
       <div v-if="showEmpty">
-        <h1 class="empty">Your don't have new requests.</h1>
+        <h1 class="empty">You don't have new requests.</h1>
       </div>
 
       <div v-if="!showEmpty" class="container mt-2">
@@ -109,92 +109,6 @@ export default {
         showEmpty: false,
         newRequests: [],
         loading: true,
-        /*newRequests: [
-            {
-              id: 1,
-              clientId: 3,
-              clientName: "Petar",
-              clientLastname: "Petrovic",
-              ownerId: 2,
-               requestAds: [
-                {
-                 id: 1,
-                 startDate: '2020-05-31',
-                 endDate: '2020-06-30',
-                 payment: '250',
-                 currentPricePerKm: 2,
-                 ad: {
-                     startDate: '2020-04-30', 
-                     endDate: '2020-06-30',
-                     location: 'Novi Sad',
-                     cdw: true,
-                     limitKm: 0,
-                     car:{
-                        photos64:  ["https://audimediacenter-a.akamaihd.net/system/production/media/49930/images/28318372b7f78fa640c07e629929a92fffb90804/A178321_x500.jpg?1582358914"],
-                        carBrand: "Audi",
-                        carModel: "A8",
-                        mileage: 15000,
-                        childrenSeats: 0,                       
-                        rate: 4.5
-                     },               
-                 }
-               },
-               { 
-                id: 2,
-                startDate: '2020-05-31',
-                 endDate: '2020-06-30',
-                 payment: '250',
-                 currentPricePerKm: 2,
-                 ad: {
-                     startDate: '2020-04-30', 
-                     endDate: '2020-06-30',
-                     location: 'Novi Sad',
-                     cdw: true,
-                     limitKm: "Unlimited",
-                     car:{
-                        photos64:  ["https://audimediacenter-a.akamaihd.net/system/production/media/49930/images/28318372b7f78fa640c07e629929a92fffb90804/A178321_x500.jpg?1582358914"],
-                        carBrand: "Audi",
-                        carModel: "A8",
-                        mileage: 15000,
-                        childrenSeats: 0,                       
-                        rate: 4.5
-                     },            
-                 }
-               }
-               ] 
-            },
-            {
-              id: 2,
-              clientId: 4,
-              clientName: "Marko",
-              clientLastname: "Markovic",
-              ownerId: 2,
-                requestAds: [ {
-                 id: 3,
-                 startDate: '2020-05-31',
-                 endDate: '2020-06-30',
-                 payment: '250',
-                 currentPricePerKm: 2,
-                 ad: {
-                     startDate: '2020-04-30', 
-                     endDate: '2020-06-30',
-                     location: 'Novi Sad',
-                     cdw: true,
-                     limitKm: "Unlimited",
-                     car:{
-                        photos64:  ["https://audimediacenter-a.akamaihd.net/system/production/media/49930/images/28318372b7f78fa640c07e629929a92fffb90804/A178321_x500.jpg?1582358914"],
-                        carBrand: "Audi",
-                        carModel: "A8",
-                        mileage: 15000,
-                        childrenSeats: 0,                       
-                        rate: 4.5
-                     },               
-                 }
-               },             
-               ] 
-            }
-
-        ],*/
       }
   },
   methods:
