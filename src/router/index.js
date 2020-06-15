@@ -12,7 +12,7 @@ import NotAuthorized from '../components/NotAuthorized.vue'
 import { store } from '../store/store'
 import NewRequestsPage from '../components/NewRequestsPage.vue'
 import Chat from '../components/Chat.vue'
-
+import ReservationsPage from '../components/ReservationsPage.vue'
 
 
 Vue.use(Router)
@@ -95,6 +95,18 @@ export default new Router({
             path: '/requests/:id/chat',
             name: 'Chat',
             component: Chat,
+            beforeEnter: (to, from, next) => {
+                if(!store.getters.loggedIn || store.getters.userRole == 'ROLE_ADMIN'){
+                    next({ name: 'NotAuthorized' })
+                }else{
+                    next()
+                }
+              }
+        },
+        {
+            path: '/reservations',
+            name: 'ReservationsPage',
+            component: ReservationsPage,
             beforeEnter: (to, from, next) => {
                 if(!store.getters.loggedIn || store.getters.userRole == 'ROLE_ADMIN'){
                     next({ name: 'NotAuthorized' })

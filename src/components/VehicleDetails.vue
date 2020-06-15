@@ -183,7 +183,7 @@
         <b-card-text>
           <validation-observer ref="observer" v-slot="{ handleSubmit }">
           <b-form @submit.prevent="handleSubmit(postComment)">  
-          <validation-provider name="Comment" :rules="{ required: true, alpha_spaces: true, min: 2 }" v-slot="validationContext">
+          <validation-provider name="Comment" :rules="{ required: true, regex: /^[a-zA-Z0-9?'!,:;. ]*$/, min: 2 }" v-slot="validationContext">
             <b-form-group  align="left">
               <b-form-textarea id="Comment" placeholder="Enter comment..." rows="3" no-resize v-model="textarea" :state="getValidationState(validationContext)"></b-form-textarea>               
               <b-form-invalid-feedback id="name">{{ validationContext.errors[0] }}</b-form-invalid-feedback>
@@ -225,7 +225,7 @@
     <b-modal id="modal-1" ref="replyModal" title="Your replay" hide-footer>
       <validation-observer ref="observer" v-slot="{ handleSubmit }">
       <b-form @submit.prevent="handleSubmit(postReply)"> 
-       <validation-provider name="Comment" :rules="{ required: true, alpha_spaces: true, min: 2 }" v-slot="validationContext">
+       <validation-provider name="Comment" :rules="{ required: true, regex: /^[a-zA-Z0-9?'!,:;. ]*$/, min: 2 }" v-slot="validationContext">
         <b-form-group  align="left" >
           <b-form-textarea id="textareaReply" placeholder="Enter reply..." rows="3" no-resize v-model="textareaReply" :state="getValidationState(validationContext)"></b-form-textarea>               
           <b-form-invalid-feedback id="reply">{{ validationContext.errors[0] }}</b-form-invalid-feedback>
