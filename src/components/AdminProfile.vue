@@ -50,6 +50,7 @@
       <h4 class="h4-work">{{currentOption}}</h4>
       <!--Registration requests-->
       <div class="sub-work-div" v-if="showRequests">
+        <p v-if="itemsReqClient.length < 1" class="text-center">No registration requests of clients</p>
         <b-table
           striped
           hover
@@ -57,6 +58,7 @@
           borderless
           :items="itemsReqClient"
           :fields="fieldsReqClient"
+          v-else
         >
           <template v-slot:cell(approve)="row">
             <b-button
@@ -72,7 +74,8 @@
       </div>
       <!--Agent/Companies registration-->
       <div class="sub-work-div" v-if="showRequestsAgent">
-        <b-table striped hover bordered borderless :items="itemsReqAgent" :fields="fieldsReqAgent">
+        <p v-if="itemsReqAgent.length < 1" class="text-center">No registration requests of agents/companies</p>
+        <b-table striped hover bordered borderless :items="itemsReqAgent" :fields="fieldsReqAgent" v-else>
           <template v-slot:cell(approve)="row">
             <b-button
               size="sm"
@@ -434,7 +437,7 @@ export default {
       this.showComments = false;
       this.showPermissions = false;
 
-      axios.get(baseUrl + "/request/agent").then(response => {
+      axios.get(baseUrl + "/agent/request").then(response => {
         this.itemsReqAgent = response.data;
       });
     },
@@ -483,14 +486,48 @@ export default {
       this.showComments = false;
     },
     approveRequest(id) {
-      console.log("Accepted:" + id);
-      //posalje se zahtev koji menja status zahteva
-      //ucitavaju se ponovo zahtevi sa servera da se osvezi lista
+       axios.put(baseUrl + "/request/" + id + "/approve").then(() => {
+          this.$notify({
+            group: "mainHolder",
+            title: "Success",
+            text: "Request is approved!",
+            type: "success"
+          });
+          this.showRequestsF();
+        });
     },
     rejectRequest(id) {
-      console.log("Rejected:" + id);
-      //posalje se zahtev koji odbija
-      //ucitaju se ponovo zahtevi sa servera da se osvezi lista
+      axios.put(baseUrl + "/request/" + id + "/reject").then(() => {
+          this.$notify({
+            group: "mainHolder",
+            title: "Success",
+            text: "Request is rejected!",
+            type: "success"
+          });
+          this.showRequestsF();
+        });
+    },
+    approveRequestAgent(id) {
+       axios.put(baseUrl + "/agent/request/" + id + "/approve").then(() => {
+          this.$notify({
+            group: "mainHolder",
+            title: "Success",
+            text: "Request is approved!",
+            type: "success"
+          });
+          this.showRequestsAgentF();
+        });
+    },
+    rejectRequestAgent(id) {
+      axios.put(baseUrl + "/agent/request/" + id + "/reject").then(() => {
+          this.$notify({
+            group: "mainHolder",
+            title: "Success",
+            text: "Request is rejected!",
+            type: "success"
+          });
+          this.showRequestsAgentF();
+        });
     },
     showUsersStatusType() {
       if (this.userType == "clients" && this.userStatus == "active") {
