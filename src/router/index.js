@@ -12,6 +12,7 @@ import NotAuthorized from '../components/NotAuthorized.vue'
 import { store } from '../store/store'
 import NewRequestsPage from '../components/NewRequestsPage.vue'
 import Chat from '../components/Chat.vue'
+import ActivateAccount from '../components/ActivateAccount.vue'
 import ReservationsPage from '../components/ReservationsPage.vue'
 import RequestsHistory from '../components/RequestsHistory.vue'
 
@@ -102,6 +103,11 @@ export default new Router({
                     next()
                 }
               }
+        },
+        {
+            path: '/activate/account/',
+            name: 'ActivateAccount',
+            component: ActivateAccount
         },
         {
             path: '/reservations',
