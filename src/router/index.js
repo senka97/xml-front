@@ -13,7 +13,7 @@ import { store } from '../store/store'
 import NewRequestsPage from '../components/NewRequestsPage.vue'
 import Chat from '../components/Chat.vue'
 import ReservationsPage from '../components/ReservationsPage.vue'
-
+import RequestsHistory from '../components/RequestsHistory.vue'
 
 Vue.use(Router)
 
@@ -109,6 +109,18 @@ export default new Router({
             component: ReservationsPage,
             beforeEnter: (to, from, next) => {
                 if(!store.getters.loggedIn || store.getters.userRole == 'ROLE_ADMIN'){
+                    next({ name: 'NotAuthorized' })
+                }else{
+                    next()
+                }
+              }
+        },
+        {
+            path: '/myRequests',
+            name: 'RequestsHistory',
+            component: RequestsHistory,
+            beforeEnter: (to, from, next) => {
+                if(!store.getters.loggedIn || !store.getters.userRole == 'ROLE_CLIENT'){
                     next({ name: 'NotAuthorized' })
                 }else{
                     next()

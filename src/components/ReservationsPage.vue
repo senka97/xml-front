@@ -17,12 +17,12 @@
             </div>
             <div class="container">
               <div class="custom-width" v-for="req in paidRequests" :key="req.id">
-                <b-card no-body class="overflow-hidden custom-width mb-3 shadow" header-bg-variant="secondary" header-text-variant="white"  > <!-- Velika kartica za bundle -->
+                <b-card no-body class="overflow-hidden custom-width mb-3 shadow" header-bg-variant="dark" header-text-variant="white"  > <!-- Velika kartica za bundle -->
                   <template v-slot:header>
                     <h3 class="mb-0 text-center">Client: {{req.clientName + ' ' + req.clientLastName}}</h3>
                   </template>
                   <div class="mt-2" v-for="reqAd in req.requestAds" :key="reqAd.id">
-                    <b-card no-body class="overflow-hidden shadow custom-width" header-bg-variant="info" header-text-variant="white" >
+                    <b-card no-body class="overflow-hidden shadow custom-width" header-bg-variant="success" header-text-variant="white" >
                       <template v-slot:header>
                         <h3 class="mb-0 text-center">{{reqAd.ad.car.carBrand + ' ' + reqAd.ad.car.carModel}}</h3>
                       </template>
@@ -88,8 +88,8 @@
                     </b-card>
                   </div>
                   <b-row>
-                    <b-button  type="button" class="ml-auto mr-2 mt-3 mb-3 buttons" variant="info"> Report </b-button>
-                    <b-button  type="button" class="mr-4 mt-3 mb-3 buttons" variant="secondary" @click="goToChat(req.id)">Chat</b-button>
+                    <b-button  type="button" class="ml-auto mr-2 mt-3 mb-3 buttons" variant="dark"> Report </b-button>
+                    <b-button  type="button" class="mr-4 mt-3 mb-3 buttons" variant="success" @click="goToChat(req.id)">Chat</b-button>
                   </b-row> 
                 </b-card>
               </div>
@@ -103,12 +103,12 @@
             
             <div class="container">
               <div class="custom-width" v-for="res in reservations" :key="res.id">
-                <b-card no-body class="overflow-hidden custom-width mb-3 shadow" header-bg-variant="secondary" header-text-variant="white"  > <!-- Velika kartica za bundle -->
+                <b-card no-body class="overflow-hidden custom-width mb-3 shadow" header-bg-variant="dark" header-text-variant="white"  > <!-- Velika kartica za bundle -->
                   <template v-slot:header>
                     <h3 class="mb-0 text-center">Client: {{res.clientFirstName + ' ' + res.clientLastName}}</h3>
                   </template>
                   <div class="mt-2">
-                    <b-card no-body class="overflow-hidden shadow custom-width" header-bg-variant="info" header-text-variant="white" >
+                    <b-card no-body class="overflow-hidden shadow custom-width" header-bg-variant="warning" header-text-variant="dark" >
                       <template v-slot:header>
                         <h3 class="mb-0 text-center">{{res.ad.car.carBrand + ' ' + res.ad.car.carModel}}</h3>
                       </template>
@@ -183,7 +183,7 @@
                     </b-card>
                   </div>
                   <b-row>
-                    <b-button  type="button" class="ml-auto mr-4 mt-3 mb-3 buttons" variant="info"> Report </b-button>
+                    <b-button  type="button" class="ml-auto mr-4 mt-3 mb-3 buttons" variant="dark"> Report </b-button>
                   </b-row> 
                 </b-card>
               </div>
