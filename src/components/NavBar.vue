@@ -5,6 +5,7 @@
           <b-navbar-nav class="ml-auto">
             <b-nav-item href="/home" link-classes="text-light"><b>Search Cars</b></b-nav-item>
             <b-nav-item  v-if="clientAgentLoggedIn" href="/post/ad" link-classes="text-light"><b>Post Ad</b></b-nav-item>
+            <b-nav-item  v-if="clientAgentLoggedIn" href="/reservations" link-classes="text-light"><b>Reservations</b></b-nav-item>
             <b-nav-item  v-if="clientAgentLoggedIn" href="/newRequests" link-classes="text-light"><b>New Requests</b> <b-badge v-if="showNewRequests" pills variant="danger">{{numberOfNewRequests}}</b-badge> </b-nav-item>
           </b-navbar-nav>
       <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>

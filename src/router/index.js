@@ -13,6 +13,7 @@ import { store } from '../store/store'
 import NewRequestsPage from '../components/NewRequestsPage.vue'
 import Chat from '../components/Chat.vue'
 import ActivateAccount from '../components/ActivateAccount.vue'
+import ReservationsPage from '../components/ReservationsPage.vue'
 
 Vue.use(Router)
 
@@ -106,6 +107,18 @@ export default new Router({
             path: '/activate/account/',
             name: 'ActivateAccount',
             component: ActivateAccount
+        },
+        {
+            path: '/reservations',
+            name: 'ReservationsPage',
+            component: ReservationsPage,
+            beforeEnter: (to, from, next) => {
+                if(!store.getters.loggedIn || store.getters.userRole == 'ROLE_ADMIN'){
+                    next({ name: 'NotAuthorized' })
+                }else{
+                    next()
+                }
+              }
         },
         {
             path: '*',
