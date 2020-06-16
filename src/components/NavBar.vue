@@ -11,6 +11,7 @@
       <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
       <b-collapse id="nav-collapse" is-nav>
         <b-navbar-nav class="ml-auto">
+            <b-nav-item v-if="showClientProfile" href="/myRequests" link-classes="text-light"><b>My Requests</b></b-nav-item>
             <b-nav-item v-if="showClientProfile" href="/cart" link-classes="text-light"><b>Cart</b></b-nav-item>
             <b-nav-item v-if="showAdminProfile" href="/adminProfile" link-classes="text-light"><b>Admin profile</b></b-nav-item>
             <b-nav-item v-if="loggedIn" @click="logout()" link-classes="text-light"><b>Logout</b></b-nav-item>
