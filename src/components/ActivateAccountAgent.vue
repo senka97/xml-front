@@ -13,7 +13,7 @@ import axios from "axios";
 const baseUrl = "https://localhost:8083/user-service";
 
 export default {
-  name: "ActivateAccount",
+  name: "ActivateAccountAgent",
   data() {
     return {};
   },
@@ -22,7 +22,7 @@ export default {
       const requestId = this.$route.query.id;
       const requestToken = this.$route.query.token;
       if (requestId && requestToken) {
-        axios.put(baseUrl + "/activate-account/request/" + requestId + "/" + requestToken).then(() => {
+        axios.put(baseUrl + "/activate-account/agent/request/" + requestId + "/" + requestToken).then(() => {
           this.$router.push({ name: "Login" });
         }).catch(() => {
           this.$notify({
