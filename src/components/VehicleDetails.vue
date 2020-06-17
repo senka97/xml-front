@@ -462,8 +462,8 @@ export default {
             });
             this.vehicleDetails();
             this.showStarRating();
-          }).catch((error) => {
-            this.$bvToast.toast(error.response.data, {
+          }).catch(() => {
+            this.$bvToast.toast("Car rating is unsuccessful. Please, try again.", {
               title: "Error",
               variant: "danger",
               solid: true

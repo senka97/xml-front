@@ -13,6 +13,7 @@ import { store } from '../store/store'
 import NewRequestsPage from '../components/NewRequestsPage.vue'
 import Chat from '../components/Chat.vue'
 import ActivateAccount from '../components/ActivateAccount.vue'
+import ActivateAccountAgent from '../components/ActivateAccountAgent.vue'
 import ReservationsPage from '../components/ReservationsPage.vue'
 
 Vue.use(Router)
@@ -104,9 +105,14 @@ export default new Router({
               }
         },
         {
-            path: '/activate/account/',
+            path: '/activate-account/',
             name: 'ActivateAccount',
             component: ActivateAccount
+        },
+        {
+            path: '/activate-account/agent/',
+            name: 'ActivateAccountAgent',
+            component: ActivateAccountAgent
         },
         {
             path: '/reservations',
