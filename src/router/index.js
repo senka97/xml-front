@@ -16,6 +16,7 @@ import ActivateAccount from '../components/ActivateAccount.vue'
 import ActivateAccountAgent from '../components/ActivateAccountAgent.vue'
 import ReservationsPage from '../components/ReservationsPage.vue'
 import RequestsHistory from '../components/RequestsHistory.vue'
+import PriceLists from '../components/PriceLists.vue'
 
 Vue.use(Router)
 
@@ -133,6 +134,18 @@ export default new Router({
             component: RequestsHistory,
             beforeEnter: (to, from, next) => {
                 if(!store.getters.loggedIn || !store.getters.userRole == 'ROLE_CLIENT'){
+                    next({ name: 'NotAuthorized' })
+                }else{
+                    next()
+                }
+              }
+        },
+        {
+            path: '/priceLists',
+            name: 'PriceLists',
+            component: PriceLists,
+            beforeEnter: (to, from, next) => {
+                if(!store.getters.loggedIn || store.getters.userRole == 'ROLE_ADMIN'){
                     next({ name: 'NotAuthorized' })
                 }else{
                     next()
