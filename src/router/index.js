@@ -17,6 +17,7 @@ import ActivateAccountAgent from '../components/ActivateAccountAgent.vue'
 import ReservationsPage from '../components/ReservationsPage.vue'
 import RequestsHistory from '../components/RequestsHistory.vue'
 import PriceLists from '../components/PriceLists.vue'
+import Statistic from '../components/Statistic.vue'
 
 Vue.use(Router)
 
@@ -151,6 +152,11 @@ export default new Router({
                     next()
                 }
               }
+        },
+        {
+            path: '/statistic',
+            name: 'Statistic',
+            component: Statistic
         },
         {
             path: '*',
