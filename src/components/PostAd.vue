@@ -219,6 +219,17 @@
                     </b-form-group>
                 </b-col>
             </b-row>
+            <b-row>
+               <b-col>
+                    <b-form-group label="Cdw price:" >
+                        <b-input-group append="€">
+                        <b-form-input v-model="pricingListSelected.priceForCdw" disabled></b-form-input>
+                        </b-input-group>
+                    </b-form-group>
+                </b-col>
+                <b-col>
+                  </b-col>
+            </b-row>
             <hr />
             <b-row>
               <b-col>
