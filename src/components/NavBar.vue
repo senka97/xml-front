@@ -8,7 +8,7 @@
             <b-nav-item  v-if="clientAgentLoggedIn" href="/priceLists" link-classes="text-light"><b>Price Lists</b></b-nav-item>
             <b-nav-item  v-if="clientAgentLoggedIn" href="/reservations" link-classes="text-light"><b>Reservations</b></b-nav-item>
             <b-nav-item  v-if="clientAgentLoggedIn" href="/newRequests" link-classes="text-light"><b>New Requests</b> <b-badge v-if="showNewRequests" pills variant="danger">{{numberOfNewRequests}}</b-badge> </b-nav-item>
-            <b-nav-item  v-if="clientAgentLoggedIn" href="/statistic" link-classes="text-light"><b>Statistic</b> <b-badge v-if="showNewRequests" pills variant="danger">{{numberOfNewRequests}}</b-badge> </b-nav-item>
+            <b-nav-item  v-if="clientAgentLoggedIn" href="/statistic" link-classes="text-light"><b>Statistic</b> </b-nav-item>
 
           </b-navbar-nav>
       <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
