@@ -49,10 +49,17 @@
           </b-form-group>
           </validation-provider>
           <b-button type="submit" variant="primary">Login</b-button>
-          <p>
+          <b-row class="mt-3">
+            <p class="mr-3 ml-2">
             Don't have an account?
             <a href="/registration">Create a new account.</a>
           </p>
+          <p>
+            Forgot your password?
+            <a href="/forgot-password">Reset it.</a>
+          </p>
+          </b-row>
+          
         </b-form>
       </validation-observer>
     </div>
