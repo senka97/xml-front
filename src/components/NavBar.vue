@@ -17,6 +17,7 @@
             <b-nav-item v-if="showClientProfile" href="/myRequests" link-classes="text-light"><b>My Requests</b></b-nav-item>
             <b-nav-item v-if="showClientProfile" href="/cart" link-classes="text-light"><b>Cart</b></b-nav-item>
             <b-nav-item v-if="showAdminProfile" href="/adminProfile" link-classes="text-light"><b>Admin profile</b></b-nav-item>
+            <b-nav-item v-if="loggedIn" href="/change-password" link-classes="text-light"><b>Change password</b></b-nav-item>
             <b-nav-item v-if="loggedIn" @click="logout()" link-classes="text-light"><b>Logout</b></b-nav-item>
             <b-nav-item v-if="!loggedIn" href="/login" link-classes="text-light"><b>Login</b></b-nav-item>
             <b-nav-item v-if="!loggedIn" href="/registration" link-classes="text-light"><b>Register</b></b-nav-item>           
