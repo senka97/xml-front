@@ -18,6 +18,9 @@ import ReservationsPage from '../components/ReservationsPage.vue'
 import RequestsHistory from '../components/RequestsHistory.vue'
 import PriceLists from '../components/PriceLists.vue'
 import Statistic from '../components/Statistic.vue'
+import ChangePassword from '../components/ChangePassword.vue'
+import ResetPassword from '../components/ResetPassword.vue'
+import ForgotPassword from '../components/ForgotPassword.vue'
 
 Vue.use(Router)
 
@@ -157,6 +160,21 @@ export default new Router({
             path: '/statistic',
             name: 'Statistic',
             component: Statistic
+        },
+        {
+            path: '/change-password',
+            name: 'ChangePassword',
+            component: ChangePassword
+        },
+        {
+            path: '/reset-password',
+            name: 'ResetPassword',
+            component: ResetPassword
+        },
+        {
+            path: '/forgot-password',
+            name: 'ForgotPassword',
+            component: ForgotPassword
         },
         {
             path: '*',

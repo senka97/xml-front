@@ -220,7 +220,7 @@
            <b-form-input required  type="number" :min="1" v-model="mileageReport" placeholder="Enter number of kilometers"></b-form-input>
         </b-input-group>
       </b-form-group>
-       <validation-provider name="Text" :rules="{ required: true, regex: /^[a-zA-Z0-9?'!,:;. ]*$/, min: 2 }" v-slot="validationContext">
+       <validation-provider name="Text" :rules="{ required: true, regex: /^[a-zA-Z0-9.,?! ]*$/, min: 2 }" v-slot="validationContext">
         <b-form-group label="Enter report:" align="left" >
           <b-form-textarea id="textareaReply" placeholder="Write here..." rows="3" no-resize v-model="textareaReport" :state="getValidationState(validationContext)"></b-form-textarea>               
           <b-form-invalid-feedback id="reply">{{ validationContext.errors[0] }}</b-form-invalid-feedback>
@@ -254,7 +254,7 @@
            <b-form-input required  type="number" :min="1" v-model="mileageReport" placeholder="Enter number of kilometers"></b-form-input>
         </b-input-group>
       </b-form-group>
-       <validation-provider name="Text" :rules="{ required: true, regex: /^[a-zA-Z0-9?'!,:;. ]*$/, min: 2 }" v-slot="validationContext">
+       <validation-provider name="Text" :rules="{ required: true, regex: /^[a-zA-Z0-9.,?! ]*$/, min: 2 }" v-slot="validationContext">
         <b-form-group label="Enter report:" align="left" >
           <b-form-textarea id="textareaReply" placeholder="Write here..." rows="3" no-resize v-model="textareaReport" :state="getValidationState(validationContext)"></b-form-textarea>               
           <b-form-invalid-feedback id="reply">{{ validationContext.errors[0] }}</b-form-invalid-feedback>
