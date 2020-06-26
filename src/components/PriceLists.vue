@@ -108,7 +108,7 @@ export default {
             "alias",
             { key :"pricePerDay", label: "Price Per Day (\u20AC)"},
             { key :"pricePerKm", label: "Price Per Km (\u20AC)"},
-            { key :"pricePriceForCdw", label: "Price For Cdw (\u20AC)"},
+            { key :"priceForCdw", label: "Price For Cdw (\u20AC)"},
             "delete"
           ],
           items: [],
@@ -151,6 +151,7 @@ export default {
       { 
         axios.get("https://localhost:8083/ad-service/api/priceList/owner").then(response => {
             this.items = response.data;
+            console.log(this.items);
         });
       },
       
