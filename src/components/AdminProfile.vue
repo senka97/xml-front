@@ -277,7 +277,28 @@
         </b-table>
       </div>
       <!--Permissions management-->
-      <div class="sub-work-div" v-if="showPermissions"></div>
+      <div class="sub-work-div" v-if="showPermissions">
+         <b-table striped hover bordered borderless :items="itemsActiveClients" :fields="fieldsActiveClients">
+          <template v-slot:cell(comments)="row">
+            <b-button
+              v-if="row.item.canComment == true"
+              size="sm"
+              variant="outline-danger"
+              @click="disableCommenting(row.item.id)"
+            >Disable creating comment</b-button>
+            <p v-else>Disabled</p>
+          </template>
+          <template v-slot:cell(reservations)="row">
+            <b-button
+              v-if="row.item.canAddToCart == true"
+              size="sm"
+              variant="outline-danger"
+              @click="disableCreatingReservations(row.item.id)"
+            >Disable creating reservations</b-button>
+            <p v-else>Disabled</p>
+          </template>
+        </b-table>
+      </div>
     </div>
   </div>
 </template>
@@ -405,6 +426,23 @@ export default {
         },
         "Approve",
         "Reject"
+      ],
+      itemsActiveClients: [],
+      fieldsActiveClients: [
+        {
+          key: 'name',
+          label:'First name'
+        },
+        {
+          key: 'surname',
+          label:'Last name'
+        },
+        {
+          key: 'email',
+          label:'Email'
+        },
+        "Comments",
+        "Reservations"
       ]
     };
   },
@@ -484,6 +522,10 @@ export default {
       this.showRequestsAgent = false;
       this.showRequests = false;
       this.showComments = false;
+
+      axios.get(baseUrl + "/client/active").then((response) => {
+        this.itemsActiveClients = response.data;
+      })
     },
     approveRequest(id) {
        axios.put(baseUrl + "/request/" + id + "/approve").then(() => {
@@ -706,6 +748,45 @@ export default {
       }).then(() => {
         this.showCommentsF();
       })   
+    },
+    disableCommenting(id) {
+      axios.put(baseUrl + "/client/" + id + "/comment/disable").then(() => {
+        this.$notify({
+            group: "mainHolder",
+            title: "Success",
+            text: "Client successfully disabled for creating comments!",
+            type: "success"
+          });
+          
+      }).catch(() => {
+        this.$notify({
+            group: "mainHolder",
+            title: "Error",
+            text: "Client must have 3 or more rejected comments!",
+            type: "error"
+        }) 
+      }).then(() => {
+        this.showPermissionsF();
+      })
+    },
+    disableCreatingReservations(id) {
+      axios.put(baseUrl + "/client/" + id + "/reservation/disable").then(() => {
+        this.$notify({
+            group: "mainHolder",
+            title: "Success",
+            text: "Client successfully disabled for creating reservations!",
+            type: "success"
+          });
+      }).catch(() => {
+        this.$notify({
+            group: "mainHolder",
+            title: "Error",
+            text: "Client must have 3 or more canceled reservations!",
+            type: "error"
+        });
+      }).then(() => {
+        this.showPermissionsF();
+      })
     }
   }
 };
