@@ -21,6 +21,7 @@ import Statistic from '../components/Statistic.vue'
 import ChangePassword from '../components/ChangePassword.vue'
 import ResetPassword from '../components/ResetPassword.vue'
 import ForgotPassword from '../components/ForgotPassword.vue'
+import Map from '../components/Map.vue'
 
 Vue.use(Router)
 
@@ -175,6 +176,18 @@ export default new Router({
             path: '/forgot-password',
             name: 'ForgotPassword',
             component: ForgotPassword
+        },
+        {
+            path: '/map',
+            name: 'Map',
+            component: Map,
+            /*beforeEnter: (to, from, next) => {
+                if(!store.getters.loggedIn || store.getters.userRole == 'ROLE_ADMIN'){
+                    next({ name: 'NotAuthorized' })
+                }else{
+                    next()
+                }
+              }*/
         },
         {
             path: '*',
