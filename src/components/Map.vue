@@ -22,7 +22,8 @@
 
 <script>
 import NavBar from "../components/NavBar.vue";
-
+import SockJS from "sockjs-client";
+import Stomp from "webstomp-client";
 export default {
     name: 'Map',
     components: {
@@ -32,6 +33,7 @@ export default {
         return {
             carBeingUsed: true,
             connected: false,
+            isCustomSocketOpened: false,
             markersData: [
                 {position: {lat: 45.245581, lng: 19.879947}},  
                 {position: {lat: 45.228618, lng: 19.895053}},
@@ -58,7 +60,7 @@ export default {
         }
      },
      created(){
-            setTimeout(function() {  
+            /*setTimeout(function() {  
             this.markers = [this.markersData[0]];
             setTimeout(function() {   
                     this.markers = [this.markersData[1]];  
@@ -117,13 +119,50 @@ export default {
                 }.bind(this), 3000)                          
                 }.bind(this), 3000)                        
                 }.bind(this), 3000)
-            }.bind(this),3000)    
+            }.bind(this),3000)    */
+            this.initializeWebSocketConnection();
                   
      },
-    
-    
+     methods:{
+        initializeWebSocketConnection() {
+             let ws = new SockJS("http://localhost:8082/web-socket")
+             this.stompClient = Stomp.over(ws); 
+             let that = this;
+             this.stompClient.connect({}, function () { 
+                 that.connected = true; 
+                 that.openGlobalSocket()
+             });
+         },
+        openGlobalSocket() { 
+            if (this.connected) { 
+                this.stompClient.subscribe("/socket-publisher", (message) => {
+                    console.log(message.body);
+                    let positionObj = {"position": JSON.parse(message.body)};
+                    this.markers = [positionObj];
+                    //this.handleResult(message); 
+                }); 
+        }
+       },
+        openSocket() { //da bi stizale poruke koje su samo namenjene nama
+            if (this.connected) {
+            this.isCustomSocketOpened = true;
+            // pretplata na topic /socket-publisher/specificni_user
+            this.stompClient.subscribe("/socket-publisher/" + "ovde_ce_ici_token", (message) => {
+                console.log(message);
+                this.handleResult(message);
+            });
+            }
+        },
+        handleResult(message) {
+            console.log(message)
+            //if (message.body) {
+            //let position = JSON.parse(message.body);
+            //console.log(position);       
+        }
+    }  
 
-}
+     }
+    
 </script>
 
 <style scoped>
