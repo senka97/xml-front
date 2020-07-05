@@ -45,6 +45,16 @@ axios.interceptors.request.use(config => {
   return config;
 })
 
+import * as VueGoogleMaps from 'vue2-google-maps'
+Vue.use(VueGoogleMaps, {
+  load: {
+    key: '', 
+  },
+  installComponents: false
+})
+Vue.component('google-map', VueGoogleMaps.Map);
+Vue.component('google-marker', VueGoogleMaps.Marker);
+
 new Vue({
   router,
   store,
