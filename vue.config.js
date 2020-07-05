@@ -1,4 +1,4 @@
-const fs = require('fs')
+/*const fs = require('fs')
 
 module.exports = {
     devServer: {
@@ -8,4 +8,4 @@ module.exports = {
         },
         public: 'https://localhost:8080/'
     }
-  }
+  }*/
