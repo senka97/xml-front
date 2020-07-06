@@ -93,6 +93,7 @@
             </b-col>
             <b-col>
               <b>Android app present:</b> {{ vehicle.car.hasAndroidApp == true ? 'Yes' : 'No' }}
+              <b-button v-if="loggedInOwner && vehicle.car.hasAndroidApp" @click="seeMap(vehicle.car.androidToken)">Map</b-button> <!--ako je oglas od vlasnika i ako ima android uredjaj-->
             </b-col>
           </b-row>
         </b-card-text>
@@ -503,6 +504,9 @@ export default {
                      
             }
         );
+      },
+      seeMap: function(androidToken){
+            this.$router.push({ path: '/map/'+ androidToken});
       }
 
   },
