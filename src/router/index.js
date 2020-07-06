@@ -178,16 +178,16 @@ export default new Router({
             component: ForgotPassword
         },
         {
-            path: '/map',
+            path: '/map/:token',
             name: 'Map',
             component: Map,
-            /*beforeEnter: (to, from, next) => {
+            beforeEnter: (to, from, next) => {
                 if(!store.getters.loggedIn || store.getters.userRole == 'ROLE_ADMIN'){
                     next({ name: 'NotAuthorized' })
                 }else{
                     next()
                 }
-              }*/
+              }
         },
         {
             path: '*',

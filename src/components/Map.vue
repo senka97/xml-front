@@ -34,6 +34,7 @@ export default {
             carBeingUsed: true,
             connected: false,
             isCustomSocketOpened: false,
+            androidToken: '',
             markersData: [
                 {position: {lat: 45.245581, lng: 19.879947}},  
                 {position: {lat: 45.228618, lng: 19.895053}},
@@ -120,6 +121,7 @@ export default {
                 }.bind(this), 3000)                        
                 }.bind(this), 3000)
             }.bind(this),3000)    */
+            this.androidToken = this.$route.params.token;
             this.initializeWebSocketConnection();
                   
      },
@@ -130,7 +132,8 @@ export default {
              let that = this;
              this.stompClient.connect({}, function () { 
                  that.connected = true; 
-                 that.openGlobalSocket()
+                 //that.openGlobalSocket()
+                 that.openSocket()
              });
          },
         openGlobalSocket() { 
@@ -139,7 +142,7 @@ export default {
                     console.log(message.body);
                     let positionObj = {"position": JSON.parse(message.body)};
                     this.markers = [positionObj];
-                    //this.handleResult(message); 
+                    
                 }); 
         }
        },
@@ -147,17 +150,13 @@ export default {
             if (this.connected) {
             this.isCustomSocketOpened = true;
             // pretplata na topic /socket-publisher/specificni_user
-            this.stompClient.subscribe("/socket-publisher/" + "ovde_ce_ici_token", (message) => {
-                console.log(message);
-                this.handleResult(message);
+            this.stompClient.subscribe("/socket-publisher/" + this.androidToken, (message) => {
+                console.log(message.body);
+                    let positionObj = {"position": JSON.parse(message.body)};
+                    this.markers = [positionObj];
+                
             });
             }
-        },
-        handleResult(message) {
-            console.log(message)
-            //if (message.body) {
-            //let position = JSON.parse(message.body);
-            //console.log(position);       
         }
     }  
 
