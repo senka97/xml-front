@@ -102,7 +102,7 @@ export default {
     },
     changePassword: function() {
       axios
-        .post("https://localhost:8083/user-service/auth/change-password", {
+        .post("http://localhost:8083/user-service/auth/change-password", {
           oldPassword: this.oldPassword,
           newPassword: this.newPassword
         })

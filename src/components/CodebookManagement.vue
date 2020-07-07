@@ -276,7 +276,7 @@
 
 <script>
 import axios from "axios";
-const baseUrl = "https://localhost:8083/car-service";
+const baseUrl = "http://localhost:8083/car-service";
 
 export default {
   name: "codebookManagement",

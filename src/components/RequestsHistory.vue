@@ -318,7 +318,7 @@ export default {
 
       cancel(id)
       {
-          axios.put("https://localhost:8083/rent-service/api/request/cancel/"+ id).then(
+          axios.put("http://localhost:8083/rent-service/api/request/cancel/"+ id).then(
             response=> {
                 console.log(response.data);
                 let i = 0;
@@ -346,7 +346,7 @@ export default {
       
         getPendingRequests()
         {
-            axios.get("https://localhost:8083/rent-service/api/request/pending/client/"+this.$store.getters.currentUserId).then(
+            axios.get("http://localhost:8083/rent-service/api/request/pending/client/"+this.$store.getters.currentUserId).then(
             response=> {
                 this.pendingRequests = response.data; 
 
@@ -368,7 +368,7 @@ export default {
     created()
     {    
       this.loading = true;
-      axios.get("https://localhost:8083/rent-service/api/request/paid/client/"+ this.$store.getters.currentUserId).then(
+      axios.get("http://localhost:8083/rent-service/api/request/paid/client/"+ this.$store.getters.currentUserId).then(
             response=> {
 
                 var now = new Date();

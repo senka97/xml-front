@@ -4,7 +4,7 @@ import axios from 'axios'
 
 Vue.use(Vuex)
 
-const baseUrl = "https://localhost:8083/user-service"; //za user service
+const baseUrl = "http://localhost:8083/user-service"; //za user service
 
 
 export const store =  new Vuex.Store({

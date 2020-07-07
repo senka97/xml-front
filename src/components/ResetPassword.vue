@@ -80,7 +80,7 @@ export default {
     resetPassword: function() {
       const requestToken = this.$route.query.token;
       if(requestToken) {
-        axios.put("https://localhost:8083/user-service/auth/reset-password", {
+        axios.put("http://localhost:8083/user-service/auth/reset-password", {
             newPassword: this.newPassword,
             token: requestToken
         }).then(() => {

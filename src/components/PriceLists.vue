@@ -127,7 +127,7 @@ export default {
       },
 
       deletePriceList(id){ 
-          axios.delete("https://localhost:8083/ad-service/api/priceList/" + id).then(
+          axios.delete("http://localhost:8083/ad-service/api/priceList/" + id).then(
               () => {
                 this.$bvToast.toast('Price List Deleted ', {
                     title: 'Success',
@@ -149,7 +149,7 @@ export default {
 
       getPriceLists()
       { 
-        axios.get("https://localhost:8083/ad-service/api/priceList/owner").then(response => {
+        axios.get("http://localhost:8083/ad-service/api/priceList/owner").then(response => {
             this.items = response.data;
             console.log(this.items);
         });
@@ -178,7 +178,7 @@ export default {
           }   
 
           
-          axios.post("https://localhost:8083/ad-service/api/priceList",{
+          axios.post("http://localhost:8083/ad-service/api/priceList",{
                 "alias": this.alias,
                 "pricePerDay": this.pricePerDay,
                 "pricePerKm": this.pricePerKm,

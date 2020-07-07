@@ -443,7 +443,7 @@ export default {
       writeRequestReport()
       {
         console.log("RequestAdId:"+ this.requestAdId );
-          axios.post("https://localhost:8083/rent-service/api/reports/request",{
+          axios.post("http://localhost:8083/rent-service/api/reports/request",{
               "content": this.textareaReport,
               "km": this.mileageReport,
               "requestAdId": this.requestAdId,
@@ -470,7 +470,7 @@ export default {
 
       writeReservationReport()
       {
-          axios.post("https://localhost:8083/rent-service/api/reports/reservation",{
+          axios.post("http://localhost:8083/rent-service/api/reports/reservation",{
               "content": this.textareaReport,
               "km": this.mileageReport,
               "reservationId": this.reservationId,
@@ -497,7 +497,7 @@ export default {
 
       showRequestReport(reqAd)
       {
-        axios.get("https://localhost:8083/rent-service/api/reports/request/"+reqAd.id).then(
+        axios.get("http://localhost:8083/rent-service/api/reports/request/"+reqAd.id).then(
             response=> {
                 this.report = response.data;        
             } 
@@ -514,7 +514,7 @@ export default {
 
       showReservationReport(res)
       {
-         axios.get("https://localhost:8083/rent-service/api/reports/reservation/"+res.id).then(
+         axios.get("http://localhost:8083/rent-service/api/reports/reservation/"+res.id).then(
             response=> {
                 this.report = response.data;        
             } 
@@ -536,7 +536,7 @@ export default {
       getRequests()
       {
           
-        axios.get("https://localhost:8083/rent-service/api/request/paid").then(
+        axios.get("http://localhost:8083/rent-service/api/request/paid").then(
             response=> {
                 this.paidRequests = response.data; 
             
@@ -555,7 +555,7 @@ export default {
 
       getReservations()
       {
-        axios.get("https://localhost:8083/rent-service/api/reservations").then(
+        axios.get("http://localhost:8083/rent-service/api/reservations").then(
             response=> {
                 this.reservations = response.data; 
 

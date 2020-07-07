@@ -306,8 +306,8 @@
 <script>
 import codebookManagement from "../components/CodebookManagement.vue";
 import axios from "axios";
-const baseUrl = "https://localhost:8083/user-service";
-const baseCarUrl = "https://localhost:8083/car-service";
+const baseUrl = "http://localhost:8083/user-service";
+const baseCarUrl = "http://localhost:8083/car-service";
 
 export default {
   components: {

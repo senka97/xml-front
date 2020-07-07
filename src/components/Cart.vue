@@ -140,7 +140,7 @@ export default {
   },
   created() {
     this.loading = true;
-    axios.get("https://localhost:8083/rent-service/api/cart").then(
+    axios.get("http://localhost:8083/rent-service/api/cart").then(
             response=> {
                 this.cartItems = response.data;
                 console.log(this.cartItems);
@@ -164,7 +164,7 @@ export default {
   methods: {
     removeFromCart(id){
 
-      axios.delete("https://localhost:8083/rent-service/api/cartItem/"+id).then(
+      axios.delete("http://localhost:8083/rent-service/api/cartItem/"+id).then(
         response => {
            console.log(response);
            let i = 0;
@@ -208,7 +208,7 @@ export default {
         cartItemsIDs.push(this.cartItems[i].id);
       }
       let dto = {"cartItemsIDs": cartItemsIDs, "bundle":this.bundle};
-      axios.post("https://localhost:8083/rent-service/api/request", dto).then(
+      axios.post("http://localhost:8083/rent-service/api/request", dto).then(
         response => {
           console.log(response.data);
              this.cartItems = [];
@@ -241,7 +241,7 @@ export default {
                 variant: "danger",
                 solid: true
               });
-              axios.get("https://localhost:8083/rent-service/api/cart").then(
+              axios.get("http://localhost:8083/rent-service/api/cart").then(
                   response=> {
                       this.cartItems = response.data;
                       console.log(this.cartItems);
