@@ -367,6 +367,14 @@ export default {
                 variant: 'success',
                 solid: true
                 });
+                if(this.android == true){
+                  this.$bvToast.toast(response.data.car.androidToken, {
+                  title: `Token for android app`,
+                  variant: 'success',
+                  autoHideDelay: 20000,
+                  solid: true
+                });
+                }
                 this.refreshForm();
             })
             .catch(error =>{
