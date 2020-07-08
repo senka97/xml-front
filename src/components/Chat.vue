@@ -72,7 +72,7 @@ export default {
 
             this.requestID = this.$route.params.id;
             console.log(this.requestID);
-            axios.get("https://localhost:8083/rent-service/api/message/request/" + this.requestID).then(
+            axios.get("http://localhost:8083/rent-service/api/message/request/" + this.requestID).then(
                 response => {
                     this.messages = response.data;
                 }
@@ -92,7 +92,7 @@ export default {
             }
             let messageRequest = {"requestId": this.requestID, "content":this.message};
             console.log(messageRequest);
-            axios.post("https://localhost:8083/rent-service/api/message", messageRequest).then(
+            axios.post("http://localhost:8083/rent-service/api/message", messageRequest).then(
                 response => {
                     console.log(response.data);
                     this.message = "";

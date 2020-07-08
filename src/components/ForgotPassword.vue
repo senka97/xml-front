@@ -59,7 +59,7 @@ export default {
       return dirty || validated ? valid : null;
     },
     send: function() {
-      axios.post("https://localhost:8083/user-service/auth/forgot-password", {
+      axios.post("http://localhost:8083/user-service/auth/forgot-password", {
          email: this.email
         })
         .then(() => {

@@ -286,7 +286,7 @@ export default {
   methods: {
 
   reserve() {
-      axios.post("https://localhost:8083/rent-service/api/reservations",{
+      axios.post("http://localhost:8083/rent-service/api/reservations",{
                 startDate: this.startDate,
                 endDate: this.endDate,
                 clientFirstName: this.name,
@@ -324,7 +324,7 @@ export default {
     },
 
     postComment(){
-        axios.post("https://localhost:8083/car-service/api/comments",{
+        axios.post("http://localhost:8083/car-service/api/comments",{
               "fromComment": this.$store.getters.currentUserId,
               "content": this.textarea,
               "adId": this.vehicle.id,
@@ -350,7 +350,7 @@ export default {
 
     postReply()
     {
-      axios.put("https://localhost:8083/car-service/api/comments/"+ this.commentId,{
+      axios.put("http://localhost:8083/car-service/api/comments/"+ this.commentId,{
               "replyContent": this.textareaReply,
         }).then(
           response => {
@@ -377,7 +377,7 @@ export default {
 
     getComments()
     {
-        axios.get("https://localhost:8083/car-service/api/comments/"+ this.adId).then(
+        axios.get("http://localhost:8083/car-service/api/comments/"+ this.adId).then(
             response=> {
                 this.comments = response.data;                    
             }
@@ -385,7 +385,7 @@ export default {
 
       if(this.loggedInClient) //ne salje se zahtev ako nije ulogovan klijent
       {
-        axios.get("https://localhost:8083/ad-service/api/userCanPostComment/"+ this.adId + "/" + this.$store.getters.currentUserId).then(
+        axios.get("http://localhost:8083/ad-service/api/userCanPostComment/"+ this.adId + "/" + this.$store.getters.currentUserId).then(
             response=> {
                 this.userCanPostComment = response.data;                    
             }
@@ -426,7 +426,7 @@ export default {
       this.$refs["replyModal"].hide();
     },
     addToCart: function(id, startDate, endDate){
-        axios.post("https://localhost:8083/rent-service/api/cartItem", {"adID":id, "startDate":startDate, "endDate":endDate}).then(
+        axios.post("http://localhost:8083/rent-service/api/cartItem", {"adID":id, "startDate":startDate, "endDate":endDate}).then(
           response => {
             console.log(response.data);
               this.$bvToast.toast("You have successfully added the ad in the cart.", {
@@ -447,14 +447,14 @@ export default {
       showStarRating() {
         //ne salje se zahtev ako nije ulogovan klijent
         if(this.loggedInClient)  {
-          axios.get("https://localhost:8083/ad-service/rating/user/" + this.$store.getters.currentUserId + "/ad/" + this.adId)
+          axios.get("http://localhost:8083/ad-service/rating/user/" + this.$store.getters.currentUserId + "/ad/" + this.adId)
           .then((response) => {
               this.userCanRate = response.data;
           });
         }
       },
       rateCar: function() {
-        axios.put("https://localhost:8083/car-service/api/car/user/" + this.$store.getters.currentUserId + "/ad/" + this.adId + "/" + this.newRate)
+        axios.put("http://localhost:8083/car-service/api/car/user/" + this.$store.getters.currentUserId + "/ad/" + this.adId + "/" + this.newRate)
         .then(() => {
             this.$bvToast.toast("You successfully rate this car.", {
               title: "Rating",
@@ -477,7 +477,7 @@ export default {
         id = id.split('=')[1];
         this.adId = id;
  
-        axios.get("https://localhost:8083/ad-service/api/ads/"+id).then(
+        axios.get("http://localhost:8083/ad-service/api/ads/"+id).then(
             response=> {
                 this.vehicle = response.data;
               

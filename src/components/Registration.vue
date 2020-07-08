@@ -173,7 +173,7 @@
 <script>
 import RegistrationAgent from '../components/RegistrationAgent.vue';
 import axios from "axios";
-const baseUrl = "https://localhost:8083/user-service/auth/registration";
+const baseUrl = "http://localhost:8083/user-service/auth/registration";
 
 export default {
   components: {

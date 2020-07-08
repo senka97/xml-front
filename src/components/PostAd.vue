@@ -256,8 +256,8 @@
 
 <script>
 import NavBar from "../components/NavBar.vue";
-const baseUrlCar = "https://localhost:8083/car-service";
-const baseUrlAd = "https://localhost:8083/ad-service";
+const baseUrlCar = "http://localhost:8083/car-service";
+const baseUrlAd = "http://localhost:8083/ad-service";
 import axios from "axios";
 
 export default {

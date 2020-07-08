@@ -197,7 +197,7 @@
 
 import NavBar from '../components/NavBar.vue'
 import axios from "axios";
-const baseUrl = "https://localhost:8083/car-service/api";
+const baseUrl = "http://localhost:8083/car-service/api";
 export default {
     name: 'Statistic',
     components: {

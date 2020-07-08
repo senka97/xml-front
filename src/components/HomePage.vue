@@ -196,8 +196,8 @@ import NavBar from "../components/NavBar.vue";
 import VehicleCard from "../components/VehicleCard.vue";
 import axios from "axios";
 //import moment from 'moment';
-const baseUrlCar = "https://localhost:8083/car-service";
-const baseUrlAd = "https://localhost:8083/ad-service";
+const baseUrlCar = "http://localhost:8083/car-service";
+const baseUrlAd = "http://localhost:8083/ad-service";
 
 export default {
   name: "HomePage",
@@ -294,7 +294,7 @@ export default {
       if(this.extended ==false){
         localStorage.setItem("startDate", this.startDate);
         localStorage.setItem("endDate", this.endDate);
-        axios.get("https://localhost:8083/ad-service/api/ad/"+this.startDate+"/"+this.endDate+"/"+this.location).then(
+        axios.get("http://localhost:8083/ad-service/api/ad/"+this.startDate+"/"+this.endDate+"/"+this.location).then(
           response => {
             this.vehicles = response.data;
             this.loading=false;

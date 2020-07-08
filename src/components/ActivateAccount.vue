@@ -10,7 +10,7 @@
 
 <script>
 import axios from "axios";
-const baseUrl = "https://localhost:8083/user-service";
+const baseUrl = "http://localhost:8083/user-service";
 
 export default {
   name: "ActivateAccount",

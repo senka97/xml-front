@@ -188,7 +188,7 @@
 
 <script>
 import axios from "axios";
-const baseUrl = "https://localhost:8083/user-service/auth/registration/agent";
+const baseUrl = "http://localhost:8083/user-service/auth/registration/agent";
 
 export default {
   name: 'RegistartionAgent',

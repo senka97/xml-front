@@ -82,7 +82,7 @@ export default {
 
       pay(id, requestAdId)
       {
-          axios.put("https://localhost:8083/rent-service/api/bills/"+ id + "/" + requestAdId).then(
+          axios.put("http://localhost:8083/rent-service/api/bills/"+ id + "/" + requestAdId).then(
               response => {
                   if(response.data == true)
                   {
@@ -111,7 +111,7 @@ export default {
 
       getBills()
       {
-        axios.get("https://localhost:8083/rent-service/api/bills").then(
+        axios.get("http://localhost:8083/rent-service/api/bills").then(
               response => {
                 this.items = response.data;
               }
@@ -123,7 +123,7 @@ export default {
       getBillsNumber()
       {
        
-        axios.get("https://localhost:8083/rent-service/api/bills/number").then(
+        axios.get("http://localhost:8083/rent-service/api/bills/number").then(
               response => {
                 this.numberOfBills = response.data;
                 if(this.numberOfBills > 0){
@@ -143,7 +143,7 @@ export default {
     },
     created() {
       if((this.$store.getters.userRole == "ROLE_CLIENT" || this.$store.getters.userRole == "ROLE_AGENT") && this.$store.getters.loggedIn){
-        axios.get("https://localhost:8083/rent-service/api/request/pending/number").then(
+        axios.get("http://localhost:8083/rent-service/api/request/pending/number").then(
               response => {
                 this.numberOfNewRequests = response.data;
                 if(this.numberOfNewRequests > 0){
