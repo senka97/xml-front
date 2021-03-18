@@ -23,8 +23,7 @@ Backend se sastoji od skupa mikroservisa.
 
 Korišćene tehnologije:
 
- - Backend: Spring Boot, MySQL v8.0.18
- - Frontend: Vue.js
+ - Vue.js
  
 
 ## Project setup
