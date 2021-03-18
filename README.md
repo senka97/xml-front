@@ -2,6 +2,8 @@
 
 Frontend aplikacija glavne aplikacije Rent-a-Car sistema.
 
+Glavni repozitorijum: https://github.com/senka97/xml-eureka-zuul
+
 Backend se sastoji od skupa mikroservisa.
 
  Mikroservisi:
