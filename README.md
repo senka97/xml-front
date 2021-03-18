@@ -1,5 +1,30 @@
 # xml-front
 
+Frontend aplikacija glavne aplikacije Rent-a-Car sistema.
+
+Backend se sastoji od skupa mikroservisa.
+
+ Mikroservisi:
+
+  - User microservice:
+  https://github.com/senka97/xml-user-microservice
+  
+  - Car microservice:
+  https://github.com/senka97/xml-car-microservice
+  
+  - Ad microservice:
+  https://github.com/senka97/xml-ad-microservice
+  
+  - Rent microservice
+  https://github.com/senka97/xml-rent-microservice
+  
+
+Korišćene tehnologije:
+
+ - Backend: Spring Boot, MySQL v8.0.18
+ - Frontend: Vue.js
+ 
+
 ## Project setup
 ```
 npm install
